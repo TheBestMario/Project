@@ -12,4 +12,6 @@ module org.example.projectcalendar {
 
     opens org.example.projectcalendar to javafx.fxml;
     exports org.example.projectcalendar;
+    exports org.example.projectcalendar.controllers;
+    opens org.example.projectcalendar.controllers to javafx.fxml;
 }

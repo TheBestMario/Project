@@ -1,0 +1,8 @@
+/*start view*/
+
+.start-view--background{
+    -fx-background-color: #ffffff;
+}
+.start-view--vbox2{
+    -fx-background-color: #8cc1c1;
+}

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.14-internal"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="classes.UserHome">
+   <children>
+      <SplitPane dividerPositions="0.22742474916387959" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: white;">
+               <children>
+                  <VBox layoutY="47.0" prefHeight="398.0" prefWidth="104.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Button alignment="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: grey;" text="Button" textFill="WHITE">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Button>
+                        <Button alignment="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: grey;" text="Button" textFill="WHITE">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Button>
+                        <Button alignment="CENTER" layoutX="10.0" layoutY="60.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: grey;" text="Button" textFill="WHITE">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Button>
+                        <Button alignment="CENTER" layoutX="10.0" layoutY="110.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: grey;" text="Button" textFill="WHITE">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Button>
+                        <Button alignment="CENTER" layoutX="10.0" layoutY="160.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: grey;" text="Button" textFill="WHITE">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Button>
+                        <Button alignment="CENTER" layoutX="10.0" layoutY="250.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: grey;" text="Button" textFill="WHITE">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <Label fx:id="welcomeMessage" prefHeight="398.0" prefWidth="417.0" style="-fx-background-color: lightblue;" text="Welcome, [User]" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <font>
+                        <Font size="29.0" />
+                     </font>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets left="20.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>
