@@ -1,8 +1,21 @@
 /*start view*/
 
 .start-view--background{
-    -fx-background-color: #ffffff;
+    -fx-background-color: rgba(255, 255, 255, 0.47);
+    -fx-background-image: url("/static/images/robert_walters_logo.jpeg");
+    ;
 }
 .start-view--vbox2{
     -fx-background-color: #8cc1c1;
+}
+.start-view--button{
+    -fx-background-color: transparent;
+    -fx-border-color: black;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+.start-view--button:hover{
+    -fx-background-color: rgba(15, 70, 115, 0.76);
+    -fx-text-fill: white;
+    -fx-border-color: white;
 }

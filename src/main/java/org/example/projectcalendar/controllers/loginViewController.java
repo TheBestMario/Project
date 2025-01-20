@@ -1,10 +1,8 @@
 package org.example.projectcalendar.controllers;
 
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import org.example.projectcalendar.Controller;
 import org.example.projectcalendar.service.MenuHandler;
-import org.example.projectcalendar.service.MenuInterface;
 
 import java.net.URL;
 import java.util.ResourceBundle;

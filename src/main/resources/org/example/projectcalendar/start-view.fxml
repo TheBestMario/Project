@@ -22,13 +22,13 @@
                <Font size="13.0" />
             </font>
          </Label>
-         <VBox alignment="CENTER" spacing="20.0" style="-fx-background-color: #3C3131FF;">
+         <VBox alignment="CENTER" spacing="20.0">
             <padding>
                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
             </padding>
             <children>
-              <Button fx:id="loginButton" onAction="#onLoginButtonClick" prefHeight="25.0" prefWidth="160.0" text="Login as an existing user" />
-              <Button fx:id="registerButton" onAction="#onRegisterButtonClick" prefHeight="25.0" prefWidth="160.0" text="Register an account" />
+              <Button fx:id="loginButton" onAction="#onLoginButtonClick" prefHeight="25.0" prefWidth="160.0" styleClass="start-view--button" text="Login as an existing user" />
+              <Button fx:id="registerButton" onAction="#onRegisterButtonClick" prefHeight="25.0" prefWidth="160.0" styleClass="start-view--button" text="Register an account" />
             </children>
             <VBox.margin>
                <Insets top="30.0" />
