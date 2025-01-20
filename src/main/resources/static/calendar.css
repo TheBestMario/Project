@@ -19,3 +19,15 @@
     -fx-text-fill: white;
     -fx-border-color: white;
 }
+
+/*login view*/
+.login-view--buttons-box{
+    -fx-border-color: black;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+.login-view--vbox{
+    -fx-border-color: black;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
