@@ -1,7 +1,6 @@
 package org.example.projectcalendar.service;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -43,17 +42,18 @@ public class MenuHandler {
         primaryStage.show();
     }
 
-    public void setScene(String sceneName, String title) throws IOException {
+    public void createScene(String sceneName, String title) {
         this.loader = new FXMLLoader(CalendarApplication.class.getResource(sceneName));
         this.title = title;
-        this.root = new StackPane();
-        root.getChildren().add(loader.load());
+        StackPane root = new StackPane();
         this.currentScene = new Scene(root);
+        this.currentScene.getStylesheets().add(stylesheet);
+    }
+    public void setSceneProperties() {
         Controller controller = loader.getController();
         controller.setMenuHandler(this);
         controller.setRoot(root);
-
-        this.currentScene.getStylesheets().add(stylesheet);
+        this.root.getChildren().add(loader.getRoot());
     }
     public void setStageScene() {
         primaryStage.setScene(currentScene);
@@ -61,7 +61,7 @@ public class MenuHandler {
         primaryStage.show();
     }
 
-    public Scene getScene(){
+    public Scene getCurrentScene(){
         return this.currentScene;
     }
 }
