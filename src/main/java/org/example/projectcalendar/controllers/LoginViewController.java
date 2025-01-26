@@ -22,12 +22,10 @@ public class LoginViewController extends Controller implements Initializable {
     private Button loginButton;
 
     @Override
+    public void initialize(URL location, ResourceBundle resources) {
+    }
     public void setMenuHandler(MenuHandler menuHandler) {
         this.menuHandler = menuHandler;
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
 
     }
 

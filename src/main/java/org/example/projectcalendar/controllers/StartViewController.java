@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.VBox;
 import org.example.projectcalendar.Controller;
+import org.example.projectcalendar.animations.Animations;
 import org.example.projectcalendar.service.MenuHandler;
 
 import java.net.URL;
@@ -24,13 +25,14 @@ public class StartViewController extends Controller implements Initializable{
     }
     @FXML
     protected void onLoginButtonClick() {
-        try {
-            menuHandler.setSceneOnStage("login-view.fxml", "Login");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Animations.applyLeftTransition(rootPane,0,-rootPane.getWidth(),() -> {
+            try {
+                menuHandler.setSceneOnStage("login-view.fxml", "Login");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
-
     @FXML
     protected void onRegisterButtonClick() {}
 

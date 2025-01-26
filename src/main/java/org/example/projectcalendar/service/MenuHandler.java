@@ -35,7 +35,6 @@ public class MenuHandler {
         this.loader = new FXMLLoader(CalendarApplication.class.getResource(sceneName));
         this.currentScene = new Scene(loader.load());
         this.currentScene.getStylesheets().add(stylesheet);
-
         Controller controller = loader.getController();
         controller.setMenuHandler(this);
 
