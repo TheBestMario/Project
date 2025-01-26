@@ -2,6 +2,7 @@ package org.example.projectcalendar.controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -23,6 +24,7 @@ public class LoginViewController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        System.out.println("LoginViewController initialized");
     }
     public void setMenuHandler(MenuHandler menuHandler) {
         this.menuHandler = menuHandler;
@@ -32,7 +34,8 @@ public class LoginViewController extends Controller implements Initializable {
     @FXML
     protected void onLoginButtonClicked(){
         try {
-            menuHandler.setSceneOnStage("calendar-view.fxml", "Calendar");
+            menuHandler.setScene("calendar-view.fxml", "Calendar");
+            menuHandler.setStageScene();
         } catch (Exception e) {
             e.printStackTrace();
         }
