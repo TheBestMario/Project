@@ -33,8 +33,7 @@ public class LoginViewController extends Controller implements Initializable {
     @FXML
     protected void onLoginButtonClicked(){
         try {
-            menuHandler.createScene("calendar-view.fxml", "Calendar");
-            menuHandler.setStageScene();
+            System.out.println("switches to calendar view");
         } catch (Exception e) {
             e.printStackTrace();
         }

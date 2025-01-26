@@ -15,7 +15,10 @@ public abstract class Controller {
     public void setRoot(Parent root){
         this.root = root;
     }
-    protected Parent getRoot(){
+    public MenuHandler getMenuHandler(){
+        return menuHandler;
+    }
+    public Parent getRoot(){
         return root;
     }
 }
