@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" styleClass="start-view--background" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectcalendar.controllers.LoginViewController">
+<VBox fx:id="rootPane" alignment="CENTER" styleClass="start-view--background" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectcalendar.controllers.LoginViewController">
     <properties file="login-view.fxml" />
     <children>
       <VBox alignment="CENTER" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="222.0" prefWidth="343.0" spacing="20.0" styleClass="login-view--buttons-box">
@@ -55,7 +55,7 @@
              <HBox alignment="CENTER" spacing="20.0">
                  <Button fx:id="loginButton" defaultButton="true" mnemonicParsing="false" onMouseClicked="#onLoginButtonClicked" prefHeight="25.0" prefWidth="201.0" styleClass="login-view--login-button" stylesheets="@../../../static/calendar.css" text="Log In" textFill="WHITE">
                  </Button>
-                 <Button id="backButton" fx:id="backButton" minWidth="30.0" mnemonicParsing="false" prefWidth="50" styleClass="login-view--back-button" text="Back" />
+                 <Button id="backButton" fx:id="backButton" minWidth="30.0" mnemonicParsing="false" onMouseClicked="#onBackButtonClicked" prefWidth="50" styleClass="login-view--back-button" text="Back" />
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>

@@ -21,6 +21,7 @@
     -fx-background-color: #8cc1c1;
     -fx-border-radius: 5px;
     -fx-background-radius: 5px;
+    -fx-cursor: hand;
 
 }
 .start-view--button-pane:hover{
@@ -54,5 +55,22 @@
     -fx-background-radius: 5px;
 }
 .login-view--back-button:hover{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+}
+/* register view */
+.register-view--root{
+    -fx-background-color: transparent;
+}
+.register-view--vbox-background{
+    -fx-background-color: #8cc1c1;
+    -fx-border-color: black;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+.register-view--register-button{
+    -fx-background-color: #8cc1c1;
+
+}
+.register-view--register-button:hover{
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
 }

@@ -13,7 +13,7 @@ import org.example.projectcalendar.Controller;
 
 import java.io.IOException;
 
-public class MenuHandler extends Node {
+public class MenuHandler {
 
     private static Stage primaryStage;
 
@@ -75,6 +75,8 @@ public class MenuHandler extends Node {
     public void addNodeToRoot(String fxml) throws IOException {
         FXMLLoader loader = new FXMLLoader(CalendarApplication.class.getResource(fxml));
         root.getChildren().add(loader.load());
+        Controller controller = loader.getController();
+        controller.setMenuHandler(this);
 
     }
     public Node getNodeFromRoot(String fxml){
@@ -90,6 +92,10 @@ public class MenuHandler extends Node {
     }
     public StackPane getRoot(){
         return this.root;
+    }
+
+    public Stage getPrimaryStage(){
+        return primaryStage;
     }
 
 }

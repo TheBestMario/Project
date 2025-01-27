@@ -1,11 +1,14 @@
 package org.example.projectcalendar.controllers;
 
 import javafx.scene.control.*;
+import javafx.stage.Popup;
+import javafx.stage.PopupWindow;
+import org.example.projectcalendar.Controller;
 import org.example.projectcalendar.service.User.Profile;
 
 import java.io.IOException;
 
-public class RegisterViewController {
+public class RegisterViewController extends Controller {
 
     public CheckBox policyCheckBox;
     public Button submitButton;
