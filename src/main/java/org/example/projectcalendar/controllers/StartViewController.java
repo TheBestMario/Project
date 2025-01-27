@@ -5,6 +5,7 @@ import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import org.example.projectcalendar.Controller;
 import org.example.projectcalendar.service.MenuHandler;
@@ -49,6 +50,7 @@ public class StartViewController extends Controller implements Initializable {
 
             nextTransition.setOnFinished(event -> {
                 System.out.println("hello");
+                menuHandler.getRoot().getChildren().remove(scenePane);
                 loginScene.setTranslateX(0);
             });
 

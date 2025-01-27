@@ -4,6 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -12,7 +13,7 @@ import org.example.projectcalendar.Controller;
 
 import java.io.IOException;
 
-public class MenuHandler {
+public class MenuHandler extends Node {
 
     private static Stage primaryStage;
 
@@ -87,4 +88,8 @@ public class MenuHandler {
         }
         return null;
     }
+    public StackPane getRoot(){
+        return this.root;
+    }
+
 }

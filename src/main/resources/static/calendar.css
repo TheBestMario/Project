@@ -1,27 +1,36 @@
 /*start view*/
 
-.start-view--background{
+.start-view--root{
     -fx-background-color: transparent;
     /*-fx-background-image: url("/static/images/robert_walters_logo.jpeg");*/
     ;
 }
-.start-view--vbox2{
+.start-view--vbox{
     -fx-background-color: #8cc1c1;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-color: black;
 }
 .start-view--button{
-    -fx-background-color: transparent;
-    -fx-border-color: black;
-    -fx-border-radius: 10px;
-    -fx-background-radius: 10px;
+    -fx-background-color: #8cc1c1;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
 }
-.start-view--button:hover{
-    -fx-background-color: rgba(15, 70, 115, 0.76);
-    -fx-text-fill: white;
-    -fx-border-color: white;
+
+.start-view--button-pane{
+    -fx-background-color: #8cc1c1;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+
+}
+.start-view--button-pane:hover{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+
 }
 
 /*login view*/
 .login-view--buttons-box{
+    -fx-background-color: #8cc1c1;
     -fx-border-color: black;
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
@@ -30,4 +39,20 @@
     -fx-border-color: black;
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
+}
+.login-view--login-button{
+    -fx-background-color:  #2d84d2;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+.login-view--login-button:hover{
+    -fx-background-color: rgba(45, 132, 210, 0.5);
+}
+.login-view--back-button{
+    -fx-background-color: #8cc1c1;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+.login-view--back-button:hover{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
 }
