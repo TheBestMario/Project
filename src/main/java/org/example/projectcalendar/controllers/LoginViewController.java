@@ -20,6 +20,8 @@ public class LoginViewController extends Controller implements Initializable {
     private PasswordField passwordField;
     @FXML
     private Button loginButton;
+    @FXML
+    private Button backButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

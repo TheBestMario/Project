@@ -1,8 +1,8 @@
 /*start view*/
 
 .start-view--background{
-    -fx-background-color: rgba(255, 255, 255, 0.47);
-    -fx-background-image: url("/static/images/robert_walters_logo.jpeg");
+    -fx-background-color: transparent;
+    /*-fx-background-image: url("/static/images/robert_walters_logo.jpeg");*/
     ;
 }
 .start-view--vbox2{

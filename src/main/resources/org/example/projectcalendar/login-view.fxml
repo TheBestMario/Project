@@ -5,23 +5,21 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane styleClass="start-view--background" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectcalendar.controllers.LoginViewController">
-   <properties file="login-view.fxml" life="true"/>
+<VBox alignment="CENTER" styleClass="start-view--background" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectcalendar.controllers.LoginViewController">
+    <properties file="login-view.fxml" />
     <children>
-      <VBox alignment="CENTER" layoutX="150.0" layoutY="30.0" spacing="20.0" style="-fx-background-color: #d8e8f7;" styleClass="login-view--buttons-box" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="50.0">
+      <VBox alignment="CENTER" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="222.0" prefWidth="343.0" spacing="20.0" style="-fx-background-color: #d8e8f7;" styleClass="login-view--buttons-box">
          <children>
              <Label alignment="CENTER" text="Login to your account">
                <font>
                   <Font size="25.0" />
                </font>
             </Label>
-            <VBox alignment="CENTER" prefHeight="100.0" prefWidth="400.0" styleClass="login-view--buttons-box">
+            <VBox alignment="CENTER" fillWidth="false" minHeight="-Infinity" minWidth="-Infinity" scaleShape="false" styleClass="login-view--buttons-box" VBox.vgrow="NEVER">
                <children>
                    <HBox alignment="CENTER" spacing="50.0">
                        <children>
@@ -40,7 +38,7 @@
                          <Label alignment="CENTER" text="Password: " />
                         <PasswordField fx:id="passwordField" />
       
-                                 </children>
+                                                               </children>
                      <padding>
                         <Insets bottom="10.0" top="10.0" />
                      </padding>
@@ -57,10 +55,12 @@
              <HBox alignment="CENTER" spacing="20.0">
                  <Button fx:id="loginButton" defaultButton="true" mnemonicParsing="false" onMouseClicked="#onLoginButtonClicked" prefHeight="25.0" prefWidth="201.0" style="-fx-background-color: #2d84d2;" text="Log In" textFill="WHITE">
                  </Button>
-                 <Button id="backButton" minWidth="30.0" mnemonicParsing="false" prefWidth="50" text="Back" />
+                 <Button id="backButton" fx:id="backButton" minWidth="30.0" mnemonicParsing="false" prefWidth="50" text="Back" />
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
              </HBox>
-      
-                     </children>
+    </children>
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
@@ -69,4 +69,4 @@
          </padding>
       </VBox>
    </children>
-</AnchorPane>
+</VBox>

@@ -5,7 +5,6 @@ import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import org.example.projectcalendar.Controller;
 import org.example.projectcalendar.service.MenuHandler;
@@ -33,15 +32,15 @@ public class StartViewController extends Controller implements Initializable {
         try {
             //animates and switches scenes after finishing animation
             System.out.println("before");
-            menuHandler.addSceneToRoot("login-view.fxml");
-            Node loginScene = menuHandler.getSceneFromRoot("login-view.fxml");
-            this.scenePane = menuHandler.getSceneFromRoot("start-view.fxml");
+            menuHandler.addNodeToRoot("login-view.fxml");
+            Node loginScene = menuHandler.getNodeFromRoot("login-view.fxml");
+            this.scenePane = menuHandler.getNodeFromRoot("start-view.fxml");
             loginScene.setLayoutX(500);
 
             //transition for first 'scene'
             TranslateTransition currentTransition = new TranslateTransition(Duration.millis(500), scenePane);
             currentTransition.setFromX(0);
-            currentTransition.setToX(-scenePane.getScene().getWidth());
+            currentTransition.setToX(-scenePane.getBoundsInParent().getWidth());
 
             //transition for second 'scene'
             TranslateTransition nextTransition = new TranslateTransition(Duration.millis(500), loginScene);
