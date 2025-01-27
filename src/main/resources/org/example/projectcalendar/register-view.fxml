@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" fillWidth="false" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectcalendar.controllers.RegisterViewController">
+<VBox fx:id="rootPane" alignment="CENTER" fillWidth="false" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectcalendar.controllers.RegisterViewController">
    <properties file="register-view.fxml" />
     <children>
       <VBox alignment="CENTER" prefHeight="320.0" prefWidth="400.0" styleClass="register-view--vbox-background">

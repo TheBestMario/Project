@@ -74,7 +74,7 @@ public class StartViewController extends Controller implements Initializable {
 
             //transition for second 'scene'
             TranslateTransition nextTransition = new TranslateTransition(Duration.millis(500), registerScene);
-            nextTransition.setFromX(registerScene.getBoundsInParent().getWidth() + registerScene.getTranslateX());
+            nextTransition.setFromX(scenePane.getBoundsInParent().getWidth() + registerScene.getTranslateX());
             nextTransition.setToX(0);
 
 
