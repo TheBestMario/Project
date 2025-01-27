@@ -18,6 +18,7 @@ public class RegisterViewController extends Controller {
     public PasswordField confirmPasswordField;
     public Label informationLabel;
     public Node rootPane;
+    public TextField emailField;
 
     @FXML
     protected void onBackButtonClicked() {
@@ -59,9 +60,11 @@ public class RegisterViewController extends Controller {
         String username = usernameField.getText();
         String password = passwordField.getText();
         String confirmedPassword = confirmPasswordField.getText();
+        String email = emailField.getText();
 
         boolean passwordMatches = false;
         boolean userChecked = false;
+        boolean validEmail = false;
         //Map<String, Boolean> map = new HashMap<>();
         boolean checkBoxState = policyCheckBox.isSelected();
 
@@ -93,6 +96,12 @@ public class RegisterViewController extends Controller {
             informationLabel.setText("Passwords must match");
         }
 
+        if (!email.contains("@")){
+            informationLabel.setText("not a valid email.");
+        } else{
+            validEmail = true;
+        }
+
         if (!checkBoxState){
             System.out.println("You must agree to our policies");
             informationLabel.setText("You must agree to our policies");
@@ -100,11 +109,11 @@ public class RegisterViewController extends Controller {
 
 
 
-        if (userChecked && passwordMatches && checkBoxState){
+        if (userChecked && passwordMatches && checkBoxState && validEmail){
             informationLabel.setStyle("-fx-text-fill: green");
             informationLabel.setText("Creating account...");
 
-            Profile.addProfile(new Profile(username,password));
+            Profile.addProfile(new Profile(username,email,password));
 
 
             System.out.println("switch scene");

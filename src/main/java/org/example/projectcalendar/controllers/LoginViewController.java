@@ -8,10 +8,9 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import org.example.projectcalendar.Controller;
-import org.example.projectcalendar.service.MenuHandler;
+import org.example.projectcalendar.service.User.Profile;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -35,7 +34,22 @@ public class LoginViewController extends Controller implements Initializable {
     @FXML
     protected void onLoginButtonClicked(){
         try {
-            System.out.println("switches to calendar view");
+            String usernameInput = usernameField.getText();
+            String passwordInput = passwordField.getText();
+
+            boolean isReal = false;
+
+            if (usernameInput.contains("@")){
+                isReal = Profile.ProfileCheckByEmail(usernameInput,passwordInput);
+            }else {
+                isReal = Profile.ProfileCheckByUsername(usernameInput,passwordInput);
+            }
+
+            if (isReal){
+                System.out.println("switches to calendar view");
+            } else{
+                System.out.println("incorrect username or password");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

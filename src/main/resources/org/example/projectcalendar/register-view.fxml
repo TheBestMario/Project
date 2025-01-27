@@ -34,6 +34,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
                   <Label alignment="CENTER" prefHeight="50.0" prefWidth="224.0" text="Username">
@@ -41,11 +42,19 @@
                         <Font name="Arial Bold" size="12.0" />
                      </font></Label>
                   <TextField fx:id="usernameField" GridPane.columnIndex="1" />
-                  <Label alignment="CENTER" text="Password" GridPane.rowIndex="1">
+                  <TextField fx:id="emailField" prefHeight="25.0" prefWidth="137.0" promptText="Email" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets left="50.0" />
+                     </GridPane.margin>
+                  </TextField>
+                  <Label alignment="CENTER" text="Password" GridPane.rowIndex="3">
                      <font>
                         <Font name="Arial Bold" size="12.0" />
                      </font></Label>
-                  <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <Label alignment="CENTER" text="Confirm Password" GridPane.rowIndex="2">
                      <font>
                         <Font name="Arial Bold" size="12.0" />
@@ -58,7 +67,7 @@
                   <CheckBox fx:id="policyCheckBox" alignment="CENTER" mnemonicParsing="false" text="Accept the terms and conditions, as well as the policies" wrapText="true" />
                </children>
             </HBox>
-            <Label fx:id="informationLabel" prefHeight="146.0" />
+            <Label fx:id="informationLabel" prefHeight="125.0" prefWidth="0.0" />
             <HBox alignment="CENTER" layoutX="21.0" layoutY="204.0" prefWidth="200.0" spacing="20.0">
                <children>
                   <Button fx:id="submitButton" mnemonicParsing="false" onMouseClicked="#onRegisterButtonClick" styleClass="register-view--register-button" text="Complete Registration">

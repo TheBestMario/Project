@@ -6,23 +6,27 @@ import java.util.Map;
 public class Profile {
     private String username;
     private String password;
-
+    private String email;
     private boolean loggedIn = false;
     private static Profile[] profiles = new Profile[10];
 
-    public Profile(String username, String password) {
+    public Profile(String username,String email, String password) {
         this.username = username;
+        this.email = email;
         this.password = password;
 
     }
 
 
     public Profile(String username){
-        this(username, null);
+        this(username, null, null);
     }
 
     public String getUsername() {
         return username;
+    }
+    public String getEmail(){
+        return email;
     }
 
     //for the sake of testing, we use this method to set some profiles
@@ -90,7 +94,8 @@ public class Profile {
         return map;
     }
 
-    public static boolean ProfileCheck(String username, String password) {
+
+    public static boolean ProfileCheckByUsername(String username, String password) {
         for (Profile profile : profiles){
             if (profile == null){
                 continue;
@@ -108,7 +113,28 @@ public class Profile {
                 return false;
             }
         }
-        System.out.println("User doesn't exist");
+    System.out.println("User doesn't exist");
     return false;
+    }
+    public static boolean ProfileCheckByEmail(String email, String password) {
+        for (Profile profile : profiles){
+            if (profile == null){
+                continue;
+            }
+
+            String existingName = profile.getEmail();
+            boolean existingPasswordMatches = profile.checkPassword(password);
+
+            if (existingName.equals(email) && existingPasswordMatches){
+                System.out.println("Logging in...");
+                return true;
+            } else if (existingName.equals(email) && !existingPasswordMatches) {
+                //could customise the warning here.
+                System.out.println("Incorrect password");
+                return false;
+            }
+        }
+        System.out.println("User doesn't exist by email");
+        return false;
     }
 }
