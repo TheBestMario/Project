@@ -42,7 +42,7 @@ if (TestPort -hostname "localhost" -port $port) {
         $schema = Get-Content -Path "schema.txt" -Raw
 
         # Execute the schema on the database
-        docker-compose exec -T calendarDB /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $env:DB_PASSWORD -Q $schema
+        docker-compose exec -T calendarDB /opt/mssql-tools18/bin/sqlcmd -S localhost -U SA -P $env:DB_PASSWORD -Q $schema
     } else {
         Write-Output "Failed to set up the local Docker container with SQL Server."
         exit 1

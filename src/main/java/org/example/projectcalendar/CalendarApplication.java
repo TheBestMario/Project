@@ -25,7 +25,7 @@ public class CalendarApplication extends javafx.application.Application {
 
     }
 
-    public static void main(String[] args) {
+    public static void ConnectToDB(){
         try {
             Path path = Paths.get(System.getProperty("user.dir"),"script.ps1");
             System.out.println(path);
@@ -51,7 +51,11 @@ public class CalendarApplication extends javafx.application.Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    public static void main(String[] args) {
+
+        ConnectToDB();
         launch();
     }
 }
