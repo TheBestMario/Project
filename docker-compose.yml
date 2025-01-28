@@ -1,0 +1,10 @@
+version: "1"
+services:
+  calendarDB:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=QFcBf8sw
+      - MS-SQL-DB=myDB
+    ports:
+      - "8000:8000"

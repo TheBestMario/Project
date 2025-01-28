@@ -23,7 +23,8 @@
                <children>
                    <HBox alignment="CENTER" spacing="50.0">
                        <children>
-                        <TextField fx:id="usernameField" prefHeight="25.0" prefWidth="257.0" promptText="Email or Username" />
+                        <Label alignment="CENTER" text="Username:" />
+                        <TextField fx:id="usernameField" promptText="Email or Username" />
                        </children>
                      <VBox.margin>
                         <Insets />
