@@ -3,13 +3,18 @@ package org.example.projectcalendar.controllers;
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.util.Duration;
 import org.example.projectcalendar.Controller;
+import org.example.projectcalendar.service.Database;
 import org.example.projectcalendar.service.User.Profile;
 
-public class RegisterViewController extends Controller {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class RegisterViewController extends Controller implements Initializable {
 
     public CheckBox policyCheckBox;
     public Button submitButton;
@@ -19,6 +24,13 @@ public class RegisterViewController extends Controller {
     public Label informationLabel;
     public Node rootPane;
     public TextField emailField;
+    private Database database;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        database = new Database();
+
+    }
 
     @FXML
     protected void onBackButtonClicked() {
@@ -75,7 +87,7 @@ public class RegisterViewController extends Controller {
         } else if (username.length() > 20) {
             System.out.println("username is too long, it must be less than 20 characters.");
             informationLabel.setText("Username is too long");
-        } else if (Profile.checkUserNameExists(username)) {
+        } else if (Profile.checkUserNameExists(username,database)) {
             System.out.println("username already exists");
             informationLabel.setText("Username already exists.");
         } else{

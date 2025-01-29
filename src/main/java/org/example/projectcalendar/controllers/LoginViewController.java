@@ -10,6 +10,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.util.Duration;
 import org.example.projectcalendar.Controller;
+import org.example.projectcalendar.service.Database;
 import org.example.projectcalendar.service.User.Profile;
 
 import java.net.URL;
@@ -27,6 +28,8 @@ public class LoginViewController extends Controller implements Initializable {
     @FXML
     private Node rootPane;
 
+    Database database = Database.getInstance();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     }
@@ -37,19 +40,14 @@ public class LoginViewController extends Controller implements Initializable {
             String usernameInput = usernameField.getText();
             String passwordInput = passwordField.getText();
 
-            boolean isReal = false;
-
-            if (usernameInput.contains("@")){
-                isReal = Profile.ProfileCheckByEmail(usernameInput,passwordInput);
-            }else {
-                isReal = Profile.ProfileCheckByUsername(usernameInput,passwordInput);
+            if (database.verifyCredentials(usernameInput, passwordInput)) {
+                System.out.println("Login successful");
+                // Proceed with login
+            } else {
+                System.out.println("Invalid username/email or password.");
+                //informationLabel.setText("Invalid username/email or password.");
             }
 
-            if (isReal){
-                System.out.println("switches to calendar view");
-            } else{
-                System.out.println("incorrect username or password");
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }

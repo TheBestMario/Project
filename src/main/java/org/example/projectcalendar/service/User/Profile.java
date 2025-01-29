@@ -1,5 +1,7 @@
 package org.example.projectcalendar.service.User;
 
+import org.example.projectcalendar.service.Database;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +13,8 @@ public class Profile {
     private String lastName;
     private boolean loggedIn = false;
     private static Profile[] profiles = new Profile[10];
+
+
 
     public Profile(String username,String email, String password) {
         this.username = username;
@@ -43,8 +47,21 @@ public class Profile {
     public String getUserName() {
         return username;
     }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getEmail(){
         return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     //for the sake of testing, we use this method to set some profiles
@@ -67,23 +84,10 @@ public class Profile {
         }
         return this.password.equals(password);
     }
-    public static boolean checkUserNameExists(String username){
-        for (Profile profile : profiles) {
-            if (profile != null && profile.username.equalsIgnoreCase(username)) {
-                return true;
-            }
-        }
-        return false;
+    public static boolean checkUserNameExists(String username, Database database){
+        return database.checkUserNameExists(username);
     }
 
-    public static Profile getProfile(String username){
-        for (Profile profile : profiles) {
-            if (profile != null && profile.username.equalsIgnoreCase(username)) {
-                return profile;
-            }
-        }
-        return null;
-    }
 
     public static Map<String, Boolean> ProfileCheckRegistration(String username, String password) {
         Map<String, Boolean> map = new HashMap<>();
@@ -154,5 +158,9 @@ public class Profile {
         }
         System.out.println("User doesn't exist by email");
         return false;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }

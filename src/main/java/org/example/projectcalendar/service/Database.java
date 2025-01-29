@@ -8,10 +8,7 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.Duration;
 import java.util.Map;
 
@@ -20,11 +17,13 @@ public class Database {
     private String dbPassword;
     private String connectionUrl;
     private static Connection con;
+    private static Database database;
 
     public Database() {
         this.dbUsername = System.getenv("DB_USERNAME");
         this.dbPassword = System.getenv("DB_PASSWORD");
         int port = getPortFromEnv();
+        database = this;
 
         try {
             // Check if the database is accessible
@@ -63,9 +62,20 @@ public class Database {
                     + ";databaseName=calendarDB;user=" + this.dbUsername
                     + ";password=" + this.dbPassword
                     + ";encrypt=false;";
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public static Database getInstance() {
+        if (database == null) {
+            synchronized (Database.class) {
+                if (database == null) {
+                    database = new Database();
+                }
+            }
+        }
+        return database;
     }
 
     private void runCommand(String[] command) throws IOException, InterruptedException {
@@ -142,9 +152,62 @@ public class Database {
             st.setString(2, profile.getLastName());
             st.setString(3, profile.getUserName());
             st.setString(4, profile.getEmail());
+            st.setString(5, profile.getPassword());
             st.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    public Profile getUserFromTable(Profile inProfile){
+        Profile profile = null;
+        String query = "SELECT (first_name, last_name, username, email, password) FROM Users" +
+                "WHERE user_name = ?, email = ?";
+        try (PreparedStatement st = con.prepareStatement(query)) {
+            st.setString(1, inProfile.getUserName());
+            st.setString(2, inProfile.getEmail());
+            ResultSet rs = st.executeQuery();
+            if (rs.next()){
+                profile = new Profile(rs.getString("username"),
+                        rs.getString("email"),
+                        rs.getString("password"));
+                profile.setFirstName(rs.getString("first_name"));
+                profile.setLastName(rs.getString("last_name"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return profile;
+    }
+    public boolean checkUserNameExists(String username){
+        String query = "SELECT username FROM Users WHERE username = ?";
+        try (PreparedStatement st = con.prepareStatement(query)) {
+            st.setString(1, username);
+            st.execute();
+            ResultSet rs = st.executeQuery();
+            if (rs.next()){
+                return true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
+    public boolean verifyCredentials(String usernameOrEmail, String password) {
+        String query = "SELECT password FROM Users WHERE (username = ? OR email = ?)";
+        try (PreparedStatement st = con.prepareStatement(query)) {
+            st.setString(1, usernameOrEmail);
+            st.setString(2, usernameOrEmail);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                String storedPassword = rs.getString("password");
+                if (storedPassword.equals(password)) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
