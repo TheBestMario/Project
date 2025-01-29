@@ -41,7 +41,8 @@ public class Database {
                 }
 
                 // Add a delay to ensure SQL Server is fully up and running
-                Thread.sleep(Duration.ofSeconds(10));
+                //Like don't even remove this except for adding a listener for the server.
+                Thread.sleep(Duration.ofSeconds(12));
 
                 // Execute the schema
                 Path path = Paths.get(System.getProperty("user.dir"), "schema.txt");
