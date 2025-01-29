@@ -9,6 +9,7 @@ module org.example.projectcalendar {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
+    requires java.sql;
 
     opens org.example.projectcalendar to javafx.fxml;
     exports org.example.projectcalendar;
