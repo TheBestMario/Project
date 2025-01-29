@@ -26,6 +26,12 @@ public class CalendarApplication extends javafx.application.Application {
 
     public static void main(String[] args) {
 
+        /*
+        Please make sure you have two environment variables:
+        DB_USERNAME = your_username
+        DB_PASSWORD = your_password
+        where your_username and your_password is whatever you want it to be.
+         */
         db = new Database();
 
         launch();

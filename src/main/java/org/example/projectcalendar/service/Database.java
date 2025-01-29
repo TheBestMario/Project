@@ -14,8 +14,6 @@ public class Database {
     private String connectionUrl;
     private static Connection con;
 
-    // create a BankingAppDB within your azure data studios
-    // DB == BankingAppDB
 
     public Database() {
 
