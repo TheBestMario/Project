@@ -7,4 +7,4 @@ services:
       - MSSQL_USER = ${DB_USERNAME}
       - MSSQL_SA_PASSWORD=${DB_PASSWORD}
     ports:
-      - "8765:1433"
+      - ${LOCAL_PORT}:1433

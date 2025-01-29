@@ -36,4 +36,8 @@ public class CalendarApplication extends javafx.application.Application {
 
         launch();
     }
+
+    public void saveProfileToDB(){
+
+    }
 }

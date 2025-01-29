@@ -16,10 +16,9 @@ function TestPort {
         return $false
     }
 }
-$PORT = 8000
 # Check if the database is accessible
-if (TestPort -hostname "localhost" -port $PORT) {
-    Write-Output "Database is accessible on port $PORT"
+if (TestPort -hostname "localhost" -port $env:LOCAL_PORT) {
+    Write-Output "Database is accessible on port $env:LOCAL_PORT"
 }
 elseif (docker ps -a --format "{{.Names}}" | Select-String -Pattern "calendarDB")
 {
@@ -27,20 +26,18 @@ elseif (docker ps -a --format "{{.Names}}" | Select-String -Pattern "calendarDB"
 } else {
     Write-Output "Database is not accessible. Setting up a local Docker container with docker-compose..."
 
-    wsl.exe -u root -e echo "Initializing WSL"
 
     # Navigate to the directory containing docker-compose.yml
     Push-Location -Path $SCRIPT_DIR
     # Run docker-compose to start the services
     docker-compose up -d
 
-    # Wait for the SQL Server to start
-    while (-not (TestPort -hostname "localhost" -port $PORT)) {
+    while (-not (TestPort -hostname "localhost" -port $env:LOCAL_PORT)) {
         Write-Output "Waiting for SQL Server to start..."
         Start-Sleep -Seconds 1
     }
 
-    if (TestPort -hostname "localhost" -port $PORT) {
+    if (TestPort -hostname "localhost" -port $env:LOCAL_PORT) {
         Write-Output "Local Docker container with SQL Server is set up and accessible."
 
         # Read the schema from the .txt file
@@ -52,7 +49,4 @@ elseif (docker ps -a --format "{{.Names}}" | Select-String -Pattern "calendarDB"
         Write-Output "Failed to set up the local Docker container with SQL Server."
         exit 1
     }
-
-    # Return to the original directory
-    Pop-Location
 }
