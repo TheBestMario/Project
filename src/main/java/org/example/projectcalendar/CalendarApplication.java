@@ -33,11 +33,8 @@ public class CalendarApplication extends javafx.application.Application {
         where your_username and your_password is whatever you want it to be.
          */
         db = new Database();
+        db.establishConnection();
 
         launch();
-    }
-
-    public void saveProfileToDB(){
-
     }
 }

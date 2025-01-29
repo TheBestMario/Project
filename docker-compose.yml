@@ -8,3 +8,5 @@ services:
       - MSSQL_SA_PASSWORD=${DB_PASSWORD}
     ports:
       - ${LOCAL_PORT}:1433
+    volumes:
+      - ./schema.txt:/usr/src/app/schema.txt

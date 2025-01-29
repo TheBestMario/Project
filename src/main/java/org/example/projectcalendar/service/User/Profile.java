@@ -7,6 +7,8 @@ public class Profile {
     private String username;
     private String password;
     private String email;
+    private String firstName;
+    private String lastName;
     private boolean loggedIn = false;
     private static Profile[] profiles = new Profile[10];
 
@@ -22,7 +24,23 @@ public class Profile {
         this(username, null, null);
     }
 
-    public String getUsername() {
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getUserName() {
         return username;
     }
     public String getEmail(){
@@ -34,7 +52,7 @@ public class Profile {
         return profiles;
     }
     public static void addProfile(Profile profile){
-        System.out.println("adding Profile to list "+profile.getUsername());
+        System.out.println("adding Profile to list "+profile.getUserName());
         for (int i = 0; i < profiles.length; i++) {
             if (profiles[i] == null) {
                 profiles[i] = profile;
@@ -101,7 +119,7 @@ public class Profile {
                 continue;
             }
 
-            String existingName = profile.getUsername();
+            String existingName = profile.getUserName();
             boolean existingPasswordMatches = profile.checkPassword(password);
 
             if (existingName.equals(username) && existingPasswordMatches){
