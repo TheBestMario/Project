@@ -1,8 +1,10 @@
 package org.example.projectcalendar.service;
 
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.example.projectcalendar.CalendarApplication;
 
@@ -21,8 +23,9 @@ public class MenuHandler2 {
 
     public MenuHandler2(Stage stage) throws IOException {
 
-        this.width = 500;
-        this.height = 500;
+        System.out.println();
+        this.width = 1200;
+        this.height = 768;
         //makes root component in the hierarchy
         //initializes scene to the root
         this.root = new BorderPane();
@@ -31,7 +34,9 @@ public class MenuHandler2 {
 
         // Load and set the menu bar
         FXMLLoader menuLoader = new FXMLLoader(CalendarApplication.class.getResource("app-sidebar.fxml"));
-        root.setLeft(menuLoader.load());
+        VBox sideBar = menuLoader.load();
+        VBox.setVgrow(sideBar, javafx.scene.layout.Priority.ALWAYS);
+        root.setLeft(sideBar);
 
         // Load and set the title bar
         FXMLLoader titleLoader = new FXMLLoader(CalendarApplication.class.getResource("title-bar.fxml"));
@@ -46,6 +51,11 @@ public class MenuHandler2 {
 
         primaryStage = stage;
         primaryStage.setScene(scene);
+        primaryStage.setMinWidth(800);
+        primaryStage.setMinHeight(600);
+        primaryStage.setWidth(width);
+        primaryStage.setHeight(height);
+        primaryStage.centerOnScreen();
         primaryStage.setTitle("Calendar");
         primaryStage.show();
     }

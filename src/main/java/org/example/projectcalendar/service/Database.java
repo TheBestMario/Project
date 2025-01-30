@@ -139,7 +139,6 @@ public class Database {
 
     public Boolean establishConnection() {
         try {
-            System.out.println(this.connectionUrl);
             con = DriverManager.getConnection(this.connectionUrl);
             return true;
         } catch (SQLException e) {

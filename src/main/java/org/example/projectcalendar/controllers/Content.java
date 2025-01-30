@@ -1,4 +1,6 @@
 package org.example.projectcalendar.controllers;
 
-public class Content {
+import org.example.projectcalendar.Controller;
+
+public class Content extends Controller {
 }

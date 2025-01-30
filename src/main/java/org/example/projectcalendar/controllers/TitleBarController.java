@@ -1,4 +1,6 @@
 package org.example.projectcalendar.controllers;
 
-public class TitleBarController {
+import org.example.projectcalendar.Controller;
+
+public class TitleBarController extends Controller {
 }

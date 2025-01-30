@@ -88,7 +88,6 @@ public class MenuHandler {
         for (Node scene : scenesList){
 
             if (scene.getProperties().get("file").equals(fxmlName)){
-                System.out.println("found "+fxmlName);
                 return scene;
             }
         }

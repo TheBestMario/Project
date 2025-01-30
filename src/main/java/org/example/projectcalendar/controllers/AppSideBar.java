@@ -1,4 +1,6 @@
 package org.example.projectcalendar.controllers;
 
-public class AppSideBar {
+import org.example.projectcalendar.Controller;
+
+public class AppSideBar extends Controller {
 }
