@@ -32,6 +32,8 @@ public class LoginViewController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        //initialises database (reconnects each time)
+        database = new Database();
     }
 
     @FXML

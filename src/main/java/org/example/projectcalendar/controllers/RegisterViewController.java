@@ -11,6 +11,7 @@ import org.example.projectcalendar.Controller;
 import org.example.projectcalendar.service.Database;
 import org.example.projectcalendar.service.User.Profile;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -28,6 +29,7 @@ public class RegisterViewController extends Controller implements Initializable 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        //initialises database (reconnects each time)
         database = new Database();
 
     }
@@ -65,8 +67,12 @@ public class RegisterViewController extends Controller implements Initializable 
     }
 
     @FXML
-    protected void onRegisterButtonClick() {
-
+    protected void onRegisterButtonClick(){
+        try{
+            getMenuHandler().setNodeToRoot("Initial/account-created-view.fxml");
+        } catch (IOException e){
+            e.printStackTrace();
+        }
         informationLabel.setText("");
         informationLabel.setStyle("-fx-text-fill: red");
         String username = usernameField.getText();
@@ -122,14 +128,24 @@ public class RegisterViewController extends Controller implements Initializable 
 
 
         if (userChecked && passwordMatches && checkBoxState && validEmail){
-            informationLabel.setStyle("-fx-text-fill: green");
-            informationLabel.setText("Creating account...");
+            Database.getInstance().addUsertoTable(new Profile(username,email,password));
 
-            Profile.addProfile(new Profile(username,email,password));
+            try{
+                getMenuHandler().setNodeToRoot("Initial/account-created-view.fxml");
+            } catch (IOException e){
+                e.printStackTrace();
+            }
 
 
-            System.out.println("switch scene");
 
+        }
+    }
+    @FXML
+    protected void onAccountCreatedReturnButtonPressed(){
+        try{
+            getMenuHandler().setNodeToRoot("start-view.fxml");
+        } catch (IOException e){
+            e.printStackTrace();
         }
     }
 }

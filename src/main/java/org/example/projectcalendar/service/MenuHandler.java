@@ -65,6 +65,7 @@ public class MenuHandler {
     }
     public void setNodeToRoot(String fxml) throws IOException {
         loader = new FXMLLoader(CalendarApplication.class.getResource(fxml));
+        System.out.println(loader.getLocation());
         root.getChildren().clear();
         root.getChildren().add(loader.load());
         Controller controller = loader.getController();

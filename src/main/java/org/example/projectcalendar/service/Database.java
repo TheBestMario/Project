@@ -26,6 +26,8 @@ public class Database {
         database = this;
 
         try {
+
+
             // Check if the database is accessible
             if (!databaseAccessibleCheck("localhost", port)) {
                 // Start Docker container
@@ -146,13 +148,13 @@ public class Database {
     }
 
     public void addUsertoTable(Profile profile) {
-        String query = "INSERT INTO Users (first_name, last_name, username, email, password) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Users (username, email, password) VALUES (?, ?, ?)";
         try (PreparedStatement st = con.prepareStatement(query)) {
-            st.setString(1, profile.getFirstName());
-            st.setString(2, profile.getLastName());
-            st.setString(3, profile.getUserName());
-            st.setString(4, profile.getEmail());
-            st.setString(5, profile.getPassword());
+            //st.setString(1, profile.getFirstName());
+            //st.setString(2, profile.getLastName());
+            st.setString(1, profile.getUserName());
+            st.setString(2, profile.getEmail());
+            st.setString(3, profile.getPassword());
             st.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -194,12 +196,13 @@ public class Database {
         return false;
     }
     public boolean verifyCredentials(String usernameOrEmail, String password) {
-        String query = "SELECT password FROM Users WHERE (username = ? OR email = ?)";
+        String query = "SELECT password FROM Users WHERE username = ? or email = ?";
         try (PreparedStatement st = con.prepareStatement(query)) {
             st.setString(1, usernameOrEmail);
             st.setString(2, usernameOrEmail);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
+
                 String storedPassword = rs.getString("password");
                 if (storedPassword.equals(password)) {
                     return true;
