@@ -25,6 +25,13 @@ public class Database {
         int port = getPortFromEnv();
         database = this;
 
+        if (this.dbUsername == null || this.dbPassword == null) {
+            throw new RuntimeException("Database credentials are missing. Set DB_USERNAME and DB_PASSWORD.");
+        }
+
+        this.connectionUrl = "jdbc:sqlserver://localhost:" + port
+                + ";databaseName=calendarDB;encrypt=false;";
+
         try {
 
 
@@ -71,11 +78,7 @@ public class Database {
     }
     public static Database getInstance() {
         if (database == null) {
-            synchronized (Database.class) {
-                if (database == null) {
-                    database = new Database();
-                }
-            }
+            database = new Database();
         }
         return database;
     }
@@ -114,7 +117,7 @@ public class Database {
             } catch (IOException e) {
                 System.out.println(e);
             }
-            Thread.sleep(2000);
+            wait(2000);
             retryCount++;
         }
         return false;
