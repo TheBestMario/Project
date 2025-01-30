@@ -46,6 +46,7 @@ public class LoginViewController extends Controller implements Initializable {
 
             if (database.verifyCredentials(usernameInput, passwordInput)) {
                 System.out.println("Login successful");
+                getMenuHandler().getPrimaryStage().close();
                 MenuHandler2 menuHandler = new MenuHandler2(new Stage());
                 // Proceed with login
             } else {
