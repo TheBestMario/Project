@@ -8,9 +8,11 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.projectcalendar.Controller;
 import org.example.projectcalendar.service.Database;
+import org.example.projectcalendar.service.MenuHandler2;
 import org.example.projectcalendar.service.User.Profile;
 
 import java.net.URL;
@@ -44,6 +46,7 @@ public class LoginViewController extends Controller implements Initializable {
 
             if (database.verifyCredentials(usernameInput, passwordInput)) {
                 System.out.println("Login successful");
+                MenuHandler2 menuHandler = new MenuHandler2(new Stage());
                 // Proceed with login
             } else {
                 System.out.println("Invalid username/email or password.");
@@ -58,7 +61,7 @@ public class LoginViewController extends Controller implements Initializable {
     protected void onBackButtonClicked(){
         try {
             //animates and switches scenes after finishing animation
-            getMenuHandler().addNodeToRoot("start-view.fxml");
+            getMenuHandler().addNodeToRoot("Initial/start-view.fxml");
             Node startViewScene = getMenuHandler().getNodeFromRoot("start-view.fxml");
             this.rootPane = getMenuHandler().getNodeFromRoot("login-view.fxml");
             startViewScene.setLayoutX(-rootPane.getLayoutX());

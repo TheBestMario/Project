@@ -162,8 +162,7 @@ public class Database {
     }
     public Profile getUserFromTable(Profile inProfile){
         Profile profile = null;
-        String query = "SELECT (first_name, last_name, username, email, password) FROM Users" +
-                "WHERE user_name = ?, email = ?";
+        String query = "SELECT (first_name, last_name, username, email, password) FROM Users WHERE user_name = ?, email = ?";
         try (PreparedStatement st = con.prepareStatement(query)) {
             st.setString(1, inProfile.getUserName());
             st.setString(2, inProfile.getEmail());

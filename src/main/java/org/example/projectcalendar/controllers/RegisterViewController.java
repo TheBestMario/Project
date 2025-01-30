@@ -38,7 +38,7 @@ public class RegisterViewController extends Controller implements Initializable 
     protected void onBackButtonClicked() {
         try {
             //animates and switches scenes after finishing animation
-            getMenuHandler().addNodeToRoot("start-view.fxml");
+            getMenuHandler().addNodeToRoot("Initial/start-view.fxml");
             Node startViewScene = getMenuHandler().getNodeFromRoot("start-view.fxml");
             this.rootPane = getMenuHandler().getNodeFromRoot("register-view.fxml");
             startViewScene.setLayoutX(-rootPane.getLayoutX());
@@ -143,7 +143,7 @@ public class RegisterViewController extends Controller implements Initializable 
     @FXML
     protected void onAccountCreatedReturnButtonPressed(){
         try{
-            getMenuHandler().setNodeToRoot("start-view.fxml");
+            getMenuHandler().setNodeToRoot("Initial/start-view.fxml");
         } catch (IOException e){
             e.printStackTrace();
         }

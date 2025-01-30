@@ -28,10 +28,10 @@ public class StartViewController extends Controller implements Initializable {
     protected void onLoginButtonClick() {
         try {
             //animates and switches scenes after finishing animation
-            getMenuHandler().addNodeToRoot("login-view.fxml");
+            getMenuHandler().addNodeToRoot("Initial/login-view.fxml");
             Node loginScene = getMenuHandler().getNodeFromRoot("login-view.fxml");
             this.scenePane = getMenuHandler().getNodeFromRoot("start-view.fxml");
-            loginScene.setLayoutX(500);
+            loginScene.setLayoutX(scenePane.getBoundsInParent().getWidth());
 
             //transition for first 'scene'
             TranslateTransition currentTransition = new TranslateTransition(Duration.millis(500), scenePane);
@@ -62,7 +62,7 @@ public class StartViewController extends Controller implements Initializable {
     protected void onRegisterButtonClick() {
         try {
             //animates and switches scenes after finishing animation
-            getMenuHandler().addNodeToRoot("register-view.fxml");
+            getMenuHandler().addNodeToRoot("Initial/register-view.fxml");
             Node registerScene = getMenuHandler().getNodeFromRoot("register-view.fxml");
             this.scenePane = getMenuHandler().getNodeFromRoot("start-view.fxml");
             registerScene.setLayoutX(500);
