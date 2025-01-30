@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import org.example.projectcalendar.Controller;
 import org.example.projectcalendar.service.Database;
@@ -30,7 +31,7 @@ public class RegisterViewController extends Controller implements Initializable 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //initialises database (reconnects each time)
-        database = new Database();
+        database = Database.getInstance();
 
     }
 
@@ -53,8 +54,9 @@ public class RegisterViewController extends Controller implements Initializable 
             nextTransition.setFromX(0);
             nextTransition.setToX(rootPane.getBoundsInParent().getWidth() + startViewScene.getTranslateX());
 
+            StackPane root = (StackPane) getMenuHandler().getRoot();
             nextTransition.setOnFinished(event -> {
-                getMenuHandler().getRoot().getChildren().remove(rootPane);
+                root.getChildren().remove(rootPane);
             });
 
             ParallelTransition parallelTransition = new ParallelTransition(

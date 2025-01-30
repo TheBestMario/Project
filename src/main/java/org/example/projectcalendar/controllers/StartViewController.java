@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import org.example.projectcalendar.Controller;
 import org.example.projectcalendar.service.MenuHandler;
@@ -43,10 +44,10 @@ public class StartViewController extends Controller implements Initializable {
             nextTransition.setFromX(scenePane.getBoundsInParent().getWidth() + loginScene.getTranslateX());
             nextTransition.setToX(0);
 
+
             nextTransition.setOnFinished(event -> {
-                getMenuHandler().getRoot().getChildren().remove(scenePane);
+                ((StackPane) getMenuHandler().getRoot()).getChildren().remove(scenePane);
                 loginScene.setTranslateX(0);
-                System.out.println(getMenuHandler());
             });
 
             ParallelTransition parallelTransition = new ParallelTransition(
@@ -79,7 +80,7 @@ public class StartViewController extends Controller implements Initializable {
 
 
             nextTransition.setOnFinished(event -> {
-                getMenuHandler().getRoot().getChildren().remove(scenePane);
+                ((StackPane) getMenuHandler().getRoot()).getChildren().remove(scenePane);
                 registerScene.setTranslateX(0);
             });
 

@@ -8,12 +8,10 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
+import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import org.example.projectcalendar.Controller;
 import org.example.projectcalendar.service.Database;
-import org.example.projectcalendar.service.MenuHandler2;
-import org.example.projectcalendar.service.User.Profile;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -35,7 +33,7 @@ public class LoginViewController extends Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //initialises database (reconnects each time)
-        database = new Database();
+        database = Database.getInstance();
     }
 
     @FXML
@@ -46,8 +44,7 @@ public class LoginViewController extends Controller implements Initializable {
 
             if (database.verifyCredentials(usernameInput, passwordInput)) {
                 System.out.println("Login successful");
-                getMenuHandler().getPrimaryStage().close();
-                MenuHandler2 menuHandler = new MenuHandler2(new Stage());
+                getMenuHandler().switchToCalendarMenu();
                 // Proceed with login
             } else {
                 System.out.println("Invalid username/email or password.");
@@ -76,9 +73,9 @@ public class LoginViewController extends Controller implements Initializable {
             TranslateTransition nextTransition = new TranslateTransition(Duration.millis(500), rootPane);
             nextTransition.setFromX(0);
             nextTransition.setToX(rootPane.getBoundsInParent().getWidth() + startViewScene.getTranslateX());
-
+            StackPane root = (StackPane) getMenuHandler().getRoot();
             nextTransition.setOnFinished(event -> {
-                getMenuHandler().getRoot().getChildren().remove(rootPane);
+                root.getChildren().remove(rootPane);
             });
 
             ParallelTransition parallelTransition = new ParallelTransition(

@@ -7,28 +7,43 @@
 <?import javafx.scene.control.SplitMenuButton?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<HBox alignment="CENTER" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectcalendar.controllers.TitleBarController">
-    <Label alignment="CENTER" prefHeight="56.0" prefWidth="302.0" text="Mario's Calendar">
-      <font>
-         <Font name="Arial Black" size="31.0" />
-      </font></Label>
-   <Region prefHeight="56.0" prefWidth="457.0" />
-   <SplitMenuButton alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="142.0" text="New">
-     <items>
-       <MenuItem mnemonicParsing="false" text="New Project" />
-       <MenuItem mnemonicParsing="false" text="New Event" />
-     </items>
-   </SplitMenuButton>
-   <Button mnemonicParsing="false" text="Notifs">
-      <HBox.margin>
-         <Insets left="20.0" />
-      </HBox.margin>
-   </Button>
-   <Button layoutX="931.0" layoutY="26.0" mnemonicParsing="false" text="Profile">
-      <HBox.margin>
-         <Insets left="20.0" right="20.0" />
-      </HBox.margin>
-   </Button>
-</HBox>
+
+<VBox alignment="CENTER" prefWidth="1920.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectcalendar.controllers.TitleBarController">
+   <children>
+      <HBox alignment="CENTER_LEFT" fillHeight="false" prefWidth="1920.0" styleClass="side-bar--bar">
+          <Label alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="56.0" prefWidth="288.0" text="Mario's Calendar" textFill="WHITE">
+            <font>
+               <Font name="Arial Black" size="31.0" />
+            </font>
+            <HBox.margin>
+               <Insets left="10.0" right="10.0" />
+            </HBox.margin>
+         </Label>
+         <Region maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="56.0" prefWidth="1283.0" HBox.hgrow="NEVER" />
+         <SplitMenuButton alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="142.0" text="New">
+           <items>
+             <MenuItem mnemonicParsing="false" text="New Project" />
+             <MenuItem mnemonicParsing="false" text="New Event" />
+           </items>
+            <HBox.margin>
+               <Insets left="10.0" />
+            </HBox.margin>
+         </SplitMenuButton>
+         <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Notifs">
+            <HBox.margin>
+               <Insets left="20.0" />
+            </HBox.margin>
+         </Button>
+         <Button layoutX="931.0" layoutY="26.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Profile">
+            <HBox.margin>
+               <Insets left="20.0" right="20.0" />
+            </HBox.margin>
+         </Button>
+      </HBox>
+      <Line endX="1920.0" fill="#3da195c4" stroke="#3da195c6" strokeWidth="2.0" />
+   </children>
+</VBox>
