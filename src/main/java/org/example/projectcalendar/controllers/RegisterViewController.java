@@ -10,10 +10,12 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import org.example.projectcalendar.Controller;
 import org.example.projectcalendar.service.Database;
+import org.example.projectcalendar.service.HashUtils;
 import org.example.projectcalendar.service.User.Profile;
 
 import java.io.IOException;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 import java.util.ResourceBundle;
 
 public class RegisterViewController extends Controller implements Initializable {
@@ -32,16 +34,15 @@ public class RegisterViewController extends Controller implements Initializable 
     public void initialize(URL location, ResourceBundle resources) {
         //initialises database (reconnects each time)
         database = Database.getInstance();
-
     }
 
     @FXML
     protected void onBackButtonClicked() {
         try {
             //animates and switches scenes after finishing animation
-            getMenuHandler().addNodeToRoot("Initial/start-view.fxml");
-            Node startViewScene = getMenuHandler().getNodeFromRoot("start-view.fxml");
-            this.rootPane = getMenuHandler().getNodeFromRoot("register-view.fxml");
+            getMenuHandler().addNodeToRoot("Initial/login-view.fxml");
+            Node startViewScene = getMenuHandler().getNodeFromRoot("login-view");
+            this.rootPane = getMenuHandler().getNodeFromRoot("register-view");
             startViewScene.setLayoutX(-rootPane.getLayoutX());
 
             //transition for first 'scene'
@@ -70,11 +71,6 @@ public class RegisterViewController extends Controller implements Initializable 
 
     @FXML
     protected void onRegisterButtonClick(){
-        try{
-            getMenuHandler().setNodeToRoot("Initial/account-created-view.fxml");
-        } catch (IOException e){
-            e.printStackTrace();
-        }
         informationLabel.setText("");
         informationLabel.setStyle("-fx-text-fill: red");
         String username = usernameField.getText();
@@ -130,7 +126,14 @@ public class RegisterViewController extends Controller implements Initializable 
 
 
         if (userChecked && passwordMatches && checkBoxState && validEmail){
-            Database.getInstance().addUsertoTable(new Profile(username,email,password));
+            try {
+                String salt = HashUtils.generateSalt();
+                String hashedPassword = HashUtils.hashPassword(password,salt);
+                Profile profile = new Profile(username,email,hashedPassword);
+                Database.getInstance().addUsertoTable(profile,salt,hashedPassword);
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            }
 
             try{
                 getMenuHandler().setNodeToRoot("Initial/account-created-view.fxml");

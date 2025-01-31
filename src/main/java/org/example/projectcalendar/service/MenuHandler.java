@@ -35,9 +35,9 @@ public class MenuHandler {
         // Start with a StackPane as the root
         root = new StackPane();
         root.setId("root");
-        scene = new Scene(root, 500, 500);
+        scene = new Scene(root, 600, 500);
 
-        FXMLLoader loader = new FXMLLoader(CalendarApplication.class.getResource("Initial/start-view.fxml"));
+        FXMLLoader loader = new FXMLLoader(CalendarApplication.class.getResource("Initial/login-view.fxml"));
         ((StackPane)root).getChildren().add(loader.load());
         ((StackPane)root).setAlignment(Pos.CENTER);
         root.setStyle("-fx-background-image: url(/static/images/robert_walters_logo.jpeg)");
@@ -141,7 +141,7 @@ public class MenuHandler {
     public Node getNodeFromRoot(String fxmlName) {
         if (root instanceof StackPane) {
             for (Node node : ((StackPane) root).getChildren()) {
-                if (node.getProperties().get("file").equals(fxmlName)) {
+                if (node.getId().equals(fxmlName)) {
                     return node;
                 }
             }

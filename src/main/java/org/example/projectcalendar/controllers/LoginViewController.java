@@ -12,7 +12,9 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import org.example.projectcalendar.Controller;
 import org.example.projectcalendar.service.Database;
+import org.example.projectcalendar.service.HashUtils;
 
+import javax.crypto.SecretKey;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -34,6 +36,7 @@ public class LoginViewController extends Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         //initialises database (reconnects each time)
         database = Database.getInstance();
+
     }
 
     @FXML
@@ -42,7 +45,12 @@ public class LoginViewController extends Controller implements Initializable {
             String usernameInput = usernameField.getText();
             String passwordInput = passwordField.getText();
 
-            if (database.verifyCredentials(usernameInput, passwordInput)) {
+            String salt = database.getSalt(usernameInput);
+            String storedPassword = database.getHashedPassword(usernameInput);
+
+            String hashedPassword = HashUtils.hashPassword(passwordInput, salt);
+
+            if (hashedPassword.equals(storedPassword)) {
                 System.out.println("Login successful");
                 getMenuHandler().switchToCalendarMenu();
                 // Proceed with login
@@ -56,12 +64,44 @@ public class LoginViewController extends Controller implements Initializable {
         }
     }
     @FXML
+    protected void onSignUpLinkClicked(){
+        //animates and switches scenes after finishing animation
+        try {
+            getMenuHandler().addNodeToRoot("Initial/register-view.fxml");
+            Node registerScene = getMenuHandler().getNodeFromRoot("register-view");
+            this.rootPane = getMenuHandler().getNodeFromRoot("login-view");
+            registerScene.setLayoutX(500);
+
+            //transition for first 'scene'
+            TranslateTransition currentTransition = new TranslateTransition(Duration.millis(500), rootPane);
+            currentTransition.setFromX(0);
+            currentTransition.setToX(-rootPane.getBoundsInParent().getWidth());
+
+            //transition for second 'scene'
+            TranslateTransition nextTransition = new TranslateTransition(Duration.millis(500), registerScene);
+            nextTransition.setFromX(rootPane.getBoundsInParent().getWidth() + registerScene.getTranslateX());
+            nextTransition.setToX(0);
+
+
+            nextTransition.setOnFinished(event -> {
+                ((StackPane) getMenuHandler().getRoot()).getChildren().remove(rootPane);
+                registerScene.setTranslateX(0);
+            });
+
+            ParallelTransition parallelTransition = new ParallelTransition(
+                    currentTransition, nextTransition);
+            parallelTransition.play();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    @FXML
     protected void onBackButtonClicked(){
         try {
             //animates and switches scenes after finishing animation
             getMenuHandler().addNodeToRoot("Initial/start-view.fxml");
-            Node startViewScene = getMenuHandler().getNodeFromRoot("start-view.fxml");
-            this.rootPane = getMenuHandler().getNodeFromRoot("login-view.fxml");
+            Node startViewScene = getMenuHandler().getNodeFromRoot("start-view");
+            this.rootPane = getMenuHandler().getNodeFromRoot("login-view");
             startViewScene.setLayoutX(-rootPane.getLayoutX());
 
             //transition for first 'scene'

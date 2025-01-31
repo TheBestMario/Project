@@ -2,65 +2,54 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
 
-<HBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER" prefHeight="234.0" prefWidth="130.0" styleClass="side-bar--bar" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox alignment="TOP_CENTER" prefHeight="1080.0" prefWidth="114.0" spacing="10.0" styleClass="side-bar--bar">
+      <VBox alignment="TOP_RIGHT" spacing="10.0" styleClass="side-bar--vbox-top">
          <children>
             <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="120.0" styleClass="side-bar--buttons" text="Dashboard" textFill="WHITE">
-               <VBox.margin>
-                  <Insets top="20.0" />
-               </VBox.margin>
                <font>
                   <Font name="Arial Bold" size="17.0" />
                </font>
             </Button>
-            <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="120.0" styleClass="side-bar--buttons" text="Projects" textFill="WHITE">
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
+            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="120.0" styleClass="side-bar--buttons" text="Projects" textFill="WHITE">
                <font>
                   <Font name="Arial Bold" size="18.0" />
                </font>
             </Button>
-            <Button layoutX="10.0" layoutY="35.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="120.0" styleClass="side-bar--buttons" text="My Tasks" textFill="WHITE">
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
+            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="120.0" styleClass="side-bar--buttons" text="My Tasks" textFill="WHITE">
                <font>
                   <Font name="Arial Bold" size="18.0" />
                </font>
             </Button>
-            <Button layoutX="10.0" layoutY="170.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="120.0" styleClass="side-bar--buttons" text="Chats" textFill="WHITE">
+            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="120.0" styleClass="side-bar--buttons" text="Chats" textFill="WHITE">
                <font>
                   <Font name="Arial Bold" size="18.0" />
-               </font>
-            </Button>
-            <Separator layoutX="10.0" layoutY="827.0" prefWidth="114.0" />
-            <Region prefHeight="547.0" prefWidth="100.0" />
-            <Separator prefWidth="114.0" />
-            <Button layoutX="10.0" layoutY="250.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="120.0" styleClass="side-bar--buttons" text="Settings" textFill="WHITE">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Button>
-            <Button layoutX="10.0" layoutY="330.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="120.0" styleClass="side-bar--buttons" text="Help &amp; Support" textAlignment="CENTER" textFill="WHITE" wrapText="true">
-               <VBox.margin>
-                  <Insets bottom="20.0" />
-               </VBox.margin>
-               <font>
-                  <Font size="14.0" />
                </font>
             </Button>
          </children>
       </VBox>
-      <Line endY="1080.0" fill="#3da195c4" stroke="#3da195c6" strokeWidth="2.0" />
+      <Region prefHeight="547.0" prefWidth="100.0" />
+      <VBox alignment="BOTTOM_RIGHT" spacing="10.0" styleClass="side-bar--vbox-bottom">
+         <children>
+            <Button mnemonicParsing="false" prefHeight="80.0" prefWidth="120.0" styleClass="side-bar--buttons" text="Settings" textFill="WHITE">
+               <font>
+                  <Font name="Arial Bold" size="21.0" />
+               </font>
+            </Button>
+            <Button mnemonicParsing="false" prefHeight="80.0" prefWidth="120.0" styleClass="side-bar--buttons" text="Help &amp; Support" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+               <font>
+                  <Font name="Arial Bold" size="13.0" />
+               </font>
+            </Button>
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </VBox>
    </children>
-</HBox>
+</VBox>

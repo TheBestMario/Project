@@ -1,5 +1,7 @@
 create database calendarDB
 
+use calendarDB
+
 create table Users(
 user_id int primary key identity(1,1),
 username varchar(255),
@@ -7,6 +9,7 @@ first_name varchar(255),
 last_name varchar(255),
 email varchar(255),
 password varchar(255),
+salt varchar(255),
 created_at timestamp)
 
 create table Calendars(

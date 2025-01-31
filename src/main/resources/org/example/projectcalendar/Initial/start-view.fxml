@@ -7,51 +7,58 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="scenePane" alignment="CENTER" fillWidth="false" minHeight="500.0" minWidth="500.0" prefHeight="500.0" prefWidth="500.0" styleClass="start-view--root" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectcalendar.controllers.StartViewController">
-   <properties file="start-view.fxml" />
-    <VBox alignment="CENTER" fillWidth="false" minHeight="400.0" minWidth="300.0" prefHeight="400.0" prefWidth="300.0" styleClass="start-view--vbox">
-      <children>
-         <Pane>
-            <children>
-              <Label fx:id="welcomeText" text="Mario's Calendar" textFill="WHITE" wrapText="true">
-                  <font>
-                     <Font name="Amiri Regular" size="34.0" />
-                  </font>
-               </Label>
-               <Label fx:id="welcomeText1" layoutX="1.0" layoutY="96.0" text="Login or Register to use the application." textFill="WHITE" wrapText="true">
-                  <font>
-                     <Font name="Arial" size="13.0" />
-                  </font>
-               </Label>
-            </children>
-            <VBox.margin>
-               <Insets bottom="30.0" />
-            </VBox.margin>
-         </Pane>
-         <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-            <children>
-               <Pane onMouseClicked="#onLoginButtonClick" prefHeight="25.0" styleClass="start-view--button-pane">
-                  <children>
-                    <Button layoutX="20.0" onMouseClicked="#onLoginButtonClick" styleClass="start-view--button" text="Login as an existing user">
-                        <font>
-                           <Font name="Arial Bold" size="12.0" />
-                        </font></Button>
-                  </children>
-               </Pane>
-               <Pane onMouseClicked="#onRegisterButtonClick" prefHeight="25.0" styleClass="start-view--button-pane">
-                  <children>
-                    <Button layoutX="35.0" onMouseClicked="#onRegisterButtonClick" styleClass="start-view--button" text="Register an account">
-                        <font>
-                           <Font name="Arial Bold" size="12.0" />
-                        </font></Button>
-                  </children>
-               </Pane>
-            </children>
-            <VBox.margin>
-               <Insets />
-            </VBox.margin>
-         </VBox>
-      </children>
-   </VBox>
-
+<VBox id="start-view" alignment="CENTER" styleClass="start-view--root" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectcalendar.controllers.StartViewController">
+   <children>
+       <VBox alignment="CENTER" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400.0" minWidth="300.0" prefHeight="400.0" prefWidth="300.0" styleClass="start-view">
+         <children>
+            <Pane prefHeight="117.0" prefWidth="319.0">
+               <children>
+                 <Label fx:id="welcomeText" layoutX="50.0" layoutY="15.0" styleClass="title" text="Calebar" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                     <font>
+                        <Font name="Arial" size="60.0" />
+                     </font>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="30.0" />
+               </VBox.margin>
+            </Pane>
+            <Label fx:id="welcomeText1" prefHeight="23.0" prefWidth="264.0" text="Login or Register to use the application." textFill="WHITE" wrapText="true">
+               <font>
+                  <Font name="Arial" size="13.0" />
+               </font>
+            </Label>
+            <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="208.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <Pane onMouseClicked="#onLoginButtonClick" prefHeight="59.0" prefWidth="200.0" styleClass="button-pane">
+                     <children>
+                       <Button layoutX="20.0" layoutY="18.0" onMouseClicked="#onLoginButtonClick" text="Login as an existing user">
+                           <font>
+                              <Font name="Arial Bold" size="12.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </Pane>
+                  <Pane onMouseClicked="#onRegisterButtonClick" prefHeight="57.0" prefWidth="200.0" styleClass="button-pane">
+                     <children>
+                       <Button layoutX="35.0" layoutY="17.0" onMouseClicked="#onRegisterButtonClick" text="Register an account">
+                           <font>
+                              <Font name="Arial Bold" size="12.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </Pane>
+               </children>
+            </VBox>
+            <Label fx:id="welcomeText11" text="An App by Mario Georgiev" textFill="WHITE" wrapText="true">
+               <font>
+                  <Font name="Arial" size="13.0" />
+               </font>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </Label>
+         </children>
+      </VBox>
+   </children>
 </VBox>

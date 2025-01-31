@@ -1,87 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<VBox fx:id="rootPane" alignment="CENTER" fillWidth="false" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectcalendar.controllers.RegisterViewController">
-   <properties file="register-view.fxml" />
-    <children>
-      <VBox alignment="CENTER" prefHeight="320.0" prefWidth="400.0" styleClass="register-view--vbox-background">
-         <children>
-            <Label text="Registering a new account">
-               <VBox.margin>
-                  <Insets bottom="20.0" />
-               </VBox.margin>
-               <font>
-                  <Font name="Arial Bold" size="22.0" />
-               </font></Label>
-            <GridPane alignment="CENTER" prefHeight="250.0" prefWidth="250.0">
-              <columnConstraints>
-                <ColumnConstraints halignment="CENTER" minWidth="10.0" prefWidth="185.0" />
-                <ColumnConstraints fillWidth="false" halignment="CENTER" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Label alignment="CENTER" prefHeight="50.0" prefWidth="224.0" text="Username">
-                     <font>
-                        <Font name="Arial Bold" size="12.0" />
-                     </font></Label>
-                  <TextField fx:id="usernameField" GridPane.columnIndex="1" />
-                  <TextField fx:id="emailField" prefHeight="25.0" prefWidth="137.0" promptText="Email" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-                     <font>
-                        <Font size="13.0" />
-                     </font>
-                     <GridPane.margin>
-                        <Insets left="50.0" />
-                     </GridPane.margin>
-                  </TextField>
-                  <Label alignment="CENTER" text="Password" GridPane.rowIndex="3">
-                     <font>
-                        <Font name="Arial Bold" size="12.0" />
-                     </font></Label>
-                  <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <Label alignment="CENTER" text="Confirm Password" GridPane.rowIndex="2">
-                     <font>
-                        <Font name="Arial Bold" size="12.0" />
-                     </font></Label>
-                  <PasswordField fx:id="confirmPasswordField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-               </children>
-            </GridPane>
-            <HBox alignment="CENTER" prefWidth="200.0" spacing="20.0">
-               <children>
-                  <CheckBox fx:id="policyCheckBox" alignment="CENTER" mnemonicParsing="false" text="Accept the terms and conditions, as well as the policies" wrapText="true" />
-               </children>
-            </HBox>
-            <Label fx:id="informationLabel" prefHeight="125.0" prefWidth="0.0" />
-            <HBox alignment="CENTER" layoutX="21.0" layoutY="204.0" prefWidth="200.0" spacing="20.0">
-               <children>
-                  <Button fx:id="submitButton" mnemonicParsing="false" onMouseClicked="#onRegisterButtonClick" styleClass="register-view--register-button" text="Complete Registration">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Button>
-                  <Button id="backButton" fx:id="backButton" minWidth="30.0" mnemonicParsing="false" onMouseClicked="#onBackButtonClicked" prefWidth="50" styleClass="login-view--back-button" text="Back" />
-               </children>
-            </HBox>
-         </children>
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
+
+<AnchorPane id="register-view" prefHeight="582.0" prefWidth="469.0" styleClass="register-view--root" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectcalendar.controllers.RegisterViewController">
+   <children>
+      <VBox id="register-view" fx:id="rootPane" alignment="CENTER" layoutX="4.0" layoutY="9.0" prefHeight="551.0" prefWidth="329.0" spacing="20" styleClass="register-view" stylesheets="/static/calendar.css" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="30.0">
+         <Label styleClass="title" text="Register" />
+         <TextField fx:id="usernameField" promptText="Username" styleClass="input-field" />
+         <TextField fx:id="emailField" promptText="Email" styleClass="input-field" />
+         <PasswordField fx:id="passwordField" promptText="Password" styleClass="input-field" />
+         <PasswordField fx:id="confirmPasswordField" promptText="Confirm Password" styleClass="input-field" />
+         <CheckBox fx:id="policyCheckBox" styleClass="policy-checkbox" text="I agree to the terms and conditions" />
+         <Label fx:id="informationLabel" styleClass="information-label" />
+         <Button fx:id="submitButton" onAction="#onRegisterButtonClick" prefHeight="45.0" prefWidth="220.0" styleClass="register-button" text="Register" />
+         <Button onAction="#onBackButtonClicked" prefHeight="45.0" prefWidth="90.0" styleClass="back-button" text="Back" />
       </VBox>
    </children>
-</VBox>
+</AnchorPane>

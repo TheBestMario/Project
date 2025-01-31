@@ -2,6 +2,7 @@ package org.example.projectcalendar.service;
 
 import org.example.projectcalendar.service.User.Profile;
 
+import javax.crypto.SecretKey;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,12 +20,13 @@ public class Database {
     private static Connection con;
     private static Database database;
 
+    private SecretKey key;
+
     public Database() {
         this.dbUsername = System.getenv("DB_USERNAME");
         this.dbPassword = System.getenv("DB_PASSWORD");
         int port = getPortFromEnv();
         database = this;
-
         if (this.dbUsername == null || this.dbPassword == null) {
             throw new RuntimeException("Database credentials are missing. Set DB_USERNAME and DB_PASSWORD.");
         }
@@ -76,6 +78,7 @@ public class Database {
             e.printStackTrace();
         }
     }
+    //singleton
     public static Database getInstance() {
         if (database == null) {
             database = new Database();
@@ -149,19 +152,47 @@ public class Database {
         }
     }
 
-    public void addUsertoTable(Profile profile) {
-        String query = "INSERT INTO Users (username, email, password) VALUES (?, ?, ?)";
+    public void addUsertoTable(Profile profile, String salt, String hashedPassword) {
+        String query = "INSERT INTO Users (username, email, salt, password) VALUES (?, ?, ?, ?)";
         try (PreparedStatement st = con.prepareStatement(query)) {
-            //st.setString(1, profile.getFirstName());
-            //st.setString(2, profile.getLastName());
             st.setString(1, profile.getUserName());
             st.setString(2, profile.getEmail());
-            st.setString(3, profile.getPassword());
+            st.setString(3, salt);
+            st.setString(4, hashedPassword);
             st.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    public String getSalt(String username) {
+        String query = "SELECT salt FROM Users WHERE username = ?";
+        try (PreparedStatement st = con.prepareStatement(query)) {
+            st.setString(1, username);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                return rs.getString("salt");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getHashedPassword(String username) {
+        String query = "SELECT password FROM Users WHERE username = ?";
+        try (PreparedStatement st = con.prepareStatement(query)) {
+            st.setString(1, username);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                return rs.getString("password");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public Profile getUserFromTable(Profile inProfile){
         Profile profile = null;
         String query = "SELECT (first_name, last_name, username, email, password) FROM Users WHERE user_name = ?, email = ?";

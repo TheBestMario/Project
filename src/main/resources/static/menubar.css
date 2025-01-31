@@ -9,7 +9,55 @@
     -fx-cursor: hand;
 }
 
-
 .side-bar--bar{
     -fx-background-color: darkslategray;
+    -fx-pref-height: 100%;
+    -fx-border-width: 0 5 0 0;
+    -fx-border-color: #065353
+}
+.side-bar--vbox-top{
+    -fx-alignment: top-center;
+    -fx-background-radius: 5;
+    -fx-border-width: 0 0 5 5;
+    -fx-border-color: #065353;
+    -fx-border-radius: 5px;
+
+}
+.side-bar--vbox-bottom{
+    -fx-alignment: bottom-center;
+    -fx-background-radius: 5;
+    -fx-border-width: 5 0 5 5;
+    -fx-border-color: #065353;
+    -fx-border-radius: 5px;
+}
+
+.top-bar--bar{
+    -fx-background-color: darkslategray;
+    -fx-pref-width: 100%;
+    -fx-border-width: 5;
+    -fx-border-color: #065353;
+}
+
+
+
+.top-bar--label{
+    -fx-text-fill: white;
+    -fx-font-size: 36;
+    -fx-font-family: Arial;
+    -fx-alignment: center-left;
+    -fx-border-width: 0 5 0 0;
+    -fx-border-color: #065353
+}
+
+.top-bar--buttons{
+    -fx-background-color: white;
+    -fx-border-radius: 100%;
+    -fx-background-radius: 100%;
+    -fx-alignment: center-right;
+}
+
+.top-bar--buttons:hover{
+    -fx-background-color: darkcyan;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+    -fx-cursor: hand;
 }
