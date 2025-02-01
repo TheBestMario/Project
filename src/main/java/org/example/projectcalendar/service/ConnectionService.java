@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class ConnectionService {
+public class ConnectionService implements Runnable{
     private String serverAddress;
     private Scanner in;
     private PrintWriter out;
@@ -26,7 +26,6 @@ public class ConnectionService {
             while (in.hasNextLine()) {
                 System.out.println(in.nextLine());
             }
-            out.println("HELLO SERVER");
 
         } catch (IOException e) {
             throw new RuntimeException(e);
