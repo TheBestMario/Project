@@ -19,8 +19,12 @@ public class CalendarApplication extends javafx.application.Application {
 //        initializeDatabase();
         serverAddressForDB = "127.0.0.1";
         serverPortForDB = 8766;
+
         ConnectionService connectionService = new ConnectionService(serverAddressForDB, serverPortForDB);
-        connectionService.run();
+        Thread connectionThread = new Thread(connectionService);
+        connectionThread.start();
+
+
         this.menuHandler = new MenuHandler(stage, db); // Pass Database instance
         System.out.println("Application started.");
     }
