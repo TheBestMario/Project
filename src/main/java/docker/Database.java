@@ -1,4 +1,4 @@
-package org.example.projectcalendar.service;
+package docker;
 
 import org.example.projectcalendar.service.User.Profile;
 
@@ -6,12 +6,17 @@ import javax.crypto.SecretKey;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Database {
     private String dbUsername;
@@ -19,8 +24,28 @@ public class Database {
     private String connectionUrl;
     private static Connection con;
     private static Database database;
-
+    private static ServerSocket serverSocket;
+    private static InetAddress serverAddress;
+    private static ArrayList<Connector> clientList = new ArrayList<>();
     private SecretKey key;
+
+    public static void main(String[] args){
+        database = new Database();
+        ExecutorService pool = Executors.newFixedThreadPool(200);
+        try(ServerSocket serverSocket = new ServerSocket(8766)){
+            serverAddress = InetAddress.getLocalHost();
+            System.out.println(serverAddress);
+            while (true) {
+                pool.execute(new Connector(serverSocket.accept()));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static ArrayList<Connector> getClientList() {
+        return clientList;
+    }
 
     public Database() {
         this.dbUsername = System.getenv("DB_USERNAME");
@@ -34,13 +59,13 @@ public class Database {
         this.connectionUrl = "jdbc:sqlserver://localhost:" + port
                 + ";databaseName=calendarDB;encrypt=false;";
 
+
         try {
-
-
             // Check if the database is accessible
             if (!databaseAccessibleCheck("localhost", port)) {
-                // Start Docker container
+
                 System.out.println("cannot connect to container, making one now.");
+                // Start Docker container
                 String[] command = {"docker-compose", "up", "-d"};
                 runCommand(command);
                 System.out.println("finished executing docker");

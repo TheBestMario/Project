@@ -1,7 +1,8 @@
 package org.example.projectcalendar;
 
 import javafx.stage.Stage;
-import org.example.projectcalendar.service.Database;
+import docker.Database;
+import org.example.projectcalendar.service.ConnectionService;
 import org.example.projectcalendar.service.MenuHandler;
 
 import java.io.IOException;
@@ -10,13 +11,16 @@ public class CalendarApplication extends javafx.application.Application {
 
     private Database db;
     private MenuHandler menuHandler;
+    private static String serverAddressForDB;
+    private static int serverPortForDB;
 
     @Override
     public void start(Stage stage) throws IOException {
-        stage.setMinWidth(500);
-        stage.setMinHeight(500);
-
-        initializeDatabase();
+//        initializeDatabase();
+        serverAddressForDB = "127.0.0.1";
+        serverPortForDB = 8766;
+        ConnectionService connectionService = new ConnectionService(serverAddressForDB, serverPortForDB);
+        connectionService.run();
         this.menuHandler = new MenuHandler(stage, db); // Pass Database instance
         System.out.println("Application started.");
     }
@@ -25,13 +29,13 @@ public class CalendarApplication extends javafx.application.Application {
         launch();
     }
 
-    private void initializeDatabase() {
-        try {
-            this.db = new Database();
-            db.establishConnection();
-            System.out.println("Database connection established.");
-        } catch (Exception e) {
-            System.out.println("Failed to connect to database: " + e.getMessage());
-        }
-    }
+//    private void initializeDatabase() {
+//        try {
+//            this.db = new Database();
+//            db.establishConnection();
+//            System.out.println("Database connection established.");
+//        } catch (Exception e) {
+//            System.out.println("Failed to connect to database: " + e.getMessage());
+//        }
+//    }
 }
