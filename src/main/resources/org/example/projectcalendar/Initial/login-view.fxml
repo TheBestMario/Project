@@ -13,11 +13,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="login-view" prefHeight="372.0" prefWidth="677.0" styleClass="login-view--root" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectcalendar.controllers.LoginViewController">
+<AnchorPane id="login-view" maxHeight="500.0" maxWidth="800.0" prefHeight="372.0" prefWidth="677.0" styleClass="root" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectcalendar.controllers.LoginViewController">
    <children>
-      <VBox alignment="CENTER" layoutX="-29.0" prefHeight="372.0" prefWidth="306.0" styleClass="login-view" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="371.0" AnchorPane.topAnchor="0.0">
+      <VBox alignment="CENTER" layoutX="-29.0" prefHeight="372.0" prefWidth="324.0" styleClass="login-view--root" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="353.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label alignment="TOP_CENTER" prefHeight="159.0" prefWidth="188.0" styleClass="title" text="Calebar" textAlignment="CENTER">
+            <Label alignment="TOP_CENTER" prefHeight="117.0" prefWidth="188.0" styleClass="title" text="Calebar" textAlignment="CENTER">
                <font>
                   <Font name="Arial" size="53.0" />
                </font>
@@ -27,7 +27,7 @@
                   <Font name="Arial" size="15.0" />
                </font>
             </Label>
-            <Region prefHeight="193.0" prefWidth="266.0" />
+            <Region prefHeight="146.0" prefWidth="306.0" />
             <Label layoutX="99.0" layoutY="258.0" text="Made by Mario with Love." textAlignment="CENTER">
                <font>
                   <Font name="Arial" size="12.0" />
@@ -38,15 +38,15 @@
             </Label>
          </children>
       </VBox>
-      <VBox alignment="CENTER" layoutX="306.0" prefHeight="372.0" prefWidth="370.0" spacing="20.0" styleClass="login-view" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox alignment="CENTER" layoutX="306.0" prefHeight="372.0" prefWidth="341.0" spacing="20.0" styleClass="login-view" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
           <children>
               <Label styleClass="login-label" text="Login" />
               <TextField fx:id="usernameField" promptText="Username" styleClass="input-field" />
               <PasswordField fx:id="passwordField" promptText="Password" styleClass="input-field" />
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                <children>
-                    <Button fx:id="loginButton" onMouseClicked="#onLoginButtonClicked" prefHeight="45.0" prefWidth="182.0" styleClass="login-view--login-button" text="Login" />
-                  <CheckBox mnemonicParsing="false" text="Remember me" />
+                    <Button fx:id="loginButton" onMouseClicked="#onLoginButtonClicked" prefHeight="45.0" prefWidth="170.0" styleClass="login-view--login-button" text="Login" />
+                  <CheckBox mnemonicParsing="false" prefHeight="46.0" prefWidth="99.0" text="Remember me" wrapText="true" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">

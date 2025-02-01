@@ -1,6 +1,6 @@
 package org.example.projectcalendar.service;
 
-import javafx.collections.ObservableList;
+import docker.Database;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -40,7 +40,7 @@ public class MenuHandler {
         FXMLLoader loader = new FXMLLoader(CalendarApplication.class.getResource("Initial/login-view.fxml"));
         ((StackPane)root).getChildren().add(loader.load());
         ((StackPane)root).setAlignment(Pos.CENTER);
-        root.setStyle("-fx-background-image: url(/static/images/robert_walters_logo.jpeg)");
+        root.setStyle("-fx-background-image: url(static/images/robert_walters_logo.jpeg)");
 
         Controller controller = loader.getController();
         controller.setMenuHandler(this);
@@ -48,6 +48,9 @@ public class MenuHandler {
 
         String stylesheet = CalendarApplication.class.getResource("/static/calendar.css").toExternalForm();
         scene.getStylesheets().add(stylesheet);
+
+        primaryStage.setMinWidth(500);
+        primaryStage.setMinHeight(500);
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("Calendar");

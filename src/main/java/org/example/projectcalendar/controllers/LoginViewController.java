@@ -11,10 +11,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import org.example.projectcalendar.Controller;
-import org.example.projectcalendar.service.Database;
+import docker.Database;
 import org.example.projectcalendar.service.HashUtils;
 
-import javax.crypto.SecretKey;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -42,6 +41,7 @@ public class LoginViewController extends Controller implements Initializable {
     @FXML
     protected void onLoginButtonClicked(){
         try {
+
             String usernameInput = usernameField.getText();
             String passwordInput = passwordField.getText();
 
@@ -68,24 +68,24 @@ public class LoginViewController extends Controller implements Initializable {
         //animates and switches scenes after finishing animation
         try {
             getMenuHandler().addNodeToRoot("Initial/register-view.fxml");
-            Node registerScene = getMenuHandler().getNodeFromRoot("register-view");
+            Node nextScene = getMenuHandler().getNodeFromRoot("register-view");
             this.rootPane = getMenuHandler().getNodeFromRoot("login-view");
-            registerScene.setLayoutX(500);
+            nextScene.setLayoutX(getMenuHandler().getPrimaryStage().getWidth());
 
             //transition for first 'scene'
             TranslateTransition currentTransition = new TranslateTransition(Duration.millis(500), rootPane);
             currentTransition.setFromX(0);
-            currentTransition.setToX(-rootPane.getBoundsInParent().getWidth());
+            currentTransition.setToX(-getMenuHandler().getPrimaryStage().getWidth());
 
             //transition for second 'scene'
-            TranslateTransition nextTransition = new TranslateTransition(Duration.millis(500), registerScene);
-            nextTransition.setFromX(rootPane.getBoundsInParent().getWidth() + registerScene.getTranslateX());
+            TranslateTransition nextTransition = new TranslateTransition(Duration.millis(500), nextScene);
+            nextTransition.setFromX(getMenuHandler().getPrimaryStage().getWidth());
             nextTransition.setToX(0);
 
 
             nextTransition.setOnFinished(event -> {
                 ((StackPane) getMenuHandler().getRoot()).getChildren().remove(rootPane);
-                registerScene.setTranslateX(0);
+                nextScene.setTranslateX(0);
             });
 
             ParallelTransition parallelTransition = new ParallelTransition(

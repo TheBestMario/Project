@@ -9,7 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import org.example.projectcalendar.Controller;
-import org.example.projectcalendar.service.Database;
+import docker.Database;
 import org.example.projectcalendar.service.HashUtils;
 import org.example.projectcalendar.service.User.Profile;
 
@@ -41,19 +41,19 @@ public class RegisterViewController extends Controller implements Initializable 
         try {
             //animates and switches scenes after finishing animation
             getMenuHandler().addNodeToRoot("Initial/login-view.fxml");
-            Node startViewScene = getMenuHandler().getNodeFromRoot("login-view");
+            Node nextScene = getMenuHandler().getNodeFromRoot("login-view");
             this.rootPane = getMenuHandler().getNodeFromRoot("register-view");
-            startViewScene.setLayoutX(-rootPane.getLayoutX());
+            nextScene.setLayoutX(-getMenuHandler().getPrimaryStage().getWidth());
 
             //transition for first 'scene'
-            TranslateTransition currentTransition = new TranslateTransition(Duration.millis(500), startViewScene);
-            currentTransition.setFromX(-rootPane.getBoundsInParent().getWidth());
+            TranslateTransition currentTransition = new TranslateTransition(Duration.millis(500), nextScene);
+            currentTransition.setFromX(-getMenuHandler().getPrimaryStage().getWidth());
             currentTransition.setToX(0);
 
             //transition for second 'scene'
             TranslateTransition nextTransition = new TranslateTransition(Duration.millis(500), rootPane);
             nextTransition.setFromX(0);
-            nextTransition.setToX(rootPane.getBoundsInParent().getWidth() + startViewScene.getTranslateX());
+            nextTransition.setToX(getMenuHandler().getPrimaryStage().getWidth());
 
             StackPane root = (StackPane) getMenuHandler().getRoot();
             nextTransition.setOnFinished(event -> {

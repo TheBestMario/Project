@@ -41,10 +41,12 @@
     -fx-padding: 20px;
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 10, 0, 0, 0);
 }
-.login-view--root{
-    -fx-background-color: white;
+.login-view .root{
+    -fx-background-color: #fff;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10em;
 }
 
 .login-view .title {
@@ -103,10 +105,8 @@
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.61), 10, 0, 0, 0);
-    -fx-max-height: 90%;
-    -fx-max-width: 90%;
 }
-.register-view--root{
+.register-view .root{
     -fx-background-color: white;
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
