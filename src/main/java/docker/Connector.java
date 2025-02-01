@@ -17,9 +17,7 @@ public class Connector implements Runnable {
             System.out.println(socket.getInetAddress().getHostAddress());
             in = new Scanner(socket.getInputStream());
             out = new PrintWriter(socket.getOutputStream(), true);
-            while (true){
-                out.println("HELLO user");
-            }
+            out.println("Hello user.");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
