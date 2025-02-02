@@ -9,7 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import org.example.projectcalendar.Controller;
-import docker.Database;
+import org.example.projectcalendar.service.ConnectionService;
 import org.example.projectcalendar.service.HashUtils;
 import org.example.projectcalendar.service.User.Profile;
 
@@ -28,12 +28,14 @@ public class RegisterViewController extends Controller implements Initializable 
     public Label informationLabel;
     public Node rootPane;
     public TextField emailField;
-    private Database database;
+    private ConnectionService connectionService;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //initialises database (reconnects each time)
-        database = Database.getInstance();
+    }
+    @Override
+    public void setConnectionService(ConnectionService connectionService){
+        this.connectionService = connectionService;
     }
 
     @FXML
@@ -91,7 +93,7 @@ public class RegisterViewController extends Controller implements Initializable 
         } else if (username.length() > 20) {
             System.out.println("username is too long, it must be less than 20 characters.");
             informationLabel.setText("Username is too long");
-        } else if (Profile.checkUserNameExists(username,database)) {
+        } else if (connectionService.getUserNameExists(username)) {
             System.out.println("username already exists");
             informationLabel.setText("Username already exists.");
         } else{
@@ -129,16 +131,21 @@ public class RegisterViewController extends Controller implements Initializable 
             try {
                 String salt = HashUtils.generateSalt();
                 String hashedPassword = HashUtils.hashPassword(password,salt);
-                Profile profile = new Profile(username,email,hashedPassword);
-                Database.getInstance().addUsertoTable(profile,salt,hashedPassword);
+                if (connectionService.createProfile(username,email,hashedPassword,salt)){
+                    Profile profile = new Profile(username,email,password);
+
+                    try{
+                        getMenuHandler().setNodeToRoot("Initial/account-created-view.fxml");
+                    } catch (IOException e){
+                        e.printStackTrace();
+                    }
+
+                }else{
+                    System.out.println("failed to create profile");
+                }
+
             } catch (NoSuchAlgorithmException e) {
                 throw new RuntimeException(e);
-            }
-
-            try{
-                getMenuHandler().setNodeToRoot("Initial/account-created-view.fxml");
-            } catch (IOException e){
-                e.printStackTrace();
             }
 
 
@@ -148,7 +155,7 @@ public class RegisterViewController extends Controller implements Initializable 
     @FXML
     protected void onAccountCreatedReturnButtonPressed(){
         try{
-            getMenuHandler().setNodeToRoot("Initial/start-view.fxml");
+            getMenuHandler().setNodeToRoot("Initial/login-view.fxml");
         } catch (IOException e){
             e.printStackTrace();
         }

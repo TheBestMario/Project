@@ -48,8 +48,8 @@ public class MenuHandler {
 
         Controller controller = loader.getController();
         controller.setMenuHandler(this);
-        controller.setConnectionService(connectionService);
         controller.setRoot(root);
+        controller.setConnectionService(connectionService);
         controller.setConnectionThread(connectionThread);
 
         String stylesheet = CalendarApplication.class.getResource("/static/calendar.css").toExternalForm();
@@ -127,24 +127,26 @@ public class MenuHandler {
 
     public void loadNode(String fxmlPath, boolean clearRoot) throws IOException {
         FXMLLoader loader = new FXMLLoader(CalendarApplication.class.getResource(fxmlPath));
+        Parent node = loader.load();
+        Controller controller = loader.getController();
+        controller.setMenuHandler(this);
+        controller.setRoot(root);
+        controller.setConnectionService(connectionService);
+
         switch (root.getClass().getSimpleName()) {
             case "StackPane":
                 if (clearRoot) {
                     ((StackPane) root).getChildren().clear();
                 }
-                ((StackPane) root).getChildren().add(loader.load());
+                ((StackPane) root).getChildren().add(node);
                 break;
             case "BorderPane":
                 if (clearRoot) {
                     ((BorderPane) root).getChildren().clear();
                 }
-                ((BorderPane) root).setCenter(loader.load());
+                ((BorderPane) root).setCenter(node);
                 break;
         }
-
-        Controller controller = loader.getController();
-        controller.setMenuHandler(this);
-        controller.setRoot(root);
     }
 
     public Node getNodeFromRoot(String fxmlName) {

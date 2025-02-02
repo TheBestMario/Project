@@ -35,6 +35,10 @@ public class CalendarApplication extends javafx.application.Application {
             throw new RuntimeException(e);
         }
     }
+    @Override
+    public void stop() {
+        System.exit(0);
+    }
 
     public static void main(String[] args) {
         launch();

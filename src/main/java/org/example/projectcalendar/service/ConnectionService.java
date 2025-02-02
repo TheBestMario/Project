@@ -16,6 +16,7 @@ public class ConnectionService implements Runnable {
     private BufferedReader in;
     private PrintWriter out;
     private int serverPort;
+    private Socket socket;
     private BlockingQueue<String> responseQueue = new LinkedBlockingQueue<>();
 
     public ConnectionService(String serverAddress, int port) {
@@ -25,7 +26,7 @@ public class ConnectionService implements Runnable {
 
     public void run() {
         try {
-            Socket socket = new Socket(serverAddress, serverPort);
+            socket = new Socket(serverAddress, serverPort);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
             String line;
@@ -35,6 +36,17 @@ public class ConnectionService implements Runnable {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             System.out.println("No server detected, continuing ");
+        }
+    }
+
+    public void closeConnection() {
+        try {
+            in.close();
+            out.close();
+            socket.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
     /**
@@ -72,6 +84,15 @@ public class ConnectionService implements Runnable {
             return false;
         }
     }
+    public boolean getUserNameExists(String username){
+        out.println("CHECK_USERNAME_EXISTS " + username);
+        String response = waitForResponse();
+        if (response != null && response.equals("USERNAME_EXISTS")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public String getSalt(String username) {
         try {
@@ -97,5 +118,17 @@ public class ConnectionService implements Runnable {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public boolean createProfile(String username, String email, String hashedPassword, String salt) {
+        try{
+            out.println("SAVE_USER_PROFILE_TO_DB "+username+" "+email+" "+hashedPassword+" "+salt);
+            String response = waitForResponse();
+            if (response != null && response.startsWith("PROFILE_CREATED")){
+                return true;
+            }else return false;
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

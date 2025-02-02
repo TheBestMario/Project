@@ -207,11 +207,11 @@ public class Database {
         }
     }
 
-    public void addUsertoTable(Profile profile, String salt, String hashedPassword) {
+    public void addUsertoTable(String userName,String email, String salt, String hashedPassword) {
         String query = "INSERT INTO Users (username, email, salt, password) VALUES (?, ?, ?, ?)";
         try (PreparedStatement st = con.prepareStatement(query)) {
-            st.setString(1, profile.getUserName());
-            st.setString(2, profile.getEmail());
+            st.setString(1, userName);
+            st.setString(2, email);
             st.setString(3, salt);
             st.setString(4, hashedPassword);
             st.execute();
