@@ -25,9 +25,13 @@ public class MenuHandler {
     private Parent root;
     private String title;
     private Scene scene;
+    private ConnectionService connectionService;
+    private Thread connectionThread;
 
-    public MenuHandler(Stage stage, Database db) throws IOException {
+    public MenuHandler(Stage stage, ConnectionService connectionService,Thread connectionThread) throws IOException {
         primaryStage = stage;
+        this.connectionService = connectionService;
+        this.connectionThread = connectionThread;
         initializeUI();
     }
 
@@ -44,7 +48,9 @@ public class MenuHandler {
 
         Controller controller = loader.getController();
         controller.setMenuHandler(this);
+        controller.setConnectionService(connectionService);
         controller.setRoot(root);
+        controller.setConnectionThread(connectionThread);
 
         String stylesheet = CalendarApplication.class.getResource("/static/calendar.css").toExternalForm();
         scene.getStylesheets().add(stylesheet);

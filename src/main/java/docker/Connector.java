@@ -1,6 +1,6 @@
 package docker;
 
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -8,18 +8,69 @@ public class Connector implements Runnable {
     private Socket socket;
     private Scanner in;
     private PrintWriter out;
+    private Database database;
 
     public Connector(Socket socket){
         this.socket = socket;
+        this.database = Database.getInstance();
     }
-    public void run(){
-        try{
+    public void run() {
+        try {
             System.out.println(socket.getInetAddress().getHostAddress());
             in = new Scanner(socket.getInputStream());
             out = new PrintWriter(socket.getOutputStream(), true);
-            out.println("Hello user.");
+            while (in.hasNextLine()) {
+                String message = in.nextLine();
+                System.out.println(message);
+                if (message.startsWith("LOGIN")) {
+                    handleLogin(message);
+                } else if (message.startsWith("GET_SALT")) {
+                    handleGetSalt(message);
+                } else if (message.startsWith("GET_HASHED_PASSWORD")) {
+                    handleGetHashedPassword(message);
+                }
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+    private void handleLogin(String message) {
+        String[] parts = message.split(" ");
+        if (parts.length == 3) {
+            String username = parts[1];
+            String password = parts[2];
+
+            if (database.verifyCredentials(username,password)) {
+                out.println("LOGIN_SUCCESS");
+            } else {
+                out.println("LOGIN_FAILURE");
+            }
+        } else {
+            out.println("INVALID_LOGIN_REQUEST");
+        }
+    }
+
+    private void handleGetSalt(String message) {
+        String[] parts = message.split(" ");
+        if (parts.length == 2) {
+            String username = parts[1];
+            String salt = database.getSalt(username);
+            out.println("SALT " + salt);
+        } else {
+            out.println("INVALID_GET_SALT_REQUEST");
+        }
+    }
+
+    private void handleGetHashedPassword(String message) {
+        String[] parts = message.split(" ");
+        if (parts.length == 2) {
+            String username = parts[1];
+            String hashedPassword = database.getHashedPassword(username);
+            out.println("HASHED_PASSWORD " + hashedPassword);
+        } else {
+            out.println("INVALID_GET_HASHED_PASSWORD_REQUEST");
+        }
+    }
+
+
 }

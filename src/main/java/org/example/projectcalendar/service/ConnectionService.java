@@ -1,35 +1,98 @@
 package org.example.projectcalendar.service;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
-public class ConnectionService implements Runnable{
+public class ConnectionService implements Runnable {
     private String serverAddress;
-    private Scanner in;
+    private BufferedReader in;
     private PrintWriter out;
     private int serverPort;
+    private BlockingQueue<String> responseQueue = new LinkedBlockingQueue<>();
 
-    public ConnectionService(String serverAddress, int port){
+    public ConnectionService(String serverAddress, int port) {
         this.serverAddress = serverAddress;
         this.serverPort = port;
-
-
     }
 
     public void run() {
         try {
             Socket socket = new Socket(serverAddress, serverPort);
-            in = new Scanner(socket.getInputStream());
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
-            while (in.hasNextLine()) {
-                System.out.println(in.nextLine());
+            String line;
+            while ((line = in.readLine()) != null) {
+                responseQueue.put(line);
             }
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            System.out.println("No server detected, continuing ");
+        }
+    }
+    /**
+     * Waits for a response from the server for 1 second
+     * I had a problem synchronising threads, I was trying to use thread.join()
+     * but because the app works on main it means that it crashes as it waits for the thread
+     * with the connection to finish. I looked online and saw that you can give it leeway through
+     * the blockingqueue object which is similar to queue.
+     */
+    private String waitForResponse() {
+        try {
+            return responseQueue.poll(1, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return null;
         }
     }
 
+    public boolean sendLoginRequest(String username, String password) {
+        try {
+            out.println("LOGIN " + username + " " + password);
+            String response = waitForResponse();
+            if (response != null && response.equals("LOGIN_SUCCESS")) {
+                System.out.println("Login successful");
+                return true;
+            } else {
+                System.out.println("Login failed: " + response);
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public String getSalt(String username) {
+        try {
+            out.println("GET_SALT " + username);
+            String response = waitForResponse();
+            if (response != null && response.startsWith("SALT ")) {
+                return response.substring(5);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getHashedPassword(String username) {
+        try {
+            out.println("GET_HASHED_PASSWORD " + username);
+            String response = waitForResponse();
+            if (response != null && response.startsWith("HASHED_PASSWORD ")) {
+                return response.substring(16);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

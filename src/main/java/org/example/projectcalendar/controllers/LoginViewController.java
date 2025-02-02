@@ -12,6 +12,7 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import org.example.projectcalendar.Controller;
 import docker.Database;
+import org.example.projectcalendar.service.ConnectionService;
 import org.example.projectcalendar.service.HashUtils;
 
 import java.net.URL;
@@ -29,24 +30,20 @@ public class LoginViewController extends Controller implements Initializable {
     @FXML
     private Node rootPane;
 
-    Database database = Database.getInstance();
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //initialises database (reconnects each time)
-        database = Database.getInstance();
+
 
     }
 
     @FXML
     protected void onLoginButtonClicked(){
         try {
-
             String usernameInput = usernameField.getText();
             String passwordInput = passwordField.getText();
 
-            String salt = database.getSalt(usernameInput);
-            String storedPassword = database.getHashedPassword(usernameInput);
+            String salt = getConnectionService().getSalt(usernameInput);
+            String storedPassword = getConnectionService().getHashedPassword(usernameInput);
 
             String hashedPassword = HashUtils.hashPassword(passwordInput, salt);
 
