@@ -9,8 +9,6 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.*;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -78,8 +76,13 @@ public class Database {
                     Thread.sleep(Duration.ofSeconds(4));
                 }
 
+
                 if (dockerContainerExists(containerName)) {
-                    System.out.println("container already running...");
+                    System.out.println("container already exists...");
+                    String[] command = {"docker", "start", "calendarDB"};
+                    runCommand(command);
+                } else if(dockerContainerRunning(containerName)){
+                    System.out.println("Container already running");
                 }else{
                     System.out.println("cannot connect to container, making one now.");
                     // Start Docker container
@@ -140,6 +143,19 @@ public class Database {
         }
         return false;
     }
+    private boolean dockerContainerRunning(String containerName) throws IOException, InterruptedException {
+        String[] command = {"docker", "ps", "--filter", "name=" + containerName, "--format", "{{.Names}}"};
+        ProcessBuilder processBuilder = new ProcessBuilder(command);
+        Process process = processBuilder.start();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            if (line.contains(containerName)) {
+                return true;
+            }
+        }
+        return false;
+    }
     private int runCommand(String[] command) throws IOException, InterruptedException {
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         Map<String, String> env = processBuilder.environment();
@@ -175,7 +191,6 @@ public class Database {
             } catch (IOException e) {
                 System.out.println(e);
             }
-            wait(2000);
             retryCount++;
         }
         return false;
