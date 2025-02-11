@@ -1,0 +1,45 @@
+
+create table if not exists Users(
+user_id INTEGER primary key autoincrement,
+username TEXT,
+first_name TEXT,
+last_name TEXT,
+email TEXT,
+password TEXT,
+salt TEXT);
+
+create table if not exists Calendars(
+calendar_id INTEGER primary key autoincrement,
+user_id INTEGER,
+password TEXT,
+foreign key (user_id) references Users(user_id));
+
+create table if not exists Events(
+event_id INTEGER primary key,
+calendar_id INTEGER,
+title TEXT,
+description TEXT,
+start_time DateTime,
+end_time DateTime,
+location TEXT,
+foreign key (calendar_id) references Calendars(calendar_id));
+
+create table if not exists Reminders(
+reminder_id INTEGER primary key,
+event_id INTEGER,
+calendar_id INTEGER,
+created_at timestamp,
+foreign key (event_id) references Events(event_id),
+foreign key (calendar_id) references Calendars(calendar_id));
+
+create table if not exists Tags(
+tag_id INTEGER primary key,
+name TEXT,
+created_at timestamp);
+
+create table if not exists EventTags(
+event_tag_id INTEGER primary key,
+event_id INTEGER,
+tag_id INTEGER,
+foreign key (event_id) references Events(event_id),
+foreign key (tag_id) references Tags(tag_id));

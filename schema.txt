@@ -1,6 +1,4 @@
-create database calendarDB
-
-use calendarDB
+use calendarDB;
 
 create table Users(
 user_id int primary key identity(1,1),
@@ -10,37 +8,4 @@ last_name varchar(255),
 email varchar(255),
 password varchar(255),
 salt varchar(255),
-created_at timestamp)
-
-create table Calendars(
-calendar_id int primary key identity(1,1),
-user_id int foreign key references Users(user_id),
-password varchar(255),
-created_at timestamp)
-
-create table Events(
-event_id int primary key,
-calendar_id int foreign key references Calendars(calendar_id),
-title varchar(255),
-description text,
-start_time DateTime,
-end_time DateTime,
-location varchar(255),
-created_at timestamp)
-
-create table Reminders(
-reminder_id int primary key,
-event_id int foreign key references Events(event_id),
-calendar_id int foreign key references Calendars(calendar_id),
-created_at timestamp)
-
-create table Tags(
-tag_id int primary key,
-name varchar(255),
-created_at timestamp)
-
-create table EventTags(
-event_tag_id int primary key,
-event_id int foreign key references Events(event_id),
-tag_id int foreign key references Tags(tag_id)
-)
+created_at timestamp);

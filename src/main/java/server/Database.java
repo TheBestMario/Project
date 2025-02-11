@@ -3,6 +3,7 @@ package server;
 
 import javax.crypto.SecretKey;
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
@@ -28,8 +29,10 @@ public class Database {
     private SecretKey key;
 
     public static void main(String[] args){
-        database = new Database();
+        database = getInstance();
         database.establishConnection();
+        database.createTables();
+
         ExecutorService pool = Executors.newFixedThreadPool(200);
 
         try(ServerSocket serverSocket = new ServerSocket(8766)){
@@ -46,6 +49,7 @@ public class Database {
         }
     }
 
+
     public static ArrayList<Connector> getClientList() {
         return clientList;
     }
@@ -61,33 +65,34 @@ public class Database {
         }
 
         this.connectionUrl = "jdbc:sqlserver://localhost:" + port
-                + ";databaseName=calendarDB;encrypt=false;";
+                + ";databaseName=calendarDB;user=" + this.dbUsername
+                + ";password=" + this.dbPassword
+                + ";encrypt=false;";
 
 
         try {
             // Check if the database is accessible
             if (!databaseAccessibleCheck("localhost", port)) {
 
-                String[] dockerDesktopInit = {"server", "desktop", "start"};
+                String[] dockerDesktopInit = {"docker", "desktop", "start"};
                 if (runCommand(dockerDesktopInit) == 0) {
                 } else {
                     System.out.println("server starting...");
                     Thread.sleep(Duration.ofSeconds(4));
                 }
 
-
                 if (dockerContainerExists(containerName)) {
                     System.out.println("container already exists...");
-                    String[] command = {"server", "start", "calendarDB"};
+                    String[] command = {"docker", "start", "calendarDB"};
                     runCommand(command);
                 } else if(dockerContainerRunning(containerName)){
                     System.out.println("Container already running");
                 }else{
                     System.out.println("cannot connect to container, making one now.");
                     // Start Docker container
-                    String[] command = {"server-compose", "up", "-d"};
+                    String[] command = {"docker-compose", "up", "-d"};
                     runCommand(command);
-                    System.out.println("finished executing server");
+                    System.out.println("finished executing docker");
                 }
                 // Wait for the SQL Connector to be ready
                 boolean isReady = waitForPort("localhost", port, 30);
@@ -96,32 +101,30 @@ public class Database {
                 }
 
                 // Add a delay to ensure SQL Connector is fully up and running
-                //Like don't even remove this unless adding a listener for the server status.
+                //Like don't even remove this unless adding a listener for the docker status.
                 Thread.sleep(Duration.ofSeconds(12));
 
+                String[] dockerStatus = {"docker", "ps", "--filter", "name=calendarDB"};
                 String[] commandCreateDB = {
-                        "server", "exec", "calendarDB",
+                        "docker", "exec","calendarDB",
                         "/opt/mssql-tools18/bin/sqlcmd",
                         "-S", "localhost",
                         "-U", dbUsername,
                         "-P", dbPassword,
                         "-C",
-                        "-i", "/usr/src/app/schema.txt"
+                        "-Q", "CREATE DATABASE calendarDB",
                 };
                 System.out.println("executing schema to the container");
                 runCommand(commandCreateDB);
             }
 
             System.out.println("establishing connection");
-            this.connectionUrl = "jdbc:sqlserver://localhost:" + port
-                    + ";databaseName=calendarDB;user=" + this.dbUsername
-                    + ";password=" + this.dbPassword
-                    + ";encrypt=false;";
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     //singleton
     public static Database getInstance() {
         if (database == null) {
@@ -129,8 +132,36 @@ public class Database {
         }
         return database;
     }
+
+    private void createTables() {
+        try {
+            String schemaPath = "schema.txt";
+            BufferedReader reader = new BufferedReader(new FileReader(schemaPath));
+            String line;
+            StringBuilder sb = new StringBuilder();
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+                sb.append("\n");
+            }
+            String schema = sb.toString();
+            String[] queries = schema.split(";");
+            try (Statement stmt = con.createStatement()) {
+                for (String query : queries) {
+                    query = query.trim();
+                    if (!query.isEmpty()) {
+                        stmt.execute(query);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private boolean dockerContainerExists(String containerName) throws IOException, InterruptedException {
-        String[] command = {"server", "ps", "-a", "--filter", "name=" + containerName, "--format", "{{.Names}}"};
+        String[] command = {"docker", "ps", "-a", "--filter", "name=" + containerName};
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         Process process = processBuilder.start();
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -143,7 +174,7 @@ public class Database {
         return false;
     }
     private boolean dockerContainerRunning(String containerName) throws IOException, InterruptedException {
-        String[] command = {"server", "ps", "--filter", "name=" + containerName, "--format", "{{.Names}}"};
+        String[] command = {"docker", "ps", "--filter", "name=" + containerName};
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         Process process = processBuilder.start();
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -155,6 +186,7 @@ public class Database {
         }
         return false;
     }
+
     private int runCommand(String[] command) throws IOException, InterruptedException {
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         Map<String, String> env = processBuilder.environment();

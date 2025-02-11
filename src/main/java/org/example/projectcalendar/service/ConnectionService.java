@@ -41,6 +41,13 @@ public class ConnectionService implements Runnable {
         }
     }
 
+    public boolean checkConnection() {
+        if (socket == null) {
+            return false;
+        }
+        return socket.isConnected();
+    }
+
     public void closeConnection() {
         try {
             in.close();

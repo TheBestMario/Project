@@ -52,8 +52,16 @@ public class LoginViewController extends Controller implements Initializable {
             String usernameInput = usernameField.getText();
             String passwordInput = passwordField.getText();
 
-            String salt = getConnectionService().getSalt(usernameInput);
-            String storedPassword = getConnectionService().getHashedPassword(usernameInput);
+            String salt;
+            String storedPassword;
+            if (getConnectionService().checkConnection()) {
+                salt = getConnectionService().getSalt(usernameInput);
+                storedPassword = getConnectionService().getHashedPassword(usernameInput);
+            }
+            else{
+                salt = getMenuHandler().getLocalDB().getSalt(usernameInput);
+                storedPassword = getMenuHandler().getLocalDB().getPassword(usernameInput);
+            }
 
             String hashedPassword = HashUtils.hashPassword(passwordInput, salt);
 

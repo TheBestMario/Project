@@ -26,9 +26,11 @@ public class MenuHandler {
     private Scene scene;
     private ConnectionService connectionService;
     private Thread connectionThread;
+    private LocalDatabaseStorage localDB;
 
-    public MenuHandler(Stage stage, ConnectionService connectionService,Thread connectionThread) throws IOException {
+    public MenuHandler(Stage stage, ConnectionService connectionService, Thread connectionThread, LocalDatabaseStorage localDB) throws IOException {
         primaryStage = stage;
+        this.localDB = localDB;
         this.connectionService = connectionService;
         this.connectionThread = connectionThread;
         initializeUI();
@@ -167,5 +169,9 @@ public class MenuHandler {
 
     public Stage getPrimaryStage() {
         return primaryStage;
+    }
+
+    public LocalDatabaseStorage getLocalDB() {
+        return localDB;
     }
 }
