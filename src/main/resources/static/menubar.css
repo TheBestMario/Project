@@ -1,63 +1,83 @@
-.side-bar--buttons{
-    -fx-background-color: darkslategray;
-    -fx-border-radius: 5px;
-    -fx-background-radius: 5px;
-}
-.side-bar--buttons:hover{
-    -fx-background-color: darkcyan;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
-    -fx-cursor: hand;
+.sidebar {
+    -fx-background-color: #2c3e50;
+    -fx-padding: 20;
 }
 
-.side-bar--bar{
-    -fx-background-color: darkslategray;
-    -fx-pref-height: 100%;
-    -fx-border-width: 0 5 0 0;
-    -fx-border-color: #065353
+.sidebar-title {
+    -fx-text-fill: #ecf0f1;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
 }
-.side-bar--vbox-top{
-    -fx-alignment: top-center;
+
+.sidebar .button {
+    -fx-background-color: #34495e;
+    -fx-text-fill: #ecf0f1;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20;
+    -fx-border-radius: 5;
     -fx-background-radius: 5;
-    -fx-border-width: 0 0 5 5;
-    -fx-border-color: #065353;
-    -fx-border-radius: 5px;
-
+    -fx-pref-width: 100;
+    -fx-pref-height: 50;
 }
-.side-bar--vbox-bottom{
-    -fx-alignment: bottom-center;
+.sidebar #contact {
+    -fx-font-size: 12px;
+}
+
+.sidebar #button:hover {
+    -fx-background-color: #3b5998;
+}
+
+
+.titlebar {
+    -fx-background-color: #34495e;
+    -fx-padding: 10;
+}
+
+.titlebar-title {
+    -fx-text-fill: #ecf0f1;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.titlebar-name {
+    -fx-text-fill: #ecf0f1;
+    -fx-font-size: 16px;
+}
+
+.titlebar-button {
+    -fx-background-color: #2c3e50;
+    -fx-text-fill: #ecf0f1;
+    -fx-font-size: 14px;
+    -fx-padding: 5 10;
+    -fx-border-radius: 5;
     -fx-background-radius: 5;
-    -fx-border-width: 5 0 5 5;
-    -fx-border-color: #065353;
-    -fx-border-radius: 5px;
 }
 
-.top-bar--bar{
-    -fx-background-color: darkslategray;
-    -fx-pref-width: 100%;
-    -fx-border-width: 5;
-    -fx-border-color: #065353;
+.titlebar-button:hover {
+    -fx-background-color: #3b5998;
+}
+.titlebar-button .graphic {
+    -fx-text-overrun: CLIP;
+    -fx-content-display: LEFT;
 }
 
+.titlebar-button .graphic .label {
+    -fx-wrap-text: false;
+    -fx-text-overrun: CLIP;
+}
+.titlebar-icon {
+    -fx-fill: #ecf0f1;
+}
+.titlebar Label{
+    -fx-text-fill: #ecf0f1;
+}
+.titlebar .user-button {
+    -fx-background-color: #34495e;
+    -fx-padding: 0;
+    -fx-border: none;
 
-
-.top-bar--label{
-    -fx-text-fill: white;
-    -fx-font-size: 36;
-    -fx-font-family: Arial;
-    -fx-alignment: center-left;
-    -fx-border-width: 0 5 0 0;
-    -fx-border-color: #065353
 }
 
-.top-bar--buttons{
-    -fx-background-color: white;
-    -fx-border-radius: 100%;
-    -fx-background-radius: 100%;
-    -fx-alignment: center-right;
-}
-
-.top-bar--buttons:hover{
-    -fx-background-color: darkcyan;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
-    -fx-cursor: hand;
+.titlebar .user-button:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);
 }

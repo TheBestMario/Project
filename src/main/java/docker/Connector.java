@@ -21,7 +21,7 @@ public class Connector implements Runnable {
             out = new PrintWriter(socket.getOutputStream(), true);
             while (in.hasNextLine()) {
                 String message = in.nextLine();
-                System.out.println(message);
+
                 if (message.startsWith("LOGIN")) {
                     handleLogin(message);
                 } else if (message.startsWith("GET_SALT")) {

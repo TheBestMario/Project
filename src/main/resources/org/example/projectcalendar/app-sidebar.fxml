@@ -1,55 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox alignment="CENTER" prefHeight="234.0" prefWidth="130.0" styleClass="side-bar--bar" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox id="sidebar" alignment="CENTER" spacing="10.0" styleClass="sidebar" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox alignment="TOP_RIGHT" spacing="10.0" styleClass="side-bar--vbox-top">
+      <VBox alignment="TOP_CENTER" spacing="10.0">
          <children>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="120.0" styleClass="side-bar--buttons" text="Dashboard" textFill="WHITE">
-               <font>
-                  <Font name="Arial Bold" size="17.0" />
-               </font>
-            </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="120.0" styleClass="side-bar--buttons" text="Projects" textFill="WHITE">
-               <font>
-                  <Font name="Arial Bold" size="18.0" />
-               </font>
-            </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="120.0" styleClass="side-bar--buttons" text="My Tasks" textFill="WHITE">
-               <font>
-                  <Font name="Arial Bold" size="18.0" />
-               </font>
-            </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="120.0" styleClass="side-bar--buttons" text="Chats" textFill="WHITE">
-               <font>
-                  <Font name="Arial Bold" size="18.0" />
-               </font>
-            </Button>
+            <Button id="button" text="Home" />
+            <Button id="button" text="Calendar" />
          </children>
       </VBox>
-      <Region prefHeight="547.0" prefWidth="100.0" />
-      <VBox alignment="BOTTOM_RIGHT" spacing="10.0" styleClass="side-bar--vbox-bottom">
+      <VBox alignment="BOTTOM_CENTER" spacing="10.0" VBox.vgrow="ALWAYS">
          <children>
-            <Button mnemonicParsing="false" prefHeight="80.0" prefWidth="120.0" styleClass="side-bar--buttons" text="Settings" textFill="WHITE">
+            <Button id="button" text="Settings" />
+            <Button id="contact" layoutX="10.0" layoutY="160.0" text="Contact us">
                <font>
-                  <Font name="Arial Bold" size="21.0" />
-               </font>
-            </Button>
-            <Button mnemonicParsing="false" prefHeight="80.0" prefWidth="120.0" styleClass="side-bar--buttons" text="Help &amp; Support" textAlignment="CENTER" textFill="WHITE" wrapText="true">
-               <font>
-                  <Font name="Arial Bold" size="13.0" />
+                  <Font size="9.0" />
                </font>
             </Button>
          </children>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
       </VBox>
    </children>
 </VBox>

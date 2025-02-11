@@ -63,6 +63,17 @@
             <artifactId>validatorfx</artifactId>
             <version>0.5.0</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.calendarfx/calendar -->
+        <dependency>
+            <groupId>com.calendarfx</groupId>
+            <artifactId>view</artifactId>
+            <version>11.12.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.kordamp.ikonli</groupId>
+            <artifactId>ikonli-fontawesome5-pack</artifactId>
+            <version>12.2.0</version>
+        </dependency>
         <dependency>
             <groupId>org.kordamp.ikonli</groupId>
             <artifactId>ikonli-javafx</artifactId>

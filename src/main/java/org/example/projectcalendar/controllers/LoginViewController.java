@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
@@ -13,12 +14,14 @@ import javafx.util.Duration;
 import org.example.projectcalendar.Controller;
 import docker.Database;
 import org.example.projectcalendar.service.ConnectionService;
+import org.example.projectcalendar.service.CredentialStorage;
 import org.example.projectcalendar.service.HashUtils;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class LoginViewController extends Controller implements Initializable {
+    public CheckBox rememberUserCheckBox;
     @FXML
     private TextField usernameField;
     @FXML
@@ -33,11 +36,19 @@ public class LoginViewController extends Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        //checks if user has saved credentials and fills in the fields
+        String savedUsername = CredentialStorage.getSavedUsername();
+        String savedPassword = CredentialStorage.getSavedPassword();
 
+        if (savedUsername != null && savedPassword != null) {
+            usernameField.setText(savedUsername);
+            passwordField.setText(savedPassword);
+            rememberUserCheckBox.setSelected(true);
+        }
     }
 
     @FXML
-    protected void onLoginButtonClicked(){
+    protected void onLoginButtonClicked() {
         try {
             String usernameInput = usernameField.getText();
             String passwordInput = passwordField.getText();
@@ -48,18 +59,22 @@ public class LoginViewController extends Controller implements Initializable {
             String hashedPassword = HashUtils.hashPassword(passwordInput, salt);
 
             if (hashedPassword.equals(storedPassword)) {
+                if (rememberUserCheckBox.isSelected()) {
+                    CredentialStorage.saveCredentials(usernameInput, passwordInput);
+                } else {
+                    CredentialStorage.clearCredentials();
+                }
+
                 System.out.println("Login successful");
                 getMenuHandler().switchToCalendarMenu();
-                // Proceed with login
             } else {
                 System.out.println("Invalid username/email or password.");
-                //informationLabel.setText("Invalid username/email or password.");
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     @FXML
     protected void onSignUpLinkClicked(){
         //animates and switches scenes after finishing animation

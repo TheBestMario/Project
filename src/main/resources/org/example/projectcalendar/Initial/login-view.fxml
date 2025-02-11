@@ -46,7 +46,7 @@
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                <children>
                     <Button fx:id="loginButton" onMouseClicked="#onLoginButtonClicked" prefHeight="45.0" prefWidth="170.0" styleClass="login-view--login-button" text="Login" />
-                  <CheckBox mnemonicParsing="false" prefHeight="46.0" prefWidth="99.0" text="Remember me" wrapText="true" />
+                  <CheckBox fx:id="rememberUserCheckBox" mnemonicParsing="false" prefHeight="46.0" prefWidth="99.0" text="Remember me" wrapText="true" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
