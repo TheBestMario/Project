@@ -7,7 +7,17 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectcalendar.controllers.RegisterViewController">
+<VBox alignment="CENTER"
+      maxHeight="-Infinity"
+      maxWidth="-Infinity"
+      minHeight="-Infinity"
+      minWidth="-Infinity"
+      prefHeight="300.0"
+      prefWidth="400.0"
+      style="-fx-background-color: transparent;"
+      xmlns="http://javafx.com/javafx/23.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.example.projectcalendar.controllers.RegisterViewController">
    <children>
       <VBox alignment="TOP_CENTER" prefHeight="300.0" prefWidth="400.0" styleClass="start-view--vbox">
          <children>

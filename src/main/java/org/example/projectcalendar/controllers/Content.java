@@ -16,6 +16,7 @@ public class Content extends Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         CalendarView calendarView = new CalendarView();
+        calendarView.showMonthPage();
         calendarView.setEnableTimeZoneSupport(true);
         anchorPane.getChildren().add(calendarView);
         AnchorPane.setTopAnchor(calendarView, 0.0);

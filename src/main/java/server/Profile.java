@@ -1,4 +1,4 @@
-package org.example.projectcalendar.service.User;
+package server;
 
 public class Profile {
     private String username;

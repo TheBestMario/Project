@@ -12,10 +12,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import org.example.projectcalendar.Controller;
-import docker.Database;
-import org.example.projectcalendar.service.ConnectionService;
 import org.example.projectcalendar.service.CredentialStorage;
 import org.example.projectcalendar.service.HashUtils;
+import org.example.projectcalendar.service.User.Profile;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -64,8 +63,9 @@ public class LoginViewController extends Controller implements Initializable {
                 } else {
                     CredentialStorage.clearCredentials();
                 }
-
-                System.out.println("Login successful");
+                getConnectionService().sendLoginRequest(usernameInput, storedPassword);
+                System.out.println(Profile.getInstance().getUserName());
+                System.out.println("Login successful.");
                 getMenuHandler().switchToCalendarMenu();
             } else {
                 System.out.println("Invalid username/email or password.");

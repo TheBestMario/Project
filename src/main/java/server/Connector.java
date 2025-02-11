@@ -1,4 +1,4 @@
-package docker;
+package server;
 
 import java.io.*;
 import java.net.Socket;
@@ -45,7 +45,10 @@ public class Connector implements Runnable {
             String password = parts[2];
 
             if (database.verifyCredentials(username,password)) {
-                out.println("LOGIN_SUCCESS");
+                Profile profile = database.getUserFromTable(username,password);
+                System.out.println("username "+profile.getUserName());
+                out.println("LOGIN_SUCCESS "
+                +profile.getUserName()+" "+profile.getEmail());
             } else {
                 out.println("LOGIN_FAILURE");
             }
@@ -105,6 +108,5 @@ public class Connector implements Runnable {
             out.println("INVALID_GET_HASHED_PASSWORD_REQUEST");
         }
     }
-
 
 }

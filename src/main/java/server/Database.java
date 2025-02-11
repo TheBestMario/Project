@@ -1,6 +1,5 @@
-package docker;
+package server;
 
-import org.example.projectcalendar.service.User.Profile;
 
 import javax.crypto.SecretKey;
 import java.io.BufferedReader;
@@ -69,39 +68,39 @@ public class Database {
             // Check if the database is accessible
             if (!databaseAccessibleCheck("localhost", port)) {
 
-                String[] dockerDesktopInit = {"docker", "desktop", "start"};
+                String[] dockerDesktopInit = {"server", "desktop", "start"};
                 if (runCommand(dockerDesktopInit) == 0) {
                 } else {
-                    System.out.println("docker starting...");
+                    System.out.println("server starting...");
                     Thread.sleep(Duration.ofSeconds(4));
                 }
 
 
                 if (dockerContainerExists(containerName)) {
                     System.out.println("container already exists...");
-                    String[] command = {"docker", "start", "calendarDB"};
+                    String[] command = {"server", "start", "calendarDB"};
                     runCommand(command);
                 } else if(dockerContainerRunning(containerName)){
                     System.out.println("Container already running");
                 }else{
                     System.out.println("cannot connect to container, making one now.");
                     // Start Docker container
-                    String[] command = {"docker-compose", "up", "-d"};
+                    String[] command = {"server-compose", "up", "-d"};
                     runCommand(command);
-                    System.out.println("finished executing docker");
+                    System.out.println("finished executing server");
                 }
-                // Wait for the SQL Server to be ready
+                // Wait for the SQL Connector to be ready
                 boolean isReady = waitForPort("localhost", port, 30);
                 if (!isReady) {
-                    throw new RuntimeException("Failed to set up the local Docker container with SQL Server.");
+                    throw new RuntimeException("Failed to set up the local Docker container with SQL Connector.");
                 }
 
-                // Add a delay to ensure SQL Server is fully up and running
+                // Add a delay to ensure SQL Connector is fully up and running
                 //Like don't even remove this unless adding a listener for the server status.
                 Thread.sleep(Duration.ofSeconds(12));
 
                 String[] commandCreateDB = {
-                        "docker", "exec", "calendarDB",
+                        "server", "exec", "calendarDB",
                         "/opt/mssql-tools18/bin/sqlcmd",
                         "-S", "localhost",
                         "-U", dbUsername,
@@ -131,7 +130,7 @@ public class Database {
         return database;
     }
     private boolean dockerContainerExists(String containerName) throws IOException, InterruptedException {
-        String[] command = {"docker", "ps", "-a", "--filter", "name=" + containerName, "--format", "{{.Names}}"};
+        String[] command = {"server", "ps", "-a", "--filter", "name=" + containerName, "--format", "{{.Names}}"};
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         Process process = processBuilder.start();
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -144,7 +143,7 @@ public class Database {
         return false;
     }
     private boolean dockerContainerRunning(String containerName) throws IOException, InterruptedException {
-        String[] command = {"docker", "ps", "--filter", "name=" + containerName, "--format", "{{.Names}}"};
+        String[] command = {"server", "ps", "--filter", "name=" + containerName, "--format", "{{.Names}}"};
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         Process process = processBuilder.start();
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -263,26 +262,33 @@ public class Database {
         return null;
     }
 
-    public Profile getUserFromTable(Profile inProfile){
-        Profile profile = null;
-        String query = "SELECT (first_name, last_name, username, email, password) FROM Users WHERE user_name = ?, email = ?";
+    public Profile getUserFromTable(String username ,String password){
+        Profile profile;
+        String query = "SELECT * FROM Users WHERE username = ? AND password = ?";
         try (PreparedStatement st = con.prepareStatement(query)) {
-            st.setString(1, inProfile.getUserName());
-            st.setString(2, inProfile.getEmail());
+            st.setString(1, username);
+            st.setString(2, password);
             ResultSet rs = st.executeQuery();
-            if (rs.next()){
-                profile = new Profile(rs.getString("username"),
-                        rs.getString("email"),
-                        rs.getString("password"));
-                profile.setFirstName(rs.getString("first_name"));
-                profile.setLastName(rs.getString("last_name"));
-            }
+            profile = getProfile(rs);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
         return profile;
     }
+
+    private Profile getProfile(ResultSet rs) throws SQLException {
+        Profile profile = Profile.getInstance();
+        if (rs.next()){
+            profile.setUsername(rs.getString("username"));
+            profile.setEmail(rs.getString("email"));
+            profile.setPassword(rs.getString("password"));
+            profile.setFirstName(rs.getString("first_name"));
+            profile.setLastName(rs.getString("last_name"));
+        }
+        return profile;
+    }
+
     public boolean checkUserNameExists(String username){
         String query = "SELECT username FROM Users WHERE username = ?";
         try (PreparedStatement st = con.prepareStatement(query)) {
@@ -297,6 +303,7 @@ public class Database {
         }
         return false;
     }
+
     public boolean verifyCredentials(String usernameOrEmail, String password) {
         String query = "SELECT password FROM Users WHERE username = ? or email = ?";
         try (PreparedStatement st = con.prepareStatement(query)) {

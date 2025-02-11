@@ -5,20 +5,20 @@
 <?import javafx.scene.layout.HBox?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<HBox id="titlebar" spacing="10" styleClass="titlebar" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<HBox fx:controller="org.example.projectcalendar.controllers.TitleBarController" id="titlebar" spacing="10" styleClass="titlebar" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
             <children>
-                <Label styleClass="titlebar-title" text="Calendar Application" />
+                <Label styleClass="titlebar-title" text="Calebar" />
             </children>
         </HBox>
         <HBox alignment="CENTER_RIGHT" spacing="10" HBox.hgrow="NEVER">
             <children>
-                <Button styleClass="titlebar-button">
+                <Button prefWidth="120.0" styleClass="titlebar-button">
                     <graphic>
                         <HBox alignment="CENTER" spacing="5">
                             <children>
-                                <Label styleClass="titlebar-new-label" text="New" />
+                                <Label styleClass="titlebar-new-label" text="Create new" />
                                 <Label text="▼" />
                             </children>
                         </HBox>
@@ -30,7 +30,7 @@
                         <HBox alignment="CENTER" spacing="5">
                             <children>
                                 <FontIcon iconLiteral="fa-user" iconSize="30" styleClass="titlebar-icon" />
-                                <Label styleClass="titlebar-name" text="User Name" />
+                                <Label fx:id="usernameLabel" styleClass="titlebar-name" text="User Name" />
                             </children>
                         </HBox>
                     </graphic>

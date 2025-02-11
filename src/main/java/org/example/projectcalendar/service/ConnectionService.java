@@ -1,5 +1,7 @@
 package org.example.projectcalendar.service;
 
+import org.example.projectcalendar.service.User.Profile;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -72,18 +74,29 @@ public class ConnectionService implements Runnable {
         try {
             out.println("LOGIN " + username + " " + password);
             String response = waitForResponse();
-            if (response != null && response.equals("LOGIN_SUCCESS")) {
-                System.out.println("Login successful");
+            if (response.startsWith("LOGIN_SUCCESS")) {
+                String[] parts = response.split(" ");
+                if (parts.length == 3) {
+                    username = parts[1];
+                    String email = parts[2];
+
+                    Profile.getInstance().setUsername(username);
+                    Profile.getInstance().setEmail(email);
+                    System.out.println("profile updated");
+                }
                 return true;
-            } else {
-                System.out.println("Login failed: " + response);
-                return false;
+            } else if (response.equals("LOGIN_FAILURE")) {
+                System.out.println("credentials don't match on the system");
+            } else if (response.equals("INVALID_LOGIN_REQUEST")) {
+                System.out.println("Request to login rejected by server");
             }
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
+        return false;
     }
+
     public boolean getUserNameExists(String username){
         out.println("CHECK_USERNAME_EXISTS " + username);
         String response = waitForResponse();

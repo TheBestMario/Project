@@ -1,7 +1,7 @@
 package org.example.projectcalendar;
 
 import javafx.stage.Stage;
-import docker.Database;
+import server.Database;
 import org.example.projectcalendar.service.ConnectionService;
 import org.example.projectcalendar.service.MenuHandler;
 

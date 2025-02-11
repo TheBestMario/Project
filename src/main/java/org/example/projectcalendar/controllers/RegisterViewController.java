@@ -132,7 +132,6 @@ public class RegisterViewController extends Controller implements Initializable 
                 String salt = HashUtils.generateSalt();
                 String hashedPassword = HashUtils.hashPassword(password,salt);
                 if (connectionService.createProfile(username,email,hashedPassword,salt)){
-                    Profile profile = new Profile(username,email,password);
 
                     try{
                         getMenuHandler().setNodeToRoot("Initial/account-created-view.fxml");

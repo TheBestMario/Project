@@ -1,6 +1,5 @@
 package org.example.projectcalendar.service;
 
-import docker.Database;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -89,13 +88,10 @@ public class MenuHandler {
         stylesheet = CalendarApplication.class.getResource("/static/menubar.css").toExternalForm();
         scene.getStylesheets().add(stylesheet);
 
-        primaryStage.setScene(scene);
         primaryStage.setMinWidth(800);
         primaryStage.setMinHeight(600);
-        primaryStage.setWidth(width);
-        primaryStage.setHeight(height);
-        primaryStage.centerOnScreen();
         primaryStage.setTitle("Calendar");
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 

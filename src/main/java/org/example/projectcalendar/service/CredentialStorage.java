@@ -6,8 +6,8 @@ public class CredentialStorage {
     /*
     uses Preferences API to store credentials locally and securely,
     I was debating just throwing them into a .txt file but malware could access that
-
-     */
+    https://stackoverflow.com/questions/10246503/java-how-do-you-use-the-preference-api-where-do-these-variables-store
+     should work for every system*/
     private static Preferences prefs = Preferences.userRoot().node("org.example.projectcalendar");
 
     public static void saveCredentials(String username, String password) {
