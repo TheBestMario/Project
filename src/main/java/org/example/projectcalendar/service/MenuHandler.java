@@ -99,23 +99,6 @@ public class MenuHandler {
         primaryStage.show();
     }
 
-    public void switchToStartViewMenu() throws IOException {
-        StackPane stackPane = new StackPane();
-        stackPane.setId("root");
-
-        FXMLLoader loader = new FXMLLoader(CalendarApplication.class.getResource("Initial/start-view.fxml"));
-        stackPane.getChildren().add(loader.load());
-        stackPane.setAlignment(Pos.CENTER);
-        stackPane.setStyle("-fx-background-image: url(/static/images/robert_walters_logo.jpeg)");
-
-        // Update the scene's root
-        scene.setRoot(stackPane);
-        this.root = stackPane;
-
-        // Apply stylesheets
-        String stylesheet = CalendarApplication.class.getResource("/static/calendar.css").toExternalForm();
-        scene.getStylesheets().add(stylesheet);
-    }
 
     public void setNodeToRoot(String fxmlPath) throws IOException {
         loadNode(fxmlPath, true);
@@ -126,8 +109,10 @@ public class MenuHandler {
     }
 
     public void loadNode(String fxmlPath, boolean clearRoot) throws IOException {
+
         FXMLLoader loader = new FXMLLoader(CalendarApplication.class.getResource(fxmlPath));
         Parent node = loader.load();
+
         Controller controller = loader.getController();
         controller.setMenuHandler(this);
         controller.setRoot(root);

@@ -142,6 +142,20 @@
 .manage-server-view HBox{
     -fx-padding: 10px;
 }
+.manage-server-view #Back{
+    -fx-background-color: #ccc;
+    -fx-text-fill: #333;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 10px;
+    -fx-font-size: 16px;
+    -fx-border-color: black;
+}
+.manage-server-view #Back:hover{
+    -fx-background-color: #999;
+}
+
+
 .manage-server-view Button{
     -fx-background-color: #2d84d2;
     -fx-text-fill: white;
@@ -149,6 +163,7 @@
     -fx-background-radius: 5px;
     -fx-padding: 10px;
     -fx-font-size: 16px;
+    -fx-border-color: black;
 }
 .manage-server-view #settings{
     -fx-background-color: #cccccc;
@@ -159,10 +174,14 @@
     -fx-font-size: 16px;
     -fx-border-color: black;
 }
-.manage-server-view Button:hover{
+.manage-server-view #settings:hover{
     -fx-background-color: #999;
     -fx-border-color: rgba(45, 132, 210, 0.49);
 }
+.manage-server-view Button:hover{
+    -fx-background-color: #1a5a9e;
+}
+
 .manage-server-view #statusButton{
     -fx-background-color: #f0f0f0;
     -fx-border-color: #333;

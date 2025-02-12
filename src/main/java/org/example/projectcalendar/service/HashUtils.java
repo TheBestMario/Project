@@ -10,7 +10,7 @@ import java.util.Base64;
 
 /*one way SHA-256 hashing https://security.stackexchange.com/questions/17421/how-to-store-salt
 * https://stackoverflow.com/questions/1617045/where-to-store-the-key-for-encrypting-and-decrypting-password
-*
+* md
 *
 *
 *

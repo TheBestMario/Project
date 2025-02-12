@@ -5,15 +5,26 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<AnchorPane id="manage-server-view" prefHeight="400.0" prefWidth="600.0" styleClass="manage-server-view" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.example.projectcalendar.controllers.ManageServerViewController">
+<AnchorPane id="manage-server-view" prefHeight="400.0" prefWidth="600.0" styleClass="manage-server-view" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectcalendar.controllers.ManageServerViewController">
    <children>
       <VBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
+            <HBox alignment="CENTER_LEFT" spacing="20.0">
+               <children>
+                  <Label text="Server Address:" />
+                  <TextField fx:id="serverAddressTextField" alignment="CENTER" disable="true" text="127.0.0.1" />
+                  <Button id="settings" fx:id="addressEditingButton" mnemonicParsing="false">
+                     <graphic>
+                        <FontIcon iconLiteral="fa-gear" />
+                     </graphic>
+                  </Button>
+               </children>
+            </HBox>
             <HBox alignment="CENTER_LEFT" spacing="20.0">
                <children>
                   <Label text="Server Status:" />
@@ -29,16 +40,12 @@
                   </Button>
                </children>
             </HBox>
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="27.0" spacing="20.0">
+            <Label fx:id="addressInfoLabel" />
+            <HBox alignment="CENTER_LEFT">
                <children>
-                  <Label text="Server Address:" />
-                  <TextField fx:id="serverAddressTextField" alignment="CENTER" disable="true" text="Address" />
-                  <Button id="settings" fx:id="addressEditingButton" mnemonicParsing="false">
-                     <graphic>
-                        <FontIcon iconLiteral="fa-gear" />
-                     </graphic>
-                  </Button>
-                  <Button fx:id="connectButton" mnemonicParsing="false" onMouseClicked="#onConnectButtonClicked" text="Connect" />
+                  <Button id="Back" mnemonicParsing="false" onMouseClicked="#onBackButtonClicked" prefHeight="45.0" prefWidth="84.0" text="Back" />
+                  <Region prefHeight="45.0" prefWidth="98.0" />
+                  <Button fx:id="connectButton" mnemonicParsing="false" onMouseClicked="#onConnectButtonClicked" prefHeight="45.0" prefWidth="237.0" text="Connect" />
                </children>
             </HBox>
          </children>

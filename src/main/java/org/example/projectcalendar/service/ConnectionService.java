@@ -26,6 +26,10 @@ public class ConnectionService implements Runnable {
         this.serverPort = port;
     }
 
+    public static void connect(){
+
+    }
+
     public void run() {
         try {
             socket = new Socket(serverAddress, serverPort);
@@ -46,6 +50,13 @@ public class ConnectionService implements Runnable {
             return false;
         }
         return socket.isConnected();
+    }
+
+    public void setServerAddress(String serverAddress) {
+        this.serverAddress = serverAddress;
+    }
+    public String getServerAddress() {
+        return serverAddress;
     }
 
     public void closeConnection() {

@@ -106,18 +106,19 @@ public class LocalDatabaseStorage {
     }
 
     public String getSalt(String username) {
+        System.out.println(username);
         String query = "SELECT salt FROM Users WHERE username = ?";
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
+            if (rs.getString("salt") != null) {
                 return rs.getString("salt");
             }
         } catch (SQLException e) {
             e.printStackTrace();
 
         }
-        return query;
+        return null;
     }
 
     public String getPassword(String username){
@@ -125,13 +126,26 @@ public class LocalDatabaseStorage {
         try (PreparedStatement stmt = conn.prepareStatement(query)){
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()){
+            if (rs.getString("password") != null){
                 return rs.getString("password");
             }
         }catch (SQLException e){
             e.printStackTrace();
         }
-        return query;
+        return null;
     }
 
+    public String getUsername(String usernameInput) {
+        String query = "SELECT username FROM Users WHERE username = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, usernameInput);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()){
+                return rs.getString("username");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

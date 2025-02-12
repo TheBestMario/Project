@@ -41,6 +41,9 @@ public class Controller {
         this.connectionThread = connectionThread;
         checkInitialize();
     }
+    public Thread getConnectionThread(){
+        return connectionThread;
+    }
 
     protected void checkInitialize() {
         if (!initialized &&

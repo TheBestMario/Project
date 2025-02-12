@@ -28,7 +28,8 @@ public class CalendarApplication extends javafx.application.Application {
             connectionThread = new Thread(connectionService);
             connectionThread.start();
         } catch (RuntimeException e) {
-
+            connectionThread.interrupt();
+            throw new RuntimeException(e);
         }
 
         try{

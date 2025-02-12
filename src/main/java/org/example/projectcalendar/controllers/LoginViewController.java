@@ -5,10 +5,7 @@ import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
@@ -37,6 +34,8 @@ public class LoginViewController extends Controller implements Initializable {
     private Circle statusCircle;
     @FXML
     private Button manageServerButton;
+    @FXML
+    private Label informationLabel;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -72,7 +71,8 @@ public class LoginViewController extends Controller implements Initializable {
     @FXML
     protected void onLoginButtonClicked() {
         /*
-        * Checks if the user has saved credentials and fills in the fields
+        * Checks if the username is empty
+        * checks if both fields are empty
         * If there is a connection to the server, then it checks credential validity against it
         * If there is no connection, then it checks credential validity against the local database
         * Depending on the same thing, once passwords match for the account then it will fetch
@@ -84,6 +84,16 @@ public class LoginViewController extends Controller implements Initializable {
 
             String salt;
             String storedPassword;
+            if (getLocalStorage().getUsername(usernameInput) == null) {
+                informationLabel.setText("Invalid username/email");
+                informationLabel.setStyle("-fx-text-fill: red");
+                return;
+            } else if (usernameInput.isEmpty() || passwordInput.isEmpty()) {
+                informationLabel.setText("Please fill in all the fields to login.");
+                informationLabel.setStyle("-fx-text-fill: red");
+                return;
+            }
+
             if (getConnectionService().checkConnection()) {
                 salt = getConnectionService().getSalt(usernameInput);
                 storedPassword = getConnectionService().getHashedPassword(usernameInput);
