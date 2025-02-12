@@ -1,5 +1,6 @@
 package org.example.projectcalendar.controllers;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -102,6 +103,8 @@ public class ManageServerViewController extends Controller implements Initializa
                     try {
                         Database.main(new String[0]);
                     } catch (Exception e) {
+                        addressInfoLabel.setText("server already running");
+                        addressInfoLabel.setStyle("-fx-text-fill: orange");
                         throw new RuntimeException(e);
                     }
                 });

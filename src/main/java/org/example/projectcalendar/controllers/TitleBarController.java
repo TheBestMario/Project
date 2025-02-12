@@ -16,7 +16,6 @@ public class TitleBarController extends Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         profile = Profile.getInstance();
-        System.out.println("hello");
 
         usernameLabel.setText(profile.getUserName());
     }

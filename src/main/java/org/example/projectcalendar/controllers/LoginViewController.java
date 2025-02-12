@@ -59,6 +59,7 @@ public class LoginViewController extends Controller implements Initializable {
     }
 
     public void updateStatus(){
+        System.out.println(getConnectionService().checkConnection());
         if (getConnectionService() == null){
             statusCircle.setStyle("-fx-fill: red");
         }else if (getConnectionService().checkConnection()){
