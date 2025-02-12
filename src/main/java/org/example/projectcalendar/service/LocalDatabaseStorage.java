@@ -1,5 +1,7 @@
 package org.example.projectcalendar.service;
 
+import org.example.projectcalendar.service.User.Profile;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -85,6 +87,22 @@ public class LocalDatabaseStorage {
             e.printStackTrace();
         }
         return false;
+    }
+    public Profile handleLoginOffline(String username, String password) {
+        Profile profile = Profile.getInstance();
+        String query = "SELECT * FROM Users WHERE username = ? AND password = ?";
+        try (PreparedStatement st = conn.prepareStatement(query)) {
+            st.setString(1, username);
+            st.setString(2, password);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()){
+                profile.setUsername(rs.getString("username"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return profile;
     }
 
     public String getSalt(String username) {

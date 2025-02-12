@@ -9,7 +9,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import org.example.projectcalendar.Controller;
 import org.example.projectcalendar.service.CredentialStorage;
@@ -31,11 +33,18 @@ public class LoginViewController extends Controller implements Initializable {
     private Button backButton;
     @FXML
     private Node rootPane;
+    @FXML
+    private Circle statusCircle;
+    @FXML
+    private Button manageServerButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        //checks if user has saved credentials and fills in the fields
+        /*
+        Runs initialisation
+        runs checks for saved credentials
+        runs checks for connection status to inform user.
+         */
         String savedUsername = CredentialStorage.getSavedUsername();
         String savedPassword = CredentialStorage.getSavedPassword();
 
@@ -45,9 +54,30 @@ public class LoginViewController extends Controller implements Initializable {
             rememberUserCheckBox.setSelected(true);
         }
     }
+    @Override
+    protected void onDependenciesSet() {
+        updateStatus();
+    }
+
+    public void updateStatus(){
+        if (getConnectionService() == null){
+            statusCircle.setStyle("-fx-fill: red");
+        }else if (getConnectionService().checkConnection()){
+            statusCircle.setStyle("-fx-fill: green");
+        }else {
+            statusCircle.setStyle("-fx-fill: red");
+        }
+    }
 
     @FXML
     protected void onLoginButtonClicked() {
+        /*
+        * Checks if the user has saved credentials and fills in the fields
+        * If there is a connection to the server, then it checks credential validity against it
+        * If there is no connection, then it checks credential validity against the local database
+        * Depending on the same thing, once passwords match for the account then it will fetch
+        * profile data from server or local storage
+         */
         try {
             String usernameInput = usernameField.getText();
             String passwordInput = passwordField.getText();
@@ -59,8 +89,8 @@ public class LoginViewController extends Controller implements Initializable {
                 storedPassword = getConnectionService().getHashedPassword(usernameInput);
             }
             else{
-                salt = getMenuHandler().getLocalDB().getSalt(usernameInput);
-                storedPassword = getMenuHandler().getLocalDB().getPassword(usernameInput);
+                salt = getLocalStorage().getSalt(usernameInput);
+                storedPassword = getLocalStorage().getPassword(usernameInput);
             }
 
             String hashedPassword = HashUtils.hashPassword(passwordInput, salt);
@@ -71,8 +101,16 @@ public class LoginViewController extends Controller implements Initializable {
                 } else {
                     CredentialStorage.clearCredentials();
                 }
-                getConnectionService().sendLoginRequest(usernameInput, storedPassword);
-                System.out.println(Profile.getInstance().getUserName());
+                if (Profile.getInstance().getUserName() == null) {
+
+                    if (getConnectionService().checkConnection()){
+                        getConnectionService().sendLoginRequest(usernameInput, hashedPassword);
+                        System.out.println("Fetching profile from server");
+                    }else{
+                        getLocalStorage().handleLoginOffline(usernameInput, hashedPassword);
+                    }
+                }
+
                 System.out.println("Login successful.");
                 getMenuHandler().switchToCalendarMenu();
             } else {
@@ -146,7 +184,27 @@ public class LoginViewController extends Controller implements Initializable {
             e.printStackTrace();
         }
     }
+    @FXML
+    public void onManageServerPressed(MouseEvent mouseEvent) {
+        try{
+            getMenuHandler().addNodeToRoot("Initial/manage-server-view.fxml");
+            Node nextScene = getMenuHandler().getNodeFromRoot("manage-server-view");
+            this.rootPane = getMenuHandler().getNodeFromRoot("login-view");
+            nextScene.setLayoutX(getMenuHandler().getPrimaryStage().getWidth());
 
+            //transition for first 'scene'
+            TranslateTransition currentTransition = new TranslateTransition(Duration.millis(500), rootPane);
+            currentTransition.setFromX(0);
+            currentTransition.setToX(-getMenuHandler().getPrimaryStage().getWidth());
+
+            //transition for second 'scene'
+            TranslateTransition nextTransition = new TranslateTransition(Duration.millis(500), nextScene);
+            nextTransition.setFromX(getMenuHandler().getPrimaryStage().getWidth());
+            nextTransition.setToX(0);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
 
 

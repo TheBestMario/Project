@@ -11,7 +11,6 @@ import javafx.util.Duration;
 import org.example.projectcalendar.Controller;
 import org.example.projectcalendar.service.ConnectionService;
 import org.example.projectcalendar.service.HashUtils;
-import org.example.projectcalendar.service.User.Profile;
 
 import java.io.IOException;
 import java.net.URL;
@@ -132,7 +131,7 @@ public class RegisterViewController extends Controller implements Initializable 
                 String salt = HashUtils.generateSalt();
                 String hashedPassword = HashUtils.hashPassword(password,salt);
                 if (connectionService.createProfile(username,email,hashedPassword,salt)){
-                    getMenuHandler().getLocalDB().saveUsernamePassword(username,email,hashedPassword,salt);
+                    getLocalStorage().saveUsernamePassword(username,email,hashedPassword,salt);
 
                     try{
                         getMenuHandler().setNodeToRoot("Initial/account-created-view.fxml");

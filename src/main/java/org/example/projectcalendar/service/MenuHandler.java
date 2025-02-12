@@ -10,6 +10,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.example.projectcalendar.CalendarApplication;
 import org.example.projectcalendar.Controller;
+import org.example.projectcalendar.controllers.ManageServerViewController;
 
 import java.io.IOException;
 
@@ -50,6 +51,7 @@ public class MenuHandler {
         Controller controller = loader.getController();
         controller.setMenuHandler(this);
         controller.setRoot(root);
+        controller.setLocalStorage(localDB);
         controller.setConnectionService(connectionService);
         controller.setConnectionThread(connectionThread);
 
@@ -129,7 +131,10 @@ public class MenuHandler {
         Controller controller = loader.getController();
         controller.setMenuHandler(this);
         controller.setRoot(root);
+        controller.setLocalStorage(localDB);
         controller.setConnectionService(connectionService);
+        controller.setConnectionThread(connectionThread);
+
 
         switch (root.getClass().getSimpleName()) {
             case "StackPane":
@@ -169,9 +174,5 @@ public class MenuHandler {
 
     public Stage getPrimaryStage() {
         return primaryStage;
-    }
-
-    public LocalDatabaseStorage getLocalDB() {
-        return localDB;
     }
 }
