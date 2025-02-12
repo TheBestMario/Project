@@ -12,7 +12,7 @@
 
 <AnchorPane id="register-view" maxWidth="600.0" prefHeight="570.0" prefWidth="469.0" styleClass="root" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectcalendar.controllers.RegisterViewController">
    <children>
-      <VBox id="register-view" fx:id="rootPane" alignment="CENTER" layoutX="4.0" layoutY="9.0" maxHeight="551.0" maxWidth="369.0" spacing="20.0" styleClass="register-view" stylesheets="/static/calendar.css" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="30.0">
+      <VBox id="register-view" fx:id="rootPane" alignment="CENTER" layoutX="4.0" layoutY="9.0" maxHeight="551.0" maxWidth="369.0" spacing="20.0" styleClass="register-view" stylesheets="/static/calendar.css" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
          <Label prefHeight="48.0" prefWidth="145.0" styleClass="title" text="Register" />
          <TextField fx:id="usernameField" promptText="Username" styleClass="input-field" />
          <TextField fx:id="emailField" promptText="Email" styleClass="input-field" />
@@ -27,9 +27,6 @@
                      <Button fx:id="submitButton" onAction="#onRegisterButtonClick" prefHeight="45.0" prefWidth="220.0" styleClass="register-button" text="Register" />
                      <Button onAction="#onBackButtonClicked" prefHeight="37.0" prefWidth="81.0" styleClass="back-button" text="Back" />
                   </children>
-                  <VBox.margin>
-                     <Insets />
-                  </VBox.margin>
                </HBox>
             </children>
          </VBox>
