@@ -310,7 +310,7 @@ public class Database {
     }
 
     private Profile getProfile(ResultSet rs) throws SQLException {
-        Profile profile = Profile.getInstance();
+        Profile profile = new Profile();
         if (rs.next()){
             profile.setUsername(rs.getString("username"));
             profile.setEmail(rs.getString("email"));

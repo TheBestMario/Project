@@ -6,18 +6,10 @@ public class Profile {
     private String email;
     private String firstName;
     private String lastName;
-    private static Profile instance;
     private boolean loggedIn = false;
 
 
     public Profile(){}
-
-    public static Profile getInstance() {
-        if (instance == null) {
-            instance = new Profile();
-        }
-        return instance;
-    }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
