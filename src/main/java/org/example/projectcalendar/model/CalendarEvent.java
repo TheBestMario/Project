@@ -23,6 +23,16 @@ public class CalendarEvent {
         this.endTime = endTime;
         this.location = location;
     }
+    public CalendarEvent(int calendarId, String title, String description,
+                         LocalDateTime startTime, LocalDateTime endTime, String location) {
+        this.eventId = eventId;
+        this.calendarId = calendarId;
+        this.title = title;
+        this.description = description;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.location = location;
+    }
 
     // Getters and setters
     public int getEventId() { return eventId; }
