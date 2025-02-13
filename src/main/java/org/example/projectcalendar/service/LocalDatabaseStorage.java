@@ -168,6 +168,16 @@ public class LocalDatabaseStorage {
         }
     }
 
+    public void deleteEvent(int eventId) {
+        String query = "DELETE FROM Events WHERE event_id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, eventId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public List<CalendarEvent> getEventsForCalendar(int calendarId) {
         List<CalendarEvent> events = new ArrayList<>();
         String query = "SELECT * FROM Events WHERE calendar_id = ?";
