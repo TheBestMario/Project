@@ -1,4 +1,4 @@
-package org.example.projectcalendar.service.User;
+package org.example.projectcalendar.model;
 
 public class Profile {
     private String username;
