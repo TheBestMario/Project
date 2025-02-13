@@ -13,7 +13,7 @@ import javafx.util.Duration;
 import org.example.projectcalendar.Controller;
 import org.example.projectcalendar.service.CredentialStorage;
 import org.example.projectcalendar.service.HashUtils;
-import org.example.projectcalendar.service.User.Profile;
+import org.example.projectcalendar.model.Profile;
 
 import java.net.URL;
 import java.util.ResourceBundle;

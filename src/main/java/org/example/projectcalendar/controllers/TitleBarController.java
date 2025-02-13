@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import org.example.projectcalendar.Controller;
-import org.example.projectcalendar.service.User.Profile;
+import org.example.projectcalendar.model.Profile;
 import java.net.URL;
 import java.util.ResourceBundle;
 

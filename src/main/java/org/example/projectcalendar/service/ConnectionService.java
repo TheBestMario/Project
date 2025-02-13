@@ -1,14 +1,12 @@
 package org.example.projectcalendar.service;
 
-import org.example.projectcalendar.service.User.Profile;
+import org.example.projectcalendar.model.Profile;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
