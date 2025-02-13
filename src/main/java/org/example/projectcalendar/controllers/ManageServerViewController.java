@@ -1,13 +1,13 @@
 package org.example.projectcalendar.controllers;
 
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.shape.Circle;
-import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
 import org.example.projectcalendar.Controller;
 import server.Database;
 
@@ -84,7 +84,21 @@ public class ManageServerViewController extends Controller implements Initializa
             Thread connectionThread = new Thread(getConnectionService()); // Create a new thread with updated address
             setConnectionThread(connectionThread);
             connectionThread.start();
-            updateStatus();
+
+            /*
+            https://stackoverflow.com/questions/13784333/platform-runlater-and-task-in-javafx
+            for some reason updateStatus() doesn't work without both Task thread and runlater().
+             */
+            Task<Void> task = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    Platform.runLater(() -> {
+                        updateStatus();
+                    });
+                    return null;
+                }
+            };
+            new Thread(task).start();
 
         }
     }
@@ -115,7 +129,6 @@ public class ManageServerViewController extends Controller implements Initializa
                 throw new RuntimeException(e);
             }
         }
-        updateStatus();
     }
     @FXML
     public void onBackButtonClicked() throws IOException {

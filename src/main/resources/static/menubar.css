@@ -19,6 +19,10 @@
     -fx-pref-width: 100;
     -fx-pref-height: 50;
 }
+.selected {
+    -fx-background-color: #3b5998;
+}
+
 .sidebar #contact {
     -fx-font-size: 12px;
 }

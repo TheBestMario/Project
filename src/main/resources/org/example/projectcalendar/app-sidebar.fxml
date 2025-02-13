@@ -4,12 +4,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="sidebar" alignment="CENTER" spacing="10.0" styleClass="sidebar" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox id="sidebar" fx:controller="org.example.projectcalendar.controllers.AppSideBar" alignment="CENTER" spacing="10.0" styleClass="sidebar" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox alignment="TOP_CENTER" spacing="10.0">
          <children>
             <Button id="button" text="Home" />
-            <Button id="button" text="Calendar" />
+            <Button id="button" text="Calendar" fx:id="calendarButton" onMouseClicked="#onCalenderClicked" />
          </children>
       </VBox>
       <VBox alignment="BOTTOM_CENTER" spacing="10.0" VBox.vgrow="ALWAYS">

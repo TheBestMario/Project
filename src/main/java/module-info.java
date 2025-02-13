@@ -9,6 +9,7 @@ module org.example.projectcalendar {
     requires java.sql;
     requires com.calendarfx.view;
     requires java.prefs;
+    requires jdk.compiler;
 
     opens org.example.projectcalendar to javafx.fxml;
     exports org.example.projectcalendar;
