@@ -1,7 +1,5 @@
 package org.example.projectcalendar.service;
 
-import org.example.projectcalendar.model.Profile;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,6 +9,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import org.example.projectcalendar.model.Profile;
+
 public class ConnectionService implements Runnable {
     private String serverAddress;
     private BufferedReader in;
@@ -18,6 +18,7 @@ public class ConnectionService implements Runnable {
     private int serverPort;
     private Socket socket;
     private BlockingQueue<String> responseQueue = new LinkedBlockingQueue<>();
+    private Thread currentThread;
 
     public ConnectionService(String serverAddress, int port) {
         this.serverAddress = serverAddress;
@@ -159,5 +160,13 @@ public class ConnectionService implements Runnable {
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void reconnect() {
+        if (currentThread != null) {
+            currentThread.interrupt();
+        }
+        currentThread = new Thread(this);
+        currentThread.start();
     }
 }
