@@ -9,6 +9,7 @@ public class CalendarEvent {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private String location;
+    private int userId;
 
     /*
     We need an event object for temporary storage and manipulation during process
@@ -49,4 +50,6 @@ public class CalendarEvent {
     public void setEndTime(LocalDateTime endTime) { this.endTime = endTime; }
     public String getLocation() { return location; }
     public void setLocation(String location) { this.location = location; }
+    public int getUserId() { return userId; }
+    public void setUserId(int userId) { this.userId = userId; }
 } 
