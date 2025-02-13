@@ -65,13 +65,16 @@ public class CalendarViewController extends Controller {
         }
     }
 
-    // Update the showEventDialog method to handle new entries
     private void showEventDialog(Entry<CalendarEvent> entry, Calendar calendar) {
+        /*
+        converts entry to custom Event object
+         */
+        int calendarID = 1;
+
         CalendarEvent event = (CalendarEvent) entry.getUserObject();
         if (event == null) {
             event = new CalendarEvent(
-                    0, // event_id will be auto-generated
-                    1, // calendar_id - you might want to make this dynamic
+                    calendarID,
                     entry.getTitle(),
                     "", // default description
                     entry.getStartAsLocalDateTime(),
@@ -148,7 +151,7 @@ public class CalendarViewController extends Controller {
          */
         List<CalendarEvent> events = localDB.getEventsForCalendar(1);
         for (CalendarEvent event : events) {
-            Entry<?> entry = new Entry<>(event.getTitle());
+            Entry<CalendarEvent> entry = new Entry<>(event.getTitle());
             entry.setInterval(event.getStartTime(), event.getEndTime());
             entry.setLocation(event.getLocation());
             calendar.addEntry(entry);
