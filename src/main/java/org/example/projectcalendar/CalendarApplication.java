@@ -19,6 +19,11 @@ public class CalendarApplication extends javafx.application.Application {
 
     @Override
     public void start(Stage stage) {
+        /*
+        Initialize local database connection for storage
+        Checks if it can reach server
+        Initialises menu handler and initial view
+         */
         serverAddressForDB = "127.0.0.1";
         serverPortForDB = 8766;
         LocalDatabaseStorage localDB = new LocalDatabaseStorage();
@@ -37,6 +42,7 @@ public class CalendarApplication extends javafx.application.Application {
             
             // Initialize with login view in a StackPane
             StackPane root = new StackPane();
+            root.setStyle("-fx-background-image: url('static/images/robert_walters_logo.jpeg')");
             root.setId("root");
             menuHandler.setRoot(root);
             menuHandler.addNodeToRoot("Initial/login-view.fxml");
@@ -57,13 +63,4 @@ public class CalendarApplication extends javafx.application.Application {
         launch();
     }
 
-//    private void initializeDatabase() {
-//        try {
-//            this.db = new Database();
-//            db.establishConnection();
-//            System.out.println("Database connection established.");
-//        } catch (Exception e) {
-//            System.out.println("Failed to connect to database: " + e.getMessage());
-//        }
-//    }
 }

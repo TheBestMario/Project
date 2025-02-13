@@ -22,6 +22,11 @@ public class CalendarViewController extends Controller {
     }
 
     private void initializeCalendarView() {
+        /*
+        Initialize the calendar view
+        load the events that are saved in DB
+        set up handlers for the CalendarEvents (on the view)
+         */
         userProfile = Profile.getInstance();
         calendarView = new CalendarView();
         
@@ -32,6 +37,9 @@ public class CalendarViewController extends Controller {
     }
 
     private Calendar createMainCalendar() {
+        /*
+        creates default calendar
+         */
         Calendar calendar = new Calendar("My Calendar");
         calendar.setStyle(Calendar.Style.STYLE3);
         return calendar;
@@ -52,6 +60,9 @@ public class CalendarViewController extends Controller {
     }
 
     private void setupEventHandlers(Calendar calendar) {
+        /*
+        Add event handlers to the calendar passed
+         */
         calendar.addEventHandler( e -> {
             System.out.println(e.getEventType().toString());
             com.calendarfx.model.CalendarEvent event = (com.calendarfx.model.CalendarEvent) e;
@@ -79,6 +90,9 @@ public class CalendarViewController extends Controller {
     }
 
     private void loadExistingEvents(Calendar calendar) {
+        /*
+        Load events from the database and add them to the calendar
+         */
         List<CalendarEvent> events = getLocalStorage().getEventsForCalendar(1); // calendar_id = 1
         for (CalendarEvent event : events) {
             Entry<CalendarEvent> entry = new Entry<>(event.getTitle());
@@ -90,9 +104,12 @@ public class CalendarViewController extends Controller {
     }
 
     private void saveEventToDB(Entry<?> entry, Calendar calendar) {
+        /*
+        Save the event to the database
+         */
         Entry<CalendarEvent> typedEntry = (Entry<CalendarEvent>) entry;
         int calendarID = 1;
-        // Set the calendar for the entry explicitly
+
         entry.setCalendar(calendar);
         
         CalendarEvent event = new CalendarEvent(
@@ -104,7 +121,7 @@ public class CalendarViewController extends Controller {
             entry.getLocation()
         );
 
-        // Save to database and get the generated event ID
+
         int eventId = getLocalStorage().saveEvent(
             event.getTitle(),
             event.getDescription(),
@@ -114,9 +131,9 @@ public class CalendarViewController extends Controller {
             event.getCalendarId()
         );
         
-        // Set the event ID after database save
+
         event.setEventId(eventId);
-        // Set the user object with the complete event
+
         typedEntry.setUserObject(event);
     }
 
@@ -124,12 +141,12 @@ public class CalendarViewController extends Controller {
         CalendarEvent event = (CalendarEvent) entry.getUserObject();
         if (event != null) {
             event.setTitle(entry.getTitle());
-            event.setDescription(entry.getLocation()); // CalendarFX uses location for description
+            event.setDescription(entry.getLocation());
             event.setStartTime(entry.getStartAsLocalDateTime());
             event.setEndTime(entry.getEndAsLocalDateTime());
             event.setLocation(entry.getLocation());
             
-            getLocalStorage().updateEvent(event); // You'll need to add this method to LocalDatabaseStorage
+            getLocalStorage().updateEvent(event);
         }
     }
 
