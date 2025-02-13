@@ -10,6 +10,7 @@ salt TEXT);
 
 create table if not exists Calendars(
 calendar_id INTEGER primary key autoincrement,
+name TEXT not null,
 user_id INTEGER,
 password TEXT,
 foreign key (user_id) references Users(user_id));
