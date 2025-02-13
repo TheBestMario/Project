@@ -1,152 +1,85 @@
 package org.example.projectcalendar.service;
 
+import org.example.projectcalendar.CalendarApplication;
+import org.example.projectcalendar.Controller;
+
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import org.example.projectcalendar.CalendarApplication;
-import org.example.projectcalendar.Controller;
-import org.example.projectcalendar.controllers.ManageServerViewController;
-
-import java.io.IOException;
+import java.net.URL;
 
 public class MenuHandler {
-    private static Stage primaryStage;
-
-    private int width;
-    private int height;
-
-    private String stylesheet;
-    private FXMLLoader loader;
-    private Parent root;
-    private String title;
+    private final Stage primaryStage;
+    private final ConnectionService connectionService;
+    private final LocalDatabaseStorage localDB;
     private Scene scene;
-    private ConnectionService connectionService;
-    private Thread connectionThread;
-    private LocalDatabaseStorage localDB;
+    private Parent root;
 
-    public MenuHandler(Stage stage, ConnectionService connectionService, Thread connectionThread, LocalDatabaseStorage localDB) throws IOException {
-        primaryStage = stage;
-        this.localDB = localDB;
+    public MenuHandler(Stage stage, ConnectionService connectionService, LocalDatabaseStorage localDB) {
+        this.primaryStage = stage;
         this.connectionService = connectionService;
-        this.connectionThread = connectionThread;
-        initializeUI();
+        this.localDB = localDB;
     }
 
-    private void initializeUI() throws IOException {
-        // Start with a StackPane as the root
-        root = new StackPane();
-        root.setId("root");
-        scene = new Scene(root, 600, 500);
-
-        FXMLLoader loader = new FXMLLoader(CalendarApplication.class.getResource("Initial/login-view.fxml"));
-        ((StackPane)root).getChildren().add(loader.load());
-        ((StackPane)root).setAlignment(Pos.CENTER);
-        root.setStyle("-fx-background-image: url(static/images/robert_walters_logo.jpeg)");
-
-        Controller controller = loader.getController();
-        controller.setMenuHandler(this);
-        controller.setRoot(root);
-        controller.setLocalStorage(localDB);
-        controller.setConnectionService(connectionService);
-        controller.setConnectionThread(connectionThread);
-
-        String stylesheet = CalendarApplication.class.getResource("/static/calendar.css").toExternalForm();
-        scene.getStylesheets().add(stylesheet);
-
-        primaryStage.setMinWidth(500);
-        primaryStage.setMinHeight(500);
-
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Calendar");
-        primaryStage.show();
-    }
-
-    public void switchToCalendarMenu() throws IOException {
-        BorderPane borderPane = new BorderPane();
-        borderPane.setId("root");
-
-        // Load and set the menu bar
-        FXMLLoader menuLoader = new FXMLLoader(CalendarApplication.class.getResource("app-sidebar.fxml"));
-        borderPane.setLeft(menuLoader.load());
-
-        // Load and set the title bar
-        FXMLLoader titleLoader = new FXMLLoader(CalendarApplication.class.getResource("title-bar.fxml"));
-        borderPane.setTop(titleLoader.load());
-
-        // Load and set the content view
-        FXMLLoader contentLoader = new FXMLLoader(CalendarApplication.class.getResource("Initial/content.fxml"));
-        borderPane.setCenter(contentLoader.load());
-
-        // Update the scene's root
-        scene.setRoot(borderPane);
-        this.root = borderPane;
-
-        // Apply stylesheets
-        String stylesheet = CalendarApplication.class.getResource("/static/calendar.css").toExternalForm();
-        scene.getStylesheets().add(stylesheet);
-        stylesheet = CalendarApplication.class.getResource("/static/menubar.css").toExternalForm();
-        scene.getStylesheets().add(stylesheet);
-
-        primaryStage.setMinWidth(800);
-        primaryStage.setMinHeight(600);
-        primaryStage.setTitle("Calendar");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
-
-
-    public void setNodeToRoot(String fxmlPath) throws IOException {
-        loadNode(fxmlPath, true);
-    }
-
-    public void addNodeToRoot(String fxmlPath) throws IOException {
-        loadNode(fxmlPath, false);
-    }
-
-    public void loadNode(String fxmlPath, boolean clearRoot) throws IOException {
-
-        FXMLLoader loader = new FXMLLoader(CalendarApplication.class.getResource(fxmlPath));
-        Parent node = loader.load();
-
-        Controller controller = loader.getController();
-        controller.setMenuHandler(this);
-        controller.setRoot(root);
-        controller.setLocalStorage(localDB);
-        controller.setConnectionService(connectionService);
-        controller.setConnectionThread(connectionThread);
-
-
-        switch (root.getClass().getSimpleName()) {
-            case "StackPane":
-                if (clearRoot) {
-                    ((StackPane) root).getChildren().clear();
-                }
-                ((StackPane) root).getChildren().add(node);
-                break;
-            case "BorderPane":
-                if (clearRoot) {
-                    ((BorderPane) root).getChildren().clear();
-                }
-                ((BorderPane) root).setCenter(node);
-                break;
+    public <T extends Controller> T loadView(String fxmlPath) {
+        try {
+            URL resource = CalendarApplication.class.getResource(fxmlPath);
+            if (resource == null) {
+                System.out.println("Could not find resource: " + fxmlPath);
+                throw new RuntimeException("Resource not found: " + fxmlPath);
+            }
+            System.out.println("Loading FXML from: " + resource);
+            
+            FXMLLoader loader = new FXMLLoader(resource);
+            Parent view = loader.load();
+            T controller = loader.getController();
+            initializeController(controller);
+            return controller;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to load view: " + fxmlPath, e);
         }
+    }
+
+    public void initializeController(Controller controller) {
+        controller.setMenuHandler(this);
+        controller.setLocalStorage(localDB);
+        controller.setConnectionService(connectionService);
+    }
+
+    public void setScene(Scene scene) {
+        this.scene = scene;
+        primaryStage.setScene(scene);
+    }
+
+    public void showView(Parent view) {
+        if (scene == null) {
+            scene = new Scene(view);
+            // Add CSS files
+            scene.getStylesheets().add(CalendarApplication.class.getResource("/static/menubar.css").toExternalForm());
+            scene.getStylesheets().add(CalendarApplication.class.getResource("/static/calendar.css").toExternalForm());
+            primaryStage.setScene(scene);
+        } else {
+            scene.setRoot(view);
+        }
+        primaryStage.show();
     }
 
     public Node getNodeFromRoot(String fxmlName) {
         if (root instanceof StackPane) {
             for (Node node : ((StackPane) root).getChildren()) {
-                if (node.getId().equals(fxmlName)) {
+                if (node.getId() != null && node.getId().equals(fxmlName)) {
                     return node;
                 }
             }
         } else if (root instanceof BorderPane) {
             Node centerNode = ((BorderPane) root).getCenter();
-            if (centerNode != null && centerNode.getProperties().get("file").equals(fxmlName)) {
+            if (centerNode != null && centerNode.getId() != null && 
+                centerNode.getId().equals(fxmlName)) {
                 return centerNode;
             }
         }
@@ -154,10 +87,78 @@ public class MenuHandler {
     }
 
     public Parent getRoot() {
-        return this.root;
+        return root;
     }
 
     public Stage getPrimaryStage() {
         return primaryStage;
+    }
+
+    public void addNodeToRoot(String fxmlPath) {
+        try {
+            FXMLLoader loader = new FXMLLoader(CalendarApplication.class.getResource(fxmlPath));
+            Parent node = loader.load();
+            Controller controller = loader.getController();
+            initializeController(controller);
+
+            if (root instanceof StackPane) {
+                ((StackPane) root).getChildren().add(node);
+            } else if (root instanceof BorderPane) {
+                ((BorderPane) root).setCenter(node);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to add node: " + fxmlPath, e);
+        }
+    }
+
+    public void setNodeToRoot(String fxmlPath) {
+        try {
+            FXMLLoader loader = new FXMLLoader(CalendarApplication.class.getResource(fxmlPath));
+            Parent node = loader.load();
+            Controller controller = loader.getController();
+            initializeController(controller);
+
+            if (root instanceof StackPane) {
+                ((StackPane) root).getChildren().clear();
+                ((StackPane) root).getChildren().add(node);
+            } else if (root instanceof BorderPane) {
+                ((BorderPane) root).setCenter(node);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to set node: " + fxmlPath, e);
+        }
+    }
+
+    public void switchToCalendarMenu() {
+        BorderPane borderPane = new BorderPane();
+        borderPane.setId("root");
+
+        // Load views and controllers
+        FXMLLoader titleLoader = new FXMLLoader(CalendarApplication.class.getResource("title-bar.fxml"));
+        FXMLLoader sidebarLoader = new FXMLLoader(CalendarApplication.class.getResource("app-sidebar.fxml"));
+        FXMLLoader contentLoader = new FXMLLoader(CalendarApplication.class.getResource("Initial/content.fxml"));
+
+        try {
+            Parent titleBar = titleLoader.load();
+            Parent sidebar = sidebarLoader.load();
+            Parent content = contentLoader.load();
+
+            initializeController(titleLoader.getController());
+            initializeController(sidebarLoader.getController());
+            initializeController(contentLoader.getController());
+
+            borderPane.setTop(titleBar);
+            borderPane.setLeft(sidebar);
+            borderPane.setCenter(content);
+
+            this.root = borderPane;
+            showView(borderPane);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to switch to calendar menu", e);
+        }
+    }
+
+    public void setRoot(Parent root) {
+        this.root = root;
     }
 }

@@ -1,12 +1,12 @@
 package org.example.projectcalendar;
 
-import javafx.stage.Stage;
-import org.example.projectcalendar.service.LocalDatabaseStorage;
-import server.Database;
 import org.example.projectcalendar.service.ConnectionService;
+import org.example.projectcalendar.service.LocalDatabaseStorage;
 import org.example.projectcalendar.service.MenuHandler;
 
-import java.io.IOException;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+import server.Database;
 
 public class CalendarApplication extends javafx.application.Application {
 
@@ -18,12 +18,12 @@ public class CalendarApplication extends javafx.application.Application {
     private Thread connectionThread;
 
     @Override
-    public void start(Stage stage){
-
+    public void start(Stage stage) {
         serverAddressForDB = "127.0.0.1";
         serverPortForDB = 8766;
         LocalDatabaseStorage localDB = new LocalDatabaseStorage();
-        try{
+        
+        try {
             connectionService = new ConnectionService(serverAddressForDB, serverPortForDB);
             connectionThread = new Thread(connectionService);
             connectionThread.start();
@@ -32,13 +32,22 @@ public class CalendarApplication extends javafx.application.Application {
             throw new RuntimeException(e);
         }
 
-        try{
-            this.menuHandler = new MenuHandler(stage, connectionService, connectionThread, localDB); // Pass Database instance
+        try {
+            this.menuHandler = new MenuHandler(stage, connectionService, localDB);
+            
+            // Initialize with login view in a StackPane
+            StackPane root = new StackPane();
+            root.setId("root");
+            menuHandler.setRoot(root);
+            menuHandler.addNodeToRoot("Initial/login-view.fxml");
+            menuHandler.showView(root);
+            
             System.out.println("Application started.");
-        } catch (IOException e) {
+        } catch (RuntimeException e) {
             throw new RuntimeException(e);
         }
     }
+
     @Override
     public void stop() {
         System.exit(0);
