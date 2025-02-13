@@ -201,4 +201,19 @@ public class LocalDatabaseStorage {
         }
         return events;
     }
+
+    public void updateEvent(CalendarEvent event) {
+        String query = "UPDATE Events SET title=?, description=?, start_time=?, end_time=?, location=? WHERE event_id=?";
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, event.getTitle());
+            stmt.setString(2, event.getDescription());
+            stmt.setString(3, event.getStartTime().toString());
+            stmt.setString(4, event.getEndTime().toString());
+            stmt.setString(5, event.getLocation());
+            stmt.setInt(6, event.getEventId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
