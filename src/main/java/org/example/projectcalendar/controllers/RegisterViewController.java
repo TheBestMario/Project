@@ -1,23 +1,25 @@
 package org.example.projectcalendar.controllers;
 
-import javafx.animation.ParallelTransition;
-import javafx.animation.TranslateTransition;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.control.*;
-import javafx.scene.layout.StackPane;
-import javafx.util.Duration;
+import java.net.URL;
+import java.security.NoSuchAlgorithmException;
+import java.util.ResourceBundle;
+
 import org.example.projectcalendar.Controller;
 import org.example.projectcalendar.service.ConnectionService;
 import org.example.projectcalendar.service.HashUtils;
 
-import java.io.IOException;
-import java.net.URL;
-import java.security.NoSuchAlgorithmException;
-import java.util.ResourceBundle;
+import javafx.animation.ParallelTransition;
+import javafx.animation.TranslateTransition;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
 
 public class RegisterViewController extends Controller implements Initializable {
 
@@ -156,11 +158,7 @@ public class RegisterViewController extends Controller implements Initializable 
                 if (connectionService.createProfile(username,email,hashedPassword,salt)){
                     getLocalStorage().saveUsernamePassword(username,email,hashedPassword,salt);
 
-                    try{
-                        getMenuHandler().setNodeToRoot("Initial/account-created-view.fxml");
-                    } catch (IOException e){
-                        e.printStackTrace();
-                    }
+                    getMenuHandler().setNodeToRoot("Initial/account-created-view.fxml");
 
                 }else{
                     System.out.println("failed to create profile");
@@ -176,10 +174,6 @@ public class RegisterViewController extends Controller implements Initializable 
     }
     @FXML
     protected void onAccountCreatedReturnButtonPressed(){
-        try{
-            getMenuHandler().setNodeToRoot("Initial/login-view.fxml");
-        } catch (IOException e){
-            e.printStackTrace();
-        }
+        getMenuHandler().setNodeToRoot("Initial/login-view.fxml");
     }
 }

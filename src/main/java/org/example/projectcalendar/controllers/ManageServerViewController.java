@@ -50,7 +50,7 @@ public class ManageServerViewController extends Controller implements Initializa
 
     }
     @Override
-    protected void onDependenciesSet() {
+    public void onDependenciesSet() {
         updateStatus();
     }
 
@@ -71,35 +71,23 @@ public class ManageServerViewController extends Controller implements Initializa
     public void onConnectButtonClicked() {
         String address = serverAddressTextField.getText();
         String[] parts = address.split("\\.");
-        System.out.println(parts.length);
         if (address.isEmpty()){
             addressInfoLabel.setText("No address provided");
             addressInfoLabel.setStyle("-fx-text-fill: red");
-
         } else if (parts.length != 4){
             System.out.println("Invalid address");
         } else {
             getConnectionService().setServerAddress(address);
-            getConnectionThread().interrupt(); // Stop the current thread if running
-            Thread connectionThread = new Thread(getConnectionService()); // Create a new thread with updated address
-            setConnectionThread(connectionThread);
-            connectionThread.start();
-
-            /*
-            https://stackoverflow.com/questions/13784333/platform-runlater-and-task-in-javafx
-            for some reason updateStatus() doesn't work without both Task thread and runlater().
-             */
+            getConnectionService().reconnect();
+            
             Task<Void> task = new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
-                    Platform.runLater(() -> {
-                        updateStatus();
-                    });
+                    Platform.runLater(() -> updateStatus());
                     return null;
                 }
             };
             new Thread(task).start();
-
         }
     }
     @FXML

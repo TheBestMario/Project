@@ -1,5 +1,8 @@
 package org.example.projectcalendar.model;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+
 public class Profile {
     private String username;
     private String password;
@@ -8,6 +11,8 @@ public class Profile {
     private String lastName;
     private static Profile instance;
     private boolean loggedIn = false;
+    private ArrayList<Calendar> calendars;
+    private int userId;
 
 
     public Profile(){}
@@ -67,4 +72,7 @@ public class Profile {
     public String getPassword() {
         return password;
     }
+
+    public int getUserId() { return userId; }
+    public void setUserId(int userId) { this.userId = userId; }
 }

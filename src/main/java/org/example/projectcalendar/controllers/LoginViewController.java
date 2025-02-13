@@ -1,22 +1,27 @@
 package org.example.projectcalendar.controllers;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import org.example.projectcalendar.Controller;
+import org.example.projectcalendar.model.Profile;
+import org.example.projectcalendar.service.CredentialStorage;
+import org.example.projectcalendar.service.HashUtils;
+
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
-import org.example.projectcalendar.Controller;
-import org.example.projectcalendar.service.CredentialStorage;
-import org.example.projectcalendar.service.HashUtils;
-import org.example.projectcalendar.model.Profile;
-
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class LoginViewController extends Controller implements Initializable {
     public CheckBox rememberUserCheckBox;
@@ -54,7 +59,7 @@ public class LoginViewController extends Controller implements Initializable {
         }
     }
     @Override
-    protected void onDependenciesSet() {
+    public void onDependenciesSet() {
         updateStatus();
     }
 
