@@ -1,12 +1,16 @@
 package org.example.projectcalendar.service;
 
-import org.example.projectcalendar.service.User.Profile;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.sql.*;
+
+import org.example.projectcalendar.model.CalendarEvent;
+import org.example.projectcalendar.model.Profile;
 
 public class LocalDatabaseStorage {
     private static final String DB_URL = "jdbc:sqlite:local_storage.db";
@@ -147,5 +151,44 @@ public class LocalDatabaseStorage {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void saveEvent(String title, String description, LocalDateTime startTime, LocalDateTime endTime, String location, int calendarId) {
+        String query = "INSERT INTO Events (calendar_id, title, description, start_time, end_time, location) VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, calendarId);
+            stmt.setString(2, title);
+            stmt.setString(3, description);
+            stmt.setString(4, startTime.toString());
+            stmt.setString(5, endTime.toString());
+            stmt.setString(6, location);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<CalendarEvent> getEventsForCalendar(int calendarId) {
+        List<CalendarEvent> events = new ArrayList<>();
+        String query = "SELECT * FROM Events WHERE calendar_id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, calendarId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                CalendarEvent event = new CalendarEvent(
+                    rs.getInt("event_id"),
+                    rs.getInt("calendar_id"),
+                    rs.getString("title"),
+                    rs.getString("description"),
+                    LocalDateTime.parse(rs.getString("start_time")),
+                    LocalDateTime.parse(rs.getString("end_time")),
+                    rs.getString("location")
+                );
+                events.add(event);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return events;
     }
 }
