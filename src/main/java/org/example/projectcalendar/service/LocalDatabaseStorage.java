@@ -1,65 +1,65 @@
 package org.example.projectcalendar.service;
 
-import org.example.projectcalendar.service.User.Profile;
-
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-public class LocalDatabaseStorage {
+import org.example.projectcalendar.service.User.Profile;
+
+public class LocalDatabaseStorage implements AutoCloseable {
     private static final String DB_URL = "jdbc:sqlite:local_storage.db";
-    private Connection conn;
-    private String schemaPath = "local_schema.txt";
+    
+    private final Connection conn;
+    private final String schemaPath;
 
-    public LocalDatabaseStorage() {
-        try {
-            conn = DriverManager.getConnection(DB_URL);
-            createTables();
-        } catch (SQLException e) {
+    public LocalDatabaseStorage() throws SQLException {
+        this.conn = DriverManager.getConnection(DB_URL);
+        this.schemaPath = "local_schema.txt";
+        initializeDatabase();
+
+    }
+
+    private void initializeDatabase() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(schemaPath))) {
+            executeSchemaBatch(reader);
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void closeConnection() {
+    @Override
+    public void close() {
         try {
-            conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void createTables() {
-        /*
-        Reads from file, line by line and splits lines by ;
-        Then executes each query from the list
-
-         */
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(schemaPath));
-            String line;
-            StringBuilder sb = new StringBuilder();
-            while ((line = reader.readLine()) != null) {
-                sb.append(line);
-                sb.append("\n");
+            if (conn != null && !conn.isClosed()) {
+                conn.close();
             }
-            String schema = sb.toString();
-            String[] queries = schema.split(";");
-            try (Statement stmt = conn.createStatement()) {
-                for (String query : queries) {
-                    query = query.trim();
-                    if (!query.isEmpty()) {
-                        stmt.execute(query);
-                    }
+        } catch (SQLException e) {
+            System.out.println("Error closing database connection");
+        }
+    }
+
+    private void executeSchemaBatch(BufferedReader reader) throws SQLException, IOException {
+        String line;
+        StringBuilder sb = new StringBuilder();
+        while ((line = reader.readLine()) != null) {
+            sb.append(line);
+            sb.append("\n");
+        }
+        String schema = sb.toString();
+        String[] queries = schema.split(";");
+        try (Statement stmt = conn.createStatement()) {
+            for (String query : queries) {
+                query = query.trim();
+                if (!query.isEmpty()) {
+                    stmt.execute(query);
                 }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 

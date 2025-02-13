@@ -8,12 +8,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.shape.Circle;
+
 import org.example.projectcalendar.Controller;
+
 import server.Database;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import server.Server;
 
 public class ManageServerViewController extends Controller implements Initializable {
     @FXML
@@ -115,7 +119,7 @@ public class ManageServerViewController extends Controller implements Initializa
             try {
                 Thread serverThread = new Thread(() -> {
                     try {
-                        Database.main(new String[0]);
+                        Server.main(new String[0]);
                     } catch (Exception e) {
                         addressInfoLabel.setText("server already running");
                         addressInfoLabel.setStyle("-fx-text-fill: orange");

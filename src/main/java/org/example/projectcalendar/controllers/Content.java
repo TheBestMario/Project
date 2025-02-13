@@ -50,4 +50,9 @@ public class Content extends Controller implements Initializable {
         AnchorPane.setRightAnchor(view, 0.0);
         AnchorPane.setLeftAnchor(view, 0.0);
     }
+
+    @Override
+    protected void onDependenciesSet() {
+
+    }
 }

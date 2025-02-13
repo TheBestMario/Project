@@ -1,5 +1,12 @@
 package org.example.projectcalendar.service;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.Objects;
+
+import org.example.projectcalendar.CalendarApplication;
+import org.example.projectcalendar.Controller;
+
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -8,62 +15,86 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import org.example.projectcalendar.CalendarApplication;
-import org.example.projectcalendar.Controller;
-import org.example.projectcalendar.controllers.ManageServerViewController;
-
-import java.io.IOException;
 
 public class MenuHandler {
-    private static Stage primaryStage;
-
-    private int width;
-    private int height;
-
-    private String stylesheet;
-    private FXMLLoader loader;
-    private Parent root;
-    private String title;
+    
+    // UI Constants
+    private static final int DEFAULT_WIDTH = 600;
+    private static final int DEFAULT_HEIGHT = 500;
+    private static final int MIN_WIDTH = 500;
+    private static final int MIN_HEIGHT = 500;
+    private static final String DEFAULT_TITLE = "Calendar";
+    private static final String BACKGROUND_IMAGE = "-fx-background-image: url(static/images/robert_walters_logo.jpeg)";
+    
+    // Resource paths
+    private static final String LOGIN_VIEW_PATH = "Initial/login-view.fxml";
+    private static final String STYLESHEET_PATH = "/static/calendar.css";
+    
+    private final Stage primaryStage;
+    private final ConnectionService connectionService;
+    private final Thread connectionThread;
+    private final LocalDatabaseStorage localDB;
+    
     private Scene scene;
-    private ConnectionService connectionService;
-    private Thread connectionThread;
-    private LocalDatabaseStorage localDB;
+    private Parent root;
 
-    public MenuHandler(Stage stage, ConnectionService connectionService, Thread connectionThread, LocalDatabaseStorage localDB) throws IOException {
-        primaryStage = stage;
-        this.localDB = localDB;
-        this.connectionService = connectionService;
-        this.connectionThread = connectionThread;
-        initializeUI();
+    public MenuHandler(Stage stage, ConnectionService connectionService, 
+                      Thread connectionThread, LocalDatabaseStorage localDB) {
+        this.primaryStage = Objects.requireNonNull(stage, "Stage cannot be null");
+        this.connectionService = Objects.requireNonNull(connectionService, "ConnectionService cannot be null");
+        this.connectionThread = Objects.requireNonNull(connectionThread, "ConnectionThread cannot be null");
+        this.localDB = Objects.requireNonNull(localDB, "LocalDB cannot be null");
+        
+        try {
+            initializeUI();
+        } catch (IOException e) {
+            throw new UIInitializationException("Failed to initialize UI", e);
+        }
     }
 
     private void initializeUI() throws IOException {
-        // Start with a StackPane as the root
+        initializeRoot();
+        initializeLoginView();
+        setupStage();
+    }
+
+    private void initializeRoot() {
         root = new StackPane();
         root.setId("root");
-        scene = new Scene(root, 600, 500);
+        scene = new Scene(root, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        root.setStyle(BACKGROUND_IMAGE);
+    }
 
+    private void initializeLoginView() throws IOException {
         FXMLLoader loader = new FXMLLoader(CalendarApplication.class.getResource("Initial/login-view.fxml"));
-        ((StackPane)root).getChildren().add(loader.load());
+        Parent loginView = loader.load();
+        
+        ((StackPane)root).getChildren().add(loginView);
         ((StackPane)root).setAlignment(Pos.CENTER);
-        root.setStyle("-fx-background-image: url(static/images/robert_walters_logo.jpeg)");
+        
+        initializeController(loader.getController());
+        applyStylesheets();
+    }
 
-        Controller controller = loader.getController();
+    private void initializeController(Controller controller) {
         controller.setMenuHandler(this);
         controller.setRoot(root);
         controller.setLocalStorage(localDB);
         controller.setConnectionService(connectionService);
         controller.setConnectionThread(connectionThread);
+    }
 
+    private void setupStage() {
+        primaryStage.setMinWidth(MIN_WIDTH);
+        primaryStage.setMinHeight(MIN_HEIGHT);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle(DEFAULT_TITLE);
+        primaryStage.show();
+    }
+
+    private void applyStylesheets() {
         String stylesheet = CalendarApplication.class.getResource("/static/calendar.css").toExternalForm();
         scene.getStylesheets().add(stylesheet);
-
-        primaryStage.setMinWidth(500);
-        primaryStage.setMinHeight(500);
-
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Calendar");
-        primaryStage.show();
     }
 
     public void switchToCalendarMenu() throws IOException {
@@ -99,7 +130,6 @@ public class MenuHandler {
         primaryStage.show();
     }
 
-
     public void setNodeToRoot(String fxmlPath) throws IOException {
         loadNode(fxmlPath, true);
     }
@@ -109,18 +139,34 @@ public class MenuHandler {
     }
 
     public void loadNode(String fxmlPath, boolean clearRoot) throws IOException {
+        try {
+            FXMLLoader loader = createConfiguredLoader(fxmlPath);
+            Parent node = loader.load();
+            setupController(loader.getController());
+            updateRootNode(node, clearRoot);
+        } catch (IOException e) {
+            System.out.println("Failed to load FXML: " + fxmlPath);
+            throw e;
+        }
+    }
 
-        FXMLLoader loader = new FXMLLoader(CalendarApplication.class.getResource(fxmlPath));
-        Parent node = loader.load();
+    private FXMLLoader createConfiguredLoader(String fxmlPath) {
+        URL resource = CalendarApplication.class.getResource(fxmlPath);
+        if (resource == null) {
+            System.out.println("FXML resource not found: " + fxmlPath);
+        }
+        return new FXMLLoader(resource);
+    }
 
-        Controller controller = loader.getController();
+    private void setupController(Controller controller) {
         controller.setMenuHandler(this);
         controller.setRoot(root);
         controller.setLocalStorage(localDB);
         controller.setConnectionService(connectionService);
         controller.setConnectionThread(connectionThread);
+    }
 
-
+    private void updateRootNode(Parent node, boolean clearRoot) {
         switch (root.getClass().getSimpleName()) {
             case "StackPane":
                 if (clearRoot) {
@@ -159,5 +205,12 @@ public class MenuHandler {
 
     public Stage getPrimaryStage() {
         return primaryStage;
+    }
+
+    // Add custom exceptions
+    public static class UIInitializationException extends RuntimeException {
+        public UIInitializationException(String message, Throwable cause) {
+            super(message, cause);
+        }
     }
 }

@@ -9,4 +9,9 @@ public class CalendarViewController extends Controller {
     public void setMenuHandler(MenuHandler menuHandler) {
         this.menuHandler = menuHandler;
     }
+
+    @Override
+    protected void onDependenciesSet() {
+
+    }
 }

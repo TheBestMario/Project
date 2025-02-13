@@ -1,24 +1,24 @@
 package server;
 
-import java.io.*;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
 public class Connector implements Runnable {
-    private Socket socket;
+    private final Socket clientSocket;
     private Scanner in;
     private PrintWriter out;
     private Database database;
 
-    public Connector(Socket socket){
-        this.socket = socket;
-        this.database = Database.getInstance();
+    public Connector(Socket socket, Database database) {
+        this.clientSocket = socket;
+        this.database = database;
     }
     public void run() {
         try {
-            System.out.println(socket.getInetAddress().getHostAddress());
-            in = new Scanner(socket.getInputStream());
-            out = new PrintWriter(socket.getOutputStream(), true);
+            System.out.println(clientSocket.getInetAddress().getHostAddress());
+            in = new Scanner(clientSocket.getInputStream());
+            out = new PrintWriter(clientSocket.getOutputStream(), true);
             while (in.hasNextLine()) {
                 String message = in.nextLine();
 

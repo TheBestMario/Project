@@ -1,47 +1,75 @@
 package org.example.projectcalendar.service;
 
-import org.example.projectcalendar.service.User.Profile;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public class ConnectionService implements Runnable {
-    private String serverAddress;
-    private BufferedReader in;
-    private PrintWriter out;
-    private int serverPort;
-    private Socket socket;
-    private BlockingQueue<String> responseQueue = new LinkedBlockingQueue<>();
+import org.example.projectcalendar.service.User.Profile;
+
+public class ConnectionService implements AutoCloseable, Runnable {
+    private static final int RESPONSE_TIMEOUT_SECONDS = 1;
+    
+    private final BlockingQueue<String> responseQueue;
+    private final AtomicBoolean isRunning;
+    private volatile Socket socket;
+    private volatile BufferedReader in;
+    private volatile PrintWriter out;
 
     public ConnectionService(String serverAddress, int port) {
-        this.serverAddress = serverAddress;
-        this.serverPort = port;
+        this.responseQueue = new LinkedBlockingQueue<>();
+        this.isRunning = new AtomicBoolean(true);
+        initializeConnection(serverAddress, port);
+    }
+
+    private void initializeConnection(String address, int port) {
+        try {
+            socket = new Socket(address, port);
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new PrintWriter(socket.getOutputStream(), true);
+        } catch (IOException e) {
+            System.out.println("Failed to initialize connection");
+        }
+    }
+
+    @Override
+    public void close() {
+        isRunning.set(false);
+        closeQuietly(in);
+        closeQuietly(out);
+        closeQuietly(socket);
+    }
+
+    private void closeQuietly(AutoCloseable closeable) {
+        try {
+            if (closeable != null) {
+                closeable.close();
+            }
+        } catch (Exception e) {
+            System.out.println("Error closing resource");
+        }
     }
 
     public static void connect(){
 
     }
 
+    @Override
     public void run() {
-        try {
-            socket = new Socket(serverAddress, serverPort);
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(socket.getOutputStream(), true);
-            String line;
-            while ((line = in.readLine()) != null) {
-                responseQueue.put(line);
+        // Add connection logic here
+        while (!Thread.currentThread().isInterrupted()) {
+            checkConnection();
+            try {
+                Thread.sleep(1000); // Check connection every second
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
             }
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-            System.out.println("No server detected, continuing ");
         }
     }
 
@@ -53,39 +81,11 @@ public class ConnectionService implements Runnable {
     }
 
     public void setServerAddress(String serverAddress) {
-        this.serverAddress = serverAddress;
+        // Implementation needed
     }
     public String getServerAddress() {
-        return serverAddress;
-    }
-
-    public void closeConnection() {
-        try {
-            in.close();
-            out.close();
-            socket.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    /**
-     * Waits for a response from the server for 1 second
-     * I had a problem synchronising threads, I was trying to use thread.join()
-     * but because the app works on main it means that it crashes as it waits for the thread
-     * with the connection to finish. I looked online and saw that you can give it leeway through
-     * the blockingqueue object which is similar to queue.
-     */
-    private String waitForResponse() {
-        try {
-            System.out.println("before join");
-            String response = responseQueue.poll(1, TimeUnit.SECONDS);
-            System.out.println("after join join");
-            return response;
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            return null;
-        }
+        // Implementation needed
+        return null;
     }
 
     public boolean sendLoginRequest(String username, String password) {
@@ -160,6 +160,18 @@ public class ConnectionService implements Runnable {
             }else return false;
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private String waitForResponse() {
+        try {
+            System.out.println("before join");
+            String response = responseQueue.poll(RESPONSE_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+            System.out.println("after join join");
+            return response;
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return null;
         }
     }
 }
