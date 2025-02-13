@@ -85,12 +85,13 @@ public class LoginViewController extends Controller implements Initializable {
 
             String salt;
             String storedPassword;
-            if (getLocalStorage().getUsername(usernameInput) == null) {
-                informationLabel.setText("Invalid username/email");
+             if (usernameInput.isEmpty() || passwordInput.isEmpty()) {
+                informationLabel.setText("Please fill in all the fields to login.");
                 informationLabel.setStyle("-fx-text-fill: red");
                 return;
-            } else if (usernameInput.isEmpty() || passwordInput.isEmpty()) {
-                informationLabel.setText("Please fill in all the fields to login.");
+            }
+            else if (getLocalStorage().getUsername(usernameInput) == null) {
+                informationLabel.setText("Invalid username/email");
                 informationLabel.setStyle("-fx-text-fill: red");
                 return;
             }
@@ -135,6 +136,13 @@ public class LoginViewController extends Controller implements Initializable {
     @FXML
     protected void onSignUpLinkClicked(){
         //animates and switches scenes after finishing animation
+        if (getConnectionService() == null || !getConnectionService().checkConnection()){
+            informationLabel.setText("""
+                    No connection to server.
+                    Please manage server connection or try again later.""");
+            informationLabel.setStyle("-fx-text-fill: red");
+            return;
+        }
         try {
             getMenuHandler().addNodeToRoot("Initial/register-view.fxml");
             Node nextScene = getMenuHandler().getNodeFromRoot("register-view");
@@ -161,37 +169,6 @@ public class LoginViewController extends Controller implements Initializable {
                     currentTransition, nextTransition);
             parallelTransition.play();
         }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-    @FXML
-    protected void onBackButtonClicked(){
-        try {
-            //animates and switches scenes after finishing animation
-            getMenuHandler().addNodeToRoot("Initial/start-view.fxml");
-            Node startViewScene = getMenuHandler().getNodeFromRoot("start-view");
-            this.rootPane = getMenuHandler().getNodeFromRoot("login-view");
-            startViewScene.setLayoutX(-rootPane.getLayoutX());
-
-            //transition for first 'scene'
-            TranslateTransition currentTransition = new TranslateTransition(Duration.millis(500), startViewScene);
-            currentTransition.setFromX(-rootPane.getBoundsInParent().getWidth());
-            currentTransition.setToX(0);
-
-            //transition for second 'scene'
-            TranslateTransition nextTransition = new TranslateTransition(Duration.millis(500), rootPane);
-            nextTransition.setFromX(0);
-            nextTransition.setToX(rootPane.getBoundsInParent().getWidth() + startViewScene.getTranslateX());
-            StackPane root = (StackPane) getMenuHandler().getRoot();
-            nextTransition.setOnFinished(event -> {
-                root.getChildren().remove(rootPane);
-            });
-
-            ParallelTransition parallelTransition = new ParallelTransition(
-                    currentTransition,nextTransition);
-            parallelTransition.play();
-
-        } catch (Exception e) {
             e.printStackTrace();
         }
     }

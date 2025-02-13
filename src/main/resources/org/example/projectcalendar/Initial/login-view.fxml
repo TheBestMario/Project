@@ -65,7 +65,11 @@
                   <CheckBox fx:id="rememberUserCheckBox" mnemonicParsing="false" prefHeight="46.0" prefWidth="99.0" text="Remember me" wrapText="true" />
                </children>
             </HBox>
-            <Label fx:id="informationLabel" styleClass="information-label" />
+            <HBox alignment="CENTER" prefHeight="42.0" prefWidth="301.0">
+               <children>
+                  <Label fx:id="informationLabel" styleClass="information-label" />
+               </children>
+            </HBox>
             <HBox alignment="CENTER_LEFT">
                <children>
                   <Label text="Don't have an account?" wrapText="true" />
