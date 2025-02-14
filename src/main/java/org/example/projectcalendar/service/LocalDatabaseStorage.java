@@ -12,7 +12,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.example.projectcalendar.model.CalendarEvent;
 import org.example.projectcalendar.model.Profile;
@@ -115,6 +117,10 @@ public class LocalDatabaseStorage {
             ResultSet rs = st.executeQuery();
             if (rs.next()){
                 profile.setUsername(rs.getString("username"));
+                profile.setEmail(rs.getString("email"));
+                profile.setFirstName(rs.getString("first_name"));
+                profile.setLastName(rs.getString("last_name"));
+                profile.setUserId(rs.getInt("user_id"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -167,54 +173,50 @@ public class LocalDatabaseStorage {
         return null;
     }
 
-    public int saveEvent(String title, String description, LocalDateTime startTime, LocalDateTime endTime, String location, int calendarId) {
-        try {
-            ValidationUtils.validateEventTitle(title);
-            ValidationUtils.validateEventDescription(description);
-            
-            String sql = "INSERT INTO events (title, description, start_time, end_time, location, calendar_id) " +
-                         "VALUES (?, ?, ?, ?, ?, ?) RETURNING event_id";
-            
-            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.setString(1, title);
-                pstmt.setString(2, description);
-                pstmt.setTimestamp(3, java.sql.Timestamp.valueOf(startTime));
-                pstmt.setTimestamp(4, java.sql.Timestamp.valueOf(endTime));
-                pstmt.setString(5, location);
-                pstmt.setInt(6, calendarId);
-                
-                ResultSet rs = pstmt.executeQuery();
+    // LocalDatabaseStorage.java
+    public int saveEvent(CalendarEvent event) {
+        String query = "INSERT INTO Events (calendar_id, title, description, start_time, end_time, location) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setInt(1, event.getCalendarId());
+            stmt.setString(2, event.getTitle());
+            stmt.setString(3, event.getDescription());
+            stmt.setString(4, event.getStartTime().toString());
+            stmt.setString(5, event.getEndTime().toString());
+            stmt.setString(6, event.getLocation());
+
+            stmt.executeUpdate();
+
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
                 if (rs.next()) {
-                    return rs.getInt("event_id");
+                    return rs.getInt(1);
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Database error while saving event: " + e.getMessage(), e);
+            e.printStackTrace();
+            throw new RuntimeException("Failed to save event", e);
         }
         return -1;
     }
+    // LocalDatabaseStorage.java
     public int saveCalendar(String name, int userId) {
-        String sql = "INSERT INTO calendars (name, user_id) VALUES (?, ?) RETURNING calendar_id";
-        int calendarId = -1;
-        
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
-            pstmt.setString(1, name);
-            pstmt.setInt(2, userId);
-            
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                calendarId = rs.getInt("calendar_id");
+        String query = "INSERT INTO Calendars (name, user_id) VALUES (?, ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, name);
+            stmt.setInt(2, userId);
+            stmt.executeUpdate();
+
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
             }
-        
         } catch (SQLException e) {
             e.printStackTrace();
-            System.err.println("Error saving calendar to database: " + e.getMessage());
+            throw new RuntimeException("Failed to save calendar", e);
         }
-    
-        return calendarId;
+        return -1;
     }
-
     public void deleteEvent(int eventId) {
         String query = "DELETE FROM Events WHERE event_id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -228,15 +230,18 @@ public class LocalDatabaseStorage {
     public List<CalendarEvent> getEventsForCalendar(int calendarId) {
         List<CalendarEvent> events = new ArrayList<>();
         String query = "SELECT * FROM Events WHERE calendar_id = ?";
+        
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, calendarId);
             ResultSet rs = stmt.executeQuery();
+            
             while (rs.next()) {
                 CalendarEvent event = new CalendarEvent(
                     rs.getInt("event_id"),
-                    rs.getInt("calendar_id"),
+                    calendarId,
                     rs.getString("title"),
                     rs.getString("description"),
+                    // Convert SQLite datetime string back to LocalDateTime
                     LocalDateTime.parse(rs.getString("start_time")),
                     LocalDateTime.parse(rs.getString("end_time")),
                     rs.getString("location")
@@ -244,8 +249,9 @@ public class LocalDatabaseStorage {
                 events.add(event);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Failed to load events", e);
         }
+        
         return events;
     }
 
@@ -272,5 +278,44 @@ public class LocalDatabaseStorage {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void createDefaultCalendarForUser(int userId, String username) {
+        String query = "INSERT INTO Calendars (name, user_id) VALUES (?, ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, username + "'s Calendar");
+            stmt.setInt(2, userId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to create default calendar", e);
+        }
+    }
+
+    public Map.Entry<List<Calendar>, Map<Calendar, Integer>> getCalendarsForUser(int userId) {
+        /*
+        Load all calendars for the given user
+        maps calendar objects to an ID for easy reference
+
+         */
+        List<Calendar> calendars = new ArrayList<>();
+        Map<Calendar, Integer> calendarIds = new HashMap<>();
+        
+        String query = "SELECT calendar_id, name FROM Calendars WHERE user_id = ?";
+        
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                Calendar calendar = new Calendar(rs.getString("name"));
+                calendar.setStyle(Calendar.Style.STYLE3);
+                calendars.add(calendar);
+                calendarIds.put(calendar, rs.getInt("calendar_id"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to load calendars", e);
+        }
+        
+        return Map.entry(calendars, calendarIds);
     }
 }
