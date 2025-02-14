@@ -8,7 +8,11 @@ import org.example.projectcalendar.service.ValidationUtils;
 import org.junit.jupiter.api.Test;
 
 class ValidationUtilsTest {
-
+    /*
+    since we're using exceptions to handle validation,
+    we use assertDoesNotThrow to check if the method succeeds
+    and assertThrows to check if the method doesn't succeed (throws an exception)
+     */
     @Test
     void validateUsername_WithValidUsername_ShouldNotThrowException() {
         assertDoesNotThrow(() -> ValidationUtils.validateUsername("validUser123"));
