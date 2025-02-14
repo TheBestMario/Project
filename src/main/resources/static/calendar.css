@@ -124,6 +124,17 @@
 .register-view .back-button:hover {
     -fx-background-color: #999;
 }
+.account-created-view{
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+
+}
+.account-created-view .background{
+    -fx-background-color: #f0f0f0;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.61), 10, 0, 0, 0);
+}
 
 .manage-server-view{
     -fx-background-color: #f0f0f0;
