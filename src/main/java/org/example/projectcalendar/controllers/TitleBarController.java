@@ -8,13 +8,12 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import org.example.projectcalendar.Controller;
-import org.example.projectcalendar.model.CalendarEvent;
 import org.example.projectcalendar.model.Profile;
 
 import com.calendarfx.model.Calendar;
+import com.calendarfx.model.CalendarSource;
 import com.calendarfx.model.Entry;
 import com.calendarfx.view.CalendarView;
-import com.calendarfx.model.CalendarSource;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,6 +29,7 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 
 public class TitleBarController extends Controller implements Initializable {
     public MenuItem newCalendarButton;
@@ -37,6 +37,9 @@ public class TitleBarController extends Controller implements Initializable {
     @FXML
     private Label usernameLabel;
     private Profile profile;
+
+    @FXML
+    public MenuItem logoutButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -79,6 +82,7 @@ public class TitleBarController extends Controller implements Initializable {
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(name -> {
             // Save calendar to database
+            System.out.println(Profile.getInstance().getUserId());
             int calendarId = getLocalStorage().saveCalendar(name, Profile.getInstance().getUserId());
             
             // Update calendar view
@@ -161,29 +165,23 @@ public class TitleBarController extends Controller implements Initializable {
             CalendarView calendarView = content.getCalendarView();
             Calendar calendar = calendarView.getCalendarSources().get(0).getCalendars().get(0);
             
-            // Create and save the event
-            CalendarEvent event = new CalendarEvent(
-                1, // calendar_id
-                entry.getTitle(),
-                entry.getLocation(),
-                entry.getStartAsLocalDateTime(),
-                entry.getEndAsLocalDateTime(),
-                entry.getLocation()
-            );
-            event.setUserId(Profile.getInstance().getUserId());  // Link to current user
-            
-            // Save to database
-            getLocalStorage().saveEvent(
-                event.getTitle(),
-                event.getDescription(),
-                event.getStartTime(),
-                event.getEndTime(),
-                event.getLocation(),
-                event.getCalendarId()// Add user ID parameter
-            );
-
-            // Add to calendar
+            // Add to calendar - this will trigger the ENTRY_CREATED event handler
+            // which will save to database, so we don't need to save here
             calendar.addEntry(entry);
         });
+    }
+
+    @FXML
+    public void onLogoutPressed(ActionEvent actionEvent) {
+        // Clear the profile
+        Profile.getInstance().clearProfile();
+        
+        // Reset to initial login view using existing root
+        StackPane root = new StackPane();
+        root.setStyle("-fx-background-image: url('static/images/robert_walters_logo.jpeg')");
+        root.setId("root");
+        getMenuHandler().setRoot(root);
+        getMenuHandler().addNodeToRoot("Initial/login-view.fxml");
+        getMenuHandler().showView(root);
     }
 }
