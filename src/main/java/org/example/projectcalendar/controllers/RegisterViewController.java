@@ -4,7 +4,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import org.example.projectcalendar.Controller;
-import org.example.projectcalendar.service.ConnectionService;
 import org.example.projectcalendar.service.HashUtils;
 import org.example.projectcalendar.service.ValidationException;
 import org.example.projectcalendar.service.ValidationUtils;
@@ -35,7 +34,6 @@ public class RegisterViewController extends Controller implements Initializable 
     public Label warningLabelUsername;
     public Node rootPane;
     public TextField emailField;
-    private ConnectionService connectionService;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -61,8 +59,8 @@ public class RegisterViewController extends Controller implements Initializable 
             try {
                 ValidationUtils.validateUsername(newValue);
                 // Only check uniqueness if the basic validation passes
-                if (connectionService != null) {  // Make sure service is available
-                    ValidationUtils.validateUsernameUnique(newValue, connectionService);
+                if (getConnectionService() != null && getConnectionService().checkConnection()) {
+                    ValidationUtils.validateUsernameUnique(newValue, getConnectionService());
                     showValidationSuccess(warningLabelUsername, "Username is available");
                 }
             } catch (ValidationException e) {
@@ -77,11 +75,6 @@ public class RegisterViewController extends Controller implements Initializable 
                 showValidationError(informationLabelCPassword, "Passwords do not match");
             }
         });
-    }
-
-    @Override
-    public void setConnectionService(ConnectionService connectionService){
-        this.connectionService = connectionService;
     }
 
     @FXML
@@ -176,18 +169,21 @@ public class RegisterViewController extends Controller implements Initializable 
 
         if (isValid) {
             try {
-                // Proceed with registration
+                // Generate salt and hash password
                 String salt = HashUtils.generateSalt();
                 String hashedPassword = HashUtils.hashPassword(password, salt);
                 
+                // Try to create profile on server first
                 if (getConnectionService().createProfile(username, email, hashedPassword, salt)) {
-                    // Registration successful
+                    // If server registration successful, save to local storage
+                    getLocalStorage().saveUsernamePassword(username, email, hashedPassword, salt);
+                    
+                    // Switch to success view - only call setNodeToRoot once
                     getMenuHandler().setNodeToRoot("Initial/login-view.fxml");
                 } else {
                     showValidationError(warningLabelUsername, "Registration failed. Please try again.");
                 }
             } catch (Exception e) {
-                showValidationError(warningLabelUsername, "An error occurred during registration");
                 e.printStackTrace();
             }
         }
