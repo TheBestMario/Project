@@ -41,6 +41,10 @@ public class CalendarApplication extends javafx.application.Application {
             this.menuHandler = new MenuHandler(stage, connectionService, localDB);
             
             // Initialize with login view in a StackPane
+            stage.setWidth(800);
+            stage.setHeight(600);
+            stage.setMinWidth(700);
+            stage.setMinHeight(450);
             StackPane root = new StackPane();
             root.setStyle("-fx-background-image: url('static/images/robert_walters_logo.jpeg')");
             root.setId("root");
