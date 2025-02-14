@@ -122,6 +122,7 @@ public class LoginViewController extends Controller implements Initializable {
 
                     if (getConnectionService().checkConnection()){
                         getConnectionService().sendLoginRequest(usernameInput, hashedPassword);
+                        getLocalStorage().handleLoginOffline(usernameInput, hashedPassword);
                         System.out.println("Fetching profile from server");
                     }else{
                         getLocalStorage().handleLoginOffline(usernameInput, hashedPassword);
