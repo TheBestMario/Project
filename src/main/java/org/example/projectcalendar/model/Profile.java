@@ -80,4 +80,13 @@ public class Profile {
 
     public int getUserId() { return userId; }
     public void setUserId(int userId) { this.userId = userId; }
+
+    public void clearProfile() {
+        username = null;
+        email = null;
+        firstName = null;
+        lastName = null;
+        userId = 0;
+        // Clear any other profile data you have
+    }
 }
