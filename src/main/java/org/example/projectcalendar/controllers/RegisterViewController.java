@@ -1,12 +1,13 @@
 package org.example.projectcalendar.controllers;
 
 import java.net.URL;
-import java.security.NoSuchAlgorithmException;
 import java.util.ResourceBundle;
 
 import org.example.projectcalendar.Controller;
 import org.example.projectcalendar.service.ConnectionService;
 import org.example.projectcalendar.service.HashUtils;
+import org.example.projectcalendar.service.ValidationException;
+import org.example.projectcalendar.service.ValidationUtils;
 
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
@@ -38,33 +39,42 @@ public class RegisterViewController extends Controller implements Initializable 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        emailField.textProperty().addListener(ChangeListener -> {
-            if (!emailField.getText().contains("@")) {
-                informationLabelEmail.setText("Not a valid email.");
-                informationLabelEmail.setStyle("-fx-text-fill: red");
-            } else {
-                informationLabelEmail.setText("Valid email.");
-                informationLabelEmail.setStyle("-fx-text-fill: green");
+        emailField.textProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                ValidationUtils.validateEmail(newValue);
+                showValidationSuccess(informationLabelEmail, "Valid email");
+            } catch (ValidationException e) {
+                showValidationError(informationLabelEmail, e.getMessage());
             }
         });
-        // Add a listener to the password field to check the password length
-        passwordField.textProperty().addListener(ChangeListener -> {
-            if (passwordField.getText().length() < 5) {
-                informationLabelPassword.setText("Password must be at least 5 characters long.");
-                informationLabelPassword.setStyle("-fx-text-fill: red");
-            } else {
-                informationLabelPassword.setText("Password length is sufficient.");
-                informationLabelPassword.setStyle("-fx-text-fill: green");
-            }
 
+        passwordField.textProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                ValidationUtils.validatePassword(newValue);
+                showValidationSuccess(informationLabelPassword, "Password meets requirements");
+            } catch (ValidationException e) {
+                showValidationError(informationLabelPassword, e.getMessage());
+            }
         });
-        confirmPasswordField.textProperty().addListener(ChangeListener -> {
-            if (!confirmPasswordField.getText().equals(passwordField.getText())) {
-                informationLabelCPassword.setText("Passwords do not match.");
-                informationLabelCPassword.setStyle("-fx-text-fill: red");
+
+        usernameField.textProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                ValidationUtils.validateUsername(newValue);
+                // Only check uniqueness if the basic validation passes
+                if (connectionService != null) {  // Make sure service is available
+                    ValidationUtils.validateUsernameUnique(newValue, connectionService);
+                    showValidationSuccess(warningLabelUsername, "Username is available");
+                }
+            } catch (ValidationException e) {
+                showValidationError(warningLabelUsername, e.getMessage());
+            }
+        });
+
+        confirmPasswordField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.equals(passwordField.getText())) {
+                showValidationSuccess(informationLabelCPassword, "Passwords match");
             } else {
-                informationLabelCPassword.setText("Passwords match.");
-                informationLabelCPassword.setStyle("-fx-text-fill: green");
+                showValidationError(informationLabelCPassword, "Passwords do not match");
             }
         });
     }
@@ -107,71 +117,82 @@ public class RegisterViewController extends Controller implements Initializable 
         }
     }
 
+    private void showValidationError(Label label, String message) {
+        label.setText(message);
+        label.setStyle("-fx-text-fill: red");
+    }
+
+    private void showValidationSuccess(Label label, String message) {
+        label.setText(message);
+        label.setStyle("-fx-text-fill: green");
+    }
+
     @FXML
-    protected void onRegisterButtonClick(){
+    protected void onRegisterButtonClick() {
+        boolean isValid = true;
+        
+        // Clear previous validation messages
+        warningLabelUsername.setText("");
+        informationLabelEmail.setText("");
+        informationLabelPassword.setText("");
+        informationLabelCPassword.setText("");
+
         String username = usernameField.getText();
-        String password = passwordField.getText();
-        String confirmedPassword = confirmPasswordField.getText();
         String email = emailField.getText();
+        String password = passwordField.getText();
+        String confirmPassword = confirmPasswordField.getText();
 
-        boolean passwordMatches = false;
-        boolean userChecked = false;
-        boolean validEmail = false;
-        //Map<String, Boolean> map = new HashMap<>();
-        boolean checkBoxState = policyCheckBox.isSelected();
-
-
-        if (username.isBlank()){
-        } else if (username.length() > 20) {
-        } else if (connectionService.getUserNameExists(username)) {
-            warningLabelUsername.setText("Username already exists");
-        } else{
-            warningLabelUsername.setText("");
-            userChecked = true;
+        try {
+            ValidationUtils.validateUsername(username);
+            ValidationUtils.validateUsernameUnique(username, getConnectionService());
+            showValidationSuccess(warningLabelUsername, "Username is available");
+        } catch (ValidationException e) {
+            showValidationError(warningLabelUsername, e.getMessage());
+            isValid = false;
         }
 
-        if (password.isBlank()){
-            System.out.println("please fill in the password field");
-        } else if (password.length() < 5) {
-            System.out.println("password is too short, must be more than 5 characters");
-        } else if (password.equals(confirmedPassword)){
-            passwordMatches = true;
-        } else if (!password.equals(confirmedPassword)){
-            System.out.println("Passwords must match");
+        try {
+            ValidationUtils.validateEmail(email);
+            showValidationSuccess(informationLabelEmail, "Email is valid");
+        } catch (ValidationException e) {
+            showValidationError(informationLabelEmail, e.getMessage());
+            isValid = false;
         }
 
-        if (!email.contains("@")){
-        } else{
-            validEmail = true;
+        try {
+            ValidationUtils.validatePassword(password);
+            showValidationSuccess(informationLabelPassword, "Password meets requirements");
+        } catch (ValidationException e) {
+            showValidationError(informationLabelPassword, e.getMessage());
+            isValid = false;
         }
 
-        if (!checkBoxState){
-            System.out.println("You must agree to our policies");
+        if (!password.equals(confirmPassword)) {
+            showValidationError(informationLabelCPassword, "Passwords do not match");
+            isValid = false;
+        } else {
+            showValidationSuccess(informationLabelCPassword, "Passwords match");
         }
 
-
-
-        if (userChecked && passwordMatches && checkBoxState && validEmail){
+        if (isValid) {
             try {
+                // Proceed with registration
                 String salt = HashUtils.generateSalt();
-                String hashedPassword = HashUtils.hashPassword(password,salt);
-                if (connectionService.createProfile(username,email,hashedPassword,salt)){
-                    getLocalStorage().saveUsernamePassword(username,email,hashedPassword,salt);
-
-                    getMenuHandler().setNodeToRoot("Initial/account-created-view.fxml");
-
-                }else{
-                    System.out.println("failed to create profile");
+                String hashedPassword = HashUtils.hashPassword(password, salt);
+                
+                if (getConnectionService().createProfile(username, email, hashedPassword, salt)) {
+                    // Registration successful
+                    getMenuHandler().setNodeToRoot("Initial/login-view.fxml");
+                } else {
+                    showValidationError(warningLabelUsername, "Registration failed. Please try again.");
                 }
-
-            } catch (NoSuchAlgorithmException e) {
-                throw new RuntimeException(e);
+            } catch (Exception e) {
+                showValidationError(warningLabelUsername, "An error occurred during registration");
+                e.printStackTrace();
             }
-
-
-
         }
     }
+
     @FXML
     protected void onAccountCreatedReturnButtonPressed(){
         getMenuHandler().setNodeToRoot("Initial/login-view.fxml");

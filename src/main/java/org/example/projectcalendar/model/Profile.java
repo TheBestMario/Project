@@ -3,6 +3,8 @@ package org.example.projectcalendar.model;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import org.example.projectcalendar.service.ValidationUtils;
+
 public class Profile {
     private String username;
     private String password;
@@ -45,6 +47,7 @@ public class Profile {
     }
 
     public void setUsername(String username) {
+        ValidationUtils.validateUsername(username);
         this.username = username;
     }
 
@@ -53,10 +56,12 @@ public class Profile {
     }
 
     public void setEmail(String email) {
+        ValidationUtils.validateEmail(email);
         this.email = email;
     }
 
     public void setPassword(String password) {
+        ValidationUtils.validatePassword(password);
         this.password = password;
     }
 

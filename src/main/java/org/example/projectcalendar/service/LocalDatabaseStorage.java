@@ -75,15 +75,22 @@ public class LocalDatabaseStorage {
     }
 
     public void saveUsernamePassword(String username, String email, String password, String salt) {
-        String query = "INSERT INTO Users (username,email,password,salt) VALUES (?,?,?,?)";
-        try (PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setString(1, username);
-            stmt.setString(2, email);
-            stmt.setString(3, password);
-            stmt.setString(4, salt);
-            stmt.executeUpdate();
+        try {
+            // Validate all inputs before database operation
+            ValidationUtils.validateUsername(username);
+            ValidationUtils.validateEmail(email);
+            ValidationUtils.validatePassword(password);
+            
+            String query = "INSERT INTO Users (username,email,password,salt) VALUES (?,?,?,?)";
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setString(1, username);
+                stmt.setString(2, email);
+                stmt.setString(3, password);
+                stmt.setString(4, salt);
+                stmt.executeUpdate();
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Database error while saving user: " + e.getMessage(), e);
         }
     }
 
@@ -161,22 +168,30 @@ public class LocalDatabaseStorage {
     }
 
     public int saveEvent(String title, String description, LocalDateTime startTime, LocalDateTime endTime, String location, int calendarId) {
-        String query = "INSERT INTO Events (title, description, start_time, end_time, location, calendar_id) VALUES (?, ?, ?, ?, ?, ?) RETURNING event_id";
-        try (PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setString(1, title);
-            stmt.setString(2, description);
-            stmt.setString(3, startTime.toString());
-            stmt.setString(4, endTime.toString());
-            stmt.setString(5, location);
-            stmt.setInt(6, calendarId);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt("event_id");
+        try {
+            ValidationUtils.validateEventTitle(title);
+            ValidationUtils.validateEventDescription(description);
+            
+            String sql = "INSERT INTO events (title, description, start_time, end_time, location, calendar_id) " +
+                         "VALUES (?, ?, ?, ?, ?, ?) RETURNING event_id";
+            
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, title);
+                pstmt.setString(2, description);
+                pstmt.setTimestamp(3, java.sql.Timestamp.valueOf(startTime));
+                pstmt.setTimestamp(4, java.sql.Timestamp.valueOf(endTime));
+                pstmt.setString(5, location);
+                pstmt.setInt(6, calendarId);
+                
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    return rs.getInt("event_id");
+                }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Database error while saving event: " + e.getMessage(), e);
         }
-        return -1; // Return -1 if insert failed
+        return -1;
     }
     public int saveCalendar(String name, int userId) {
         String sql = "INSERT INTO calendars (name, user_id) VALUES (?, ?) RETURNING calendar_id";

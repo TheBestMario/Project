@@ -169,4 +169,14 @@ public class ConnectionService implements Runnable {
         currentThread = new Thread(this);
         currentThread.start();
     }
+
+    public boolean checkUsernameExists(String username) {
+        try {
+            out.println("CHECK_USERNAME_EXISTS " + username);
+            String response = waitForResponse();
+            return response != null && response.equals("USERNAME_EXISTS");
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to check username availability", e);
+        }
+    }
 }
