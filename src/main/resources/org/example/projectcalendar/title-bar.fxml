@@ -36,7 +36,7 @@
                </graphic>
             </MenuButton>
                 <Button prefHeight="40.0" text="Notifs" />
-                <Button styleClass="user-button">
+                <MenuButton styleClass="user-button">
                     <graphic>
                         <HBox alignment="CENTER" spacing="5">
                             <children>
@@ -45,7 +45,10 @@
                             </children>
                         </HBox>
                     </graphic>
-                </Button>
+                    <items>
+                        <MenuItem text="Log out" fx:id="logoutButton" onAction="#onLogoutPressed"/>
+                    </items>
+                </MenuButton>
             </children>
         </HBox>
     </children>
