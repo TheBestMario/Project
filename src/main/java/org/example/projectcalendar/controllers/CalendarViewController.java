@@ -27,11 +27,23 @@ public class CalendarViewController extends Controller {
     private void initializeCalendarView() {
         userProfile = Profile.getInstance();
         calendarView = new CalendarView();
-        
+        calendarView.getCalendarSources().clear();
         // Load user's calendars and their IDs
         var calendarData = getLocalStorage().getCalendarsForUser(userProfile.getUserId());
         List<Calendar> userCalendars = calendarData.getKey();
         calendarIdMap = calendarData.getValue();
+        
+        if (userCalendars.isEmpty()) {
+            // Create default calendar
+            String defaultName = userProfile.getUserName() + "'s Calendar";
+            int calendarId = getLocalStorage().saveCalendar(defaultName, userProfile.getUserId());
+            
+            Calendar defaultCalendar = new Calendar(defaultName);
+            defaultCalendar.setStyle(Calendar.Style.STYLE3);
+            userCalendars.add(defaultCalendar);
+            calendarIdMap.put(defaultCalendar, calendarId);
+        }
+        
         calendarView.setShowAddCalendarButton(false);
         
         CalendarSource source = new CalendarSource("My Calendars");
@@ -53,11 +65,10 @@ public class CalendarViewController extends Controller {
             
             setupEventHandlers(calendar);
         }
-        
         calendarView.getCalendarSources().add(source);
     }
 
-    private void setupEventHandlers(Calendar calendar) {
+    public void setupEventHandlers(Calendar calendar) {
         /*
         Add event handlers to the calendar passed
          */
@@ -151,5 +162,13 @@ public class CalendarViewController extends Controller {
             entry.setUserObject(event);
             calendar.addEntry(entry);
         }
+    }
+
+    public void addCalendarToMapping(Calendar calendar, int calendarId) {
+        calendarIdMap.put(calendar, calendarId);
+    }
+
+    public void setupCalendarHandlers(Calendar calendar) {
+        // ... existing setupEventHandlers code ...
     }
 }

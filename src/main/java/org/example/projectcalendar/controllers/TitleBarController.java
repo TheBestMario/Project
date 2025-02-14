@@ -82,18 +82,10 @@ public class TitleBarController extends Controller implements Initializable {
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(name -> {
             // Save calendar to database
-            System.out.println(Profile.getInstance().getUserId());
             int calendarId = getLocalStorage().saveCalendar(name, Profile.getInstance().getUserId());
-            
-            // Update calendar view
-            Content content = menuHandler.loadView("Initial/content.fxml");
-            CalendarView calendarView = content.getCalendarView();
-            CalendarSource source = calendarView.getCalendarSources().get(0);
-            
-            // Create and add new calendar
+
+            // Create new calendar
             Calendar newCalendar = new Calendar(name);
-            newCalendar.setStyle(Calendar.Style.STYLE3);
-            source.getCalendars().add(newCalendar);
         });
     }
 

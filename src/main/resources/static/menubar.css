@@ -74,12 +74,16 @@
 .titlebar MenuButton .arrow:hover{
     -fx-fill: #ecf0f1;
 }
+.titlebar MenuButton:hover {
+    -fx-background-color: -green-hovered;
+}
 
 .titlebar menu-item:hover {
     -fx-background-color: -green-hovered;
     -fx-fill: #ecf0f1;
 }
-.titlebar menu-item .arrow{
+.titlebar MenuButton .arrow{
+    -fx-shape: "▼";
 
 }
 
