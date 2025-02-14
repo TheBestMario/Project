@@ -1,7 +1,9 @@
 package org.example.projectcalendar.controllers;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.example.projectcalendar.Controller;
 import org.example.projectcalendar.model.CalendarEvent;
@@ -15,6 +17,7 @@ import com.calendarfx.view.CalendarView;
 public class CalendarViewController extends Controller {
     private CalendarView calendarView;
     private Profile userProfile;
+    private Map<Calendar, Integer> calendarIdMap = new HashMap<>();
 
     @Override
     public void onDependenciesSet() {
@@ -22,41 +25,36 @@ public class CalendarViewController extends Controller {
     }
 
     private void initializeCalendarView() {
-        /*
-        Initialize the calendar view
-        load the events that are saved in DB
-        set up handlers for the CalendarEvents (on the view)
-         */
         userProfile = Profile.getInstance();
         calendarView = new CalendarView();
         
-        Calendar calendar = createMainCalendar();
-        setupCalendarView(calendar);
-        loadExistingEvents(calendar);
-        setupEventHandlers(calendar);
-    }
-
-    private Calendar createMainCalendar() {
-        /*
-        creates default calendar
-         */
-        Calendar calendar = new Calendar("My Calendar");
-        calendar.setStyle(Calendar.Style.STYLE3);
-        return calendar;
-    }
-
-    private void setupCalendarView(Calendar calendar) {
-        CalendarSource source = new CalendarSource("My Calendars");
-        source.getCalendars().add(calendar);
-        
+        // Load user's calendars and their IDs
+        var calendarData = getLocalStorage().getCalendarsForUser(userProfile.getUserId());
+        List<Calendar> userCalendars = calendarData.getKey();
+        calendarIdMap = calendarData.getValue();
         calendarView.setShowAddCalendarButton(false);
-        calendarView.getCalendarSources().clear();
+        
+        CalendarSource source = new CalendarSource("My Calendars");
+        source.getCalendars().addAll(userCalendars);
+        
+        // Load events for each calendar
+        for (Calendar calendar : userCalendars) {
+            // Get events for this calendar using its ID
+            List<CalendarEvent> events = getLocalStorage().getEventsForCalendar(calendarIdMap.get(calendar));
+            
+            // Add events to the calendar
+            for (CalendarEvent event : events) {
+                Entry<CalendarEvent> entry = new Entry<>(event.getTitle());
+                entry.setInterval(event.getStartTime(), event.getEndTime());
+                entry.setLocation(event.getLocation());
+                entry.setUserObject(event);
+                calendar.addEntry(entry);
+            }
+            
+            setupEventHandlers(calendar);
+        }
+        
         calendarView.getCalendarSources().add(source);
-        calendarView.showMonthPage();
-    }
-
-    public CalendarView getView() {
-        return calendarView;
     }
 
     private void setupEventHandlers(Calendar calendar) {
@@ -89,52 +87,32 @@ public class CalendarViewController extends Controller {
         });
     }
 
-    private void loadExistingEvents(Calendar calendar) {
-        /*
-        Load events from the database and add them to the calendar
-         */
-        List<CalendarEvent> events = getLocalStorage().getEventsForCalendar(1); // calendar_id = 1
-        for (CalendarEvent event : events) {
-            Entry<CalendarEvent> entry = new Entry<>(event.getTitle());
-            entry.setInterval(event.getStartTime(), event.getEndTime());
-            entry.setLocation(event.getLocation());
-            entry.setUserObject(event);
-            calendar.addEntry(entry);
+    private void saveEventToDB(Entry<?> entry, Calendar calendar) {
+        try {
+            Entry<CalendarEvent> typedEntry = (Entry<CalendarEvent>) entry;
+            System.out.println("Saving event: " + entry.getTitle());  // Debug log
+            
+            CalendarEvent event = new CalendarEvent(
+                -1,
+                calendarIdMap.get(calendar),
+                entry.getTitle(),
+                "",
+                entry.getStartAsLocalDateTime(),
+                entry.getEndAsLocalDateTime(),
+                entry.getLocation()
+            );
+            
+            int eventId = getLocalStorage().saveEvent(event);
+            System.out.println("Event saved with ID: " + eventId);  // Debug log
+            event.setEventId(eventId);
+            typedEntry.setUserObject(event);
+        } catch (Exception e) {
+            e.printStackTrace();  // Print any exceptions
         }
     }
 
-    private void saveEventToDB(Entry<?> entry, Calendar calendar) {
-        /*
-        Save the event to the database
-         */
-        Entry<CalendarEvent> typedEntry = (Entry<CalendarEvent>) entry;
-        int calendarID = 1;
-
-        entry.setCalendar(calendar);
-        
-        CalendarEvent event = new CalendarEvent(
-                calendarID,
-            entry.getTitle(),
-            entry.getLocation(),
-            entry.getStartAsLocalDateTime(),
-            entry.getEndAsLocalDateTime(),
-            entry.getLocation()
-        );
-
-
-        int eventId = getLocalStorage().saveEvent(
-            event.getTitle(),
-            event.getDescription(),
-            event.getStartTime(),
-            event.getEndTime(),
-            event.getLocation(),
-            event.getCalendarId()
-        );
-        
-
-        event.setEventId(eventId);
-
-        typedEntry.setUserObject(event);
+    public CalendarView getView() {
+        return calendarView;
     }
 
     private void updateEventInDB(Entry<?> entry) {
