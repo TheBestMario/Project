@@ -8,14 +8,14 @@
    <children>
       <VBox alignment="TOP_CENTER" spacing="10.0">
          <children>
-            <Button id="button" text="Home" />
-            <Button id="button" text="Calendar" fx:id="calendarButton" onMouseClicked="#onCalenderClicked" />
+            <Button styleClass="button" text="Home" />
+            <Button styleClass="button" text="Calendar" fx:id="calendarButton" onMouseClicked="#onCalenderClicked" />
          </children>
       </VBox>
       <VBox alignment="BOTTOM_CENTER" spacing="10.0" VBox.vgrow="ALWAYS">
          <children>
-            <Button id="button" text="Settings" />
-            <Button id="contact" layoutX="10.0" layoutY="160.0" text="Contact us">
+            <Button styleClass="button" id="button" text="Settings" />
+            <Button styleClass="button" id="contact" layoutX="10.0" layoutY="160.0" text="Contact us">
                <font>
                   <Font size="9.0" />
                </font>
