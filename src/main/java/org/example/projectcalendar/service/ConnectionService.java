@@ -77,9 +77,7 @@ public class ConnectionService implements Runnable {
      */
     private String waitForResponse() {
         try {
-            System.out.println("before join");
             String response = responseQueue.poll(1, TimeUnit.SECONDS);
-            System.out.println("after join join");
             return response;
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
